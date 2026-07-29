@@ -10,9 +10,9 @@ prefix-admin: '<gradient:#FFECEC:#FF5555>[EvenMoreFish] '
 # The prefix shown when errors occur e.g. no permission to run a command.
 prefix-error: '<gradient:#FFECEC:#FF5555>[EvenMoreFish] '
 # Sent to players when they catch a fish with a length.
-fish-caught: <white><b>{player}</b> has fished a {length}cm <b>{rarity}</b> {fish}!
+fish-caught: <gradient:#E6F9FF:#8FD9FB>[EvenMoreFish]</gradient> <white><b>{player}</b></white> <gray>đã câu được</gray> {rarity} {fish} <gray>dài</gray> <#A8D8EA>{length}cm</#A8D8EA>!
 # Sent to players when they catch a fish without a length.
-lengthless-fish-caught: <white><b>{player}</b> has fished a <b>{rarity}</b> {fish}!
+lengthless-fish-caught: <gradient:#E6F9FF:#8FD9FB>[EvenMoreFish]</gradient> <white><b>{player}</b></white> <gray>đã câu được</gray> {rarity} {fish}!
 # Sent to players when they hunt a fish with a length.
 fish-hunted: <white><b>{player}</b> has hunted a {length}cm <b>{rarity}</b> {fish}!
 # Sent to players when they hunt a fish without a length.

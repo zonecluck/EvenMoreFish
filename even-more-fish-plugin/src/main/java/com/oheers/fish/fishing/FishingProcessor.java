@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 
 public class FishingProcessor extends Processor<PlayerFishEvent> implements Listener {
     private final EvenMoreFish plugin = EvenMoreFish.getInstance();
+    private final FishingHookHolograms hookHolograms = new FishingHookHolograms(plugin);
 
     @Override
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -35,6 +37,8 @@ public class FishingProcessor extends Processor<PlayerFishEvent> implements List
             plugin.debug("Fishing event was cancelled. Skipping handling.");
             return;
         }
+
+        handleHookHologram(event);
 
         ItemStack rod = getRod(event);
 
@@ -168,5 +172,23 @@ public class FishingProcessor extends Processor<PlayerFishEvent> implements List
         return null;
     }
 
+    private void handleHookHologram(@NotNull PlayerFishEvent event) {
+        switch (event.getState()) {
+            case FISHING -> hookHolograms.showWaiting(event.getHook());
+            case BITE -> hookHolograms.showBite(event.getHook());
+            case FAILED_ATTEMPT -> hookHolograms.showMissed(event.getHook());
+            case CAUGHT_FISH, CAUGHT_ENTITY, REEL_IN, IN_GROUND -> hookHolograms.remove(event.getHook());
+            default -> {
+                // Other states do not affect the current hook hologram.
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPluginDisable(@NotNull PluginDisableEvent event) {
+        if (event.getPlugin().equals(plugin)) {
+            hookHolograms.clear();
+        }
+    }
 
 }

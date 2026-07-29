@@ -11,6 +11,11 @@ broadcast:
   range: -1
 catch-type: both
 sort-index: 3
+catch-event:
+  - TITLE:<gradient:#4FACFE:#00F2FE><bold>✦ CÁ HIẾM ✦</bold></gradient>
+  - SUBTITLE:<#00F2FE>{fish}</#00F2FE> <dark_gray>○</dark_gray> <white>{length}cm</white>
+  - SOUND:ENTITY_PLAYER_LEVELUP,0.8,1.4
+  - ACTIONBAR:<dark_gray>[<#4FACFE>EvenMoreFish</#4FACFE>] <gray>Đã thêm cá hiếm vào túi đồ!</gray>
 size:
   minSize: 20
   maxSize: 150

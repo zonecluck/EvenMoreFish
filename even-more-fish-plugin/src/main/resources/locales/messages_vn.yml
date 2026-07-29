@@ -1,8 +1,8 @@
 #If a message contains EvenMoreFish placeholders, e.g. {player} or {rarity} it also supports placeholderapi placeholders.
 #Sent to players when they fish an EvenMoreFish fish
-fish-caught: <bold>{player} <reset>đã câu được con {fish} dài {length}cm {rarity} !
+fish-caught: <gradient:#E6F9FF:#8FD9FB>[EvenMoreFish]</gradient> <white><b>{player}</b></white> <gray>đã câu được</gray> {rarity} {fish} <gray>dài</gray> <#A8D8EA>{length}cm</#A8D8EA>!
 #By setting a fish's minimum-length to less than 0, you can create a lengthless fish. This is used when a player fishes a lengthless fish.
-lengthless-fish-caught: <bold>{player} <reset>đã câu được con {fish} dài {length} cm {rarity}!
+lengthless-fish-caught: <gradient:#E6F9FF:#8FD9FB>[EvenMoreFish]</gradient> <white><b>{player}</b></white> <gray>đã câu được</gray> {rarity} {fish}!
 #Sent to a player when they don't have permission to execute a command.
 no-permission: <red>bạn không có quyền để chạy lệnh này.
 #The message to be sent when a competition starts and ends

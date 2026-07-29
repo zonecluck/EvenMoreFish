@@ -11,6 +11,10 @@ broadcast:
   range: -1
 catch-type: both
 sort-index: 4
+catch-event:
+  - TITLE:<gradient:#B224EF:#7579FF><bold>✦ CÁ SÁNG GIÁ ✦</bold></gradient>
+  - SUBTITLE:<#7579FF>{fish}</#7579FF> <dark_gray>⏐</dark_gray> <white>{length}cm</white>
+  - SOUND:ENTITY_PLAYER_LEVELUP,1.0,1.2
 size:
   minSize: 125
   maxSize: 800

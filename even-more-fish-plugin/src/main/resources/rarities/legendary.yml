@@ -11,6 +11,10 @@ broadcast:
   range: -1
 catch-type: both
 sort-index: 5
+catch-event:
+  - TITLE:<gradient:#FF512F:#DD2476><bold>★ HUYỀN THOẠI ★</bold></gradient>
+  - SUBTITLE:<#FFB199>Bắt được <white><bold>{fish}</bold></white> <dark_gray>•</dark_gray> <#FF512F>{length}cm</#FF512F>
+  - SOUND:UI_TOAST_CHALLENGE_COMPLETE,1.0,1.0
 size:
   minSize: 800
   maxSize: 4000

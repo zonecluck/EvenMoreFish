@@ -11,6 +11,10 @@ broadcast:
   range: -1
 catch-type: both
 sort-index: 2
+catch-event:
+  - TITLE:<#A8D8EA>✦ <bold>CÂU THÀNH CÔNG</bold> <#A8D8EA>✦
+  - SUBTITLE:<gray>Bạn nhận được <white>{fish}</white> <dark_gray>⏐</dark_gray> <#A8D8EA>{length}cm</#A8D8EA>
+  - SOUND:ENTITY_EXPERIENCE_ORB_PICKUP,1.0,1.5
 size:
   minSize: 1
   maxSize: 30
