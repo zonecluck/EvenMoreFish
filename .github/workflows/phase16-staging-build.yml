@@ -1,0 +1,45 @@
+name: EMF Simulator staging compile and tests
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'even-more-fish-*/**'
+      - 'even-more-fish-api/**'
+      - 'qa/**'
+      - 'gradle/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - '.github/workflows/phase16-staging-build.yml'
+  pull_request:
+
+jobs:
+  staging-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install headless YAML validator
+        run: python -m pip install PyYAML
+      - name: Headless regression (no Paper certification)
+        run: bash qa/run-phase16-validation.sh
+      - name: Gradle JUnit + Paper 1.21 shadow JAR
+        run: bash ./gradlew :even-more-fish-plugin:test :even-more-fish-plugin-1-21:shadowJar --stacktrace --no-daemon
+      - name: Archive build results for review
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: phase16-staging-artifacts
+          if-no-files-found: warn
+          path: |
+            even-more-fish-plugin/build/test-results/**
+            even-more-fish-plugin/build/reports/tests/**
+            even-more-fish-plugin-1-21/build/libs/*.jar
