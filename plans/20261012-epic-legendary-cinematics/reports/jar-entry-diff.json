@@ -1,0 +1,33 @@
+{
+  "sha256": "c9db5e1500fd4f80f3b87909c1697b4ab2266346f09d26c29b2f8fbd95eae64d",
+  "changed": [
+    "com/oheers/fish/effects/VanillaCatchCinematicService$Scene.class",
+    "com/oheers/fish/effects/VanillaCatchCinematicService.class",
+    "com/oheers/fish/fishing/simulator/effects/PacketCatchCinematicService$Animation.class",
+    "com/oheers/fish/fishing/simulator/effects/PacketCatchCinematicService$StageFxSink.class",
+    "com/oheers/fish/fishing/simulator/effects/PacketCatchCinematicService.class",
+    "com/oheers/fish/fishing/simulator/effects/PremiumCinematicSettings$Cue.class",
+    "com/oheers/fish/fishing/simulator/effects/PremiumCinematicSettings$Profile.class",
+    "com/oheers/fish/fishing/simulator/effects/PremiumCinematicSettings.class",
+    "com/oheers/fish/fishing/simulator/effects/PremiumCinematicTimeline$Durations.class",
+    "com/oheers/fish/fishing/simulator/effects/PremiumCinematicTimeline$Frame.class",
+    "com/oheers/fish/fishing/simulator/effects/PremiumCinematicTimeline.class",
+    "com/oheers/fish/fishing/simulator/effects/SimulatorEffectsService$1.class",
+    "com/oheers/fish/fishing/simulator/effects/SimulatorEffectsService$BiteHud.class",
+    "com/oheers/fish/fishing/simulator/effects/SimulatorEffectsService.class",
+    "simulator/cinematics.yml",
+    "simulator/hud-gui.yml"
+  ],
+  "added": [
+    "com/oheers/fish/effects/VanillaCatchCinematicService$1.class",
+    "com/oheers/fish/fishing/simulator/effects/CinematicParticleBudget.class",
+    "com/oheers/fish/fishing/simulator/effects/CinematicParticleEffects$Emission.class",
+    "com/oheers/fish/fishing/simulator/effects/CinematicParticleEffects.class",
+    "com/oheers/fish/fishing/simulator/effects/CinematicParticlePattern$1.class",
+    "com/oheers/fish/fishing/simulator/effects/CinematicParticlePattern.class",
+    "com/oheers/fish/fishing/simulator/effects/PremiumCinematicTimeline$Pose.class",
+    "com/oheers/fish/fishing/simulator/effects/PremiumCinematicTimeline$Style.class"
+  ],
+  "removed": [],
+  "unexpected": []
+}

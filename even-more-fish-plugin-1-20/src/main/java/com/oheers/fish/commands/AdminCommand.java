@@ -65,10 +65,13 @@ public class AdminCommand {
                 getFish(),
                 getList(),
                 getCompetition(),
+                getBuff(),
                 getCustomRod(),
+                PoolCommand.create(),
                 getDebug(),
                 getBait(),
                 getClearBaits(),
+                getTestEffect(),
                 getReload(),
                 getVersion(),
                 getMigrate(),
@@ -189,6 +192,63 @@ public class AdminCommand {
 
     private CommandAPICommand getCustomRod() {
         return new CommandAPICommand("custom-rod")
+            .withSubcommands(
+                new CommandAPICommand("list")
+                    .executes(info -> {
+                        var rods = com.oheers.fish.fishing.rods.RodManager.getInstance().getItemMap();
+                        EMFSingleMessage.fromString("<gold>===== DANH SÁCH CẦN CÂU CUSTOM (" + rods.size() + ") =====").send(info.sender());
+                        for (CustomRod rod : rods.values()) {
+                            String statsStr = "<gray>• <yellow>" + rod.getId() + "<gray>: Luck: <gold>+" + String.format("%.0f", rod.getLuckModifier() * 100) + "%</gold>, Lure: <aqua>+" + String.format("%.0f", rod.getLureModifier() * 100) + "%</aqua>, x2: <light_purple>" + String.format("%.0f", rod.getDoubleCatchChance() * 100) + "%</light_purple>";
+                            EMFSingleMessage.fromString(statsStr).send(info.sender());
+                        }
+                    }),
+                new CommandAPICommand("inspect")
+                    .executesPlayer(info -> {
+                        Player player = info.sender();
+                        ItemStack handItem = player.getInventory().getItemInMainHand();
+                        CustomRod rod = com.oheers.fish.fishing.rods.RodManager.getInstance().getRod(handItem);
+                        if (rod == null) {
+                            EMFSingleMessage.fromString("<red>Vật phẩm trên tay không phải là Cần Câu Custom của EvenMoreFish.").send(player);
+                            return;
+                        }
+                        EMFSingleMessage.fromString("<gold>===== THÔNG TIN CẦN CÂU: <yellow>" + rod.getId() + " <gold>=====").send(player);
+                        EMFSingleMessage.fromString("<gray> ○ <white>May mắn (Luck bonus): <yellow>+" + String.format("%.0f", rod.getLuckModifier() * 100) + "%").send(player);
+                        EMFSingleMessage.fromString("<gray> ○ <white>Tốc độ cắn câu (Lure): <aqua>+" + String.format("%.0f", rod.getLureModifier() * 100) + "%").send(player);
+                        EMFSingleMessage.fromString("<gray> ○ <white>Tỉ lệ x2 cá (Double Catch): <light_purple>+" + String.format("%.0f", rod.getDoubleCatchChance() * 100) + "%").send(player);
+                        EMFSingleMessage.fromString("<gray> ○ <white>Hệ số EXP: <green>x" + String.format("%.1f", rod.getExpMultiplier())).send(player);
+                        EMFSingleMessage.fromString("<gray> ○ <white>Không thể hỏng (Unbreakable): <white>" + rod.isUnbreakable()).send(player);
+                    }),
+                new CommandAPICommand("give")
+                    .withArguments(
+                        CustomRodArgument.create(),
+                        new EntitySelectorArgument.ManyPlayers("targets").setOptional(true)
+                    )
+                    .executes((sender, args) -> {
+                        final List<Player> players = (List<Player>) args.getOptional("targets").orElseGet(() -> {
+                            if (sender instanceof Player p) {
+                                return List.of(p);
+                            }
+                            return null;
+                        });
+
+                        if (players == null) {
+                            ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
+                            return;
+                        }
+
+                        CustomRod rod = Objects.requireNonNull(args.getUnchecked("customRod"));
+                        ItemStack rodItem = rod.create();
+
+                        for (Player player : players) {
+                            FishUtils.giveItems(List.of(rodItem), player);
+                        }
+
+                        EMFMessage giveMessage = ConfigMessage.ADMIN_CUSTOM_ROD_GIVEN.getMessage();
+                        giveMessage.setVariable("{player}", CommandUtils.getPlayersVariable(players));
+
+                        giveMessage.send(sender);
+                    })
+            )
             .withArguments(
                 CustomRodArgument.create(),
                 new EntitySelectorArgument.ManyPlayers("targets").setOptional(true)
@@ -437,14 +497,79 @@ public class AdminCommand {
 
     // COMPETITION BRANCH
 
+    // COMPETITION BRANCH
+
     private CommandAPICommand getCompetition() {
         return new CommandAPICommand("competition")
             .withSubcommands(
                 getCompetitionStart(),
                 getCompetitionEnd(),
+                getCompetitionCancel(),
+                getCompetitionPause(),
+                getCompetitionResume(),
+                getCompetitionLeaderboard(),
                 getCompetitionTest(),
                 getCompetitionExtend()
             );
+    }
+
+    private CommandAPICommand getCompetitionCancel() {
+        return new CommandAPICommand("cancel")
+            .executes(info -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
+                    return;
+                }
+                active.cancel();
+                EMFSingleMessage.fromString("<green>Đã hủy bỏ cuộc thi hiện tại thành công.").send(info.sender());
+            });
+    }
+
+    private CommandAPICommand getCompetitionPause() {
+        return new CommandAPICommand("pause")
+            .executes(info -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
+                    return;
+                }
+                if (active.isPaused()) {
+                    EMFSingleMessage.fromString("<yellow>Cuộc thi đã đang ở trạng thái tạm dừng rồi.").send(info.sender());
+                    return;
+                }
+                active.pause();
+                EMFSingleMessage.fromString("<gold>[!] <yellow>Cuộc thi câu cá đã tạm dừng đếm ngược.").broadcast();
+            });
+    }
+
+    private CommandAPICommand getCompetitionResume() {
+        return new CommandAPICommand("resume")
+            .executes(info -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
+                    return;
+                }
+                if (!active.isPaused()) {
+                    EMFSingleMessage.fromString("<yellow>Cuộc thi đang chạy bình thường, không bị tạm dừng.").send(info.sender());
+                    return;
+                }
+                active.resume();
+                EMFSingleMessage.fromString("<green>[!] <aqua>Cuộc thi câu cá đã được tiếp tục!").broadcast();
+            });
+    }
+
+    private CommandAPICommand getCompetitionLeaderboard() {
+        return new CommandAPICommand("leaderboard")
+            .executes(info -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
+                    return;
+                }
+                active.sendLeaderboard(info.sender());
+            });
     }
 
     private CommandAPICommand getCompetitionStart() {
@@ -525,6 +650,96 @@ public class AdminCommand {
                 EMFMessage message = ConfigMessage.COMPETITION_TIME_EXTENDED.getMessage();
                 message.setVariable("{duration}", FishUtils.timeFormat(duration));
                 message.broadcast();
+            });
+    }
+
+    private CommandAPICommand getBuff() {
+        return new CommandAPICommand("buff")
+            .withSubcommands(
+                new CommandAPICommand("view")
+                    .withArguments(ArgumentHelper.getPlayerArgument("target").setOptional(true))
+                    .executes((sender, args) -> {
+                        Player target = (Player) args.getOptional("target").orElseGet(() -> {
+                            if (sender instanceof Player p) return p;
+                            return null;
+                        });
+                        if (target == null) {
+                            ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
+                            return;
+                        }
+                        var buff = com.oheers.fish.competition.buff.CompetitionBuffManager.getInstance().getBuff(target.getUniqueId());
+                        if (buff == null) {
+                            EMFSingleMessage.fromString("<yellow>Người chơi <gold>" + target.getName() + "</gold> hiện không có buff cuộc thi nào.").send(sender);
+                            return;
+                        }
+                        EMFSingleMessage.fromString("<gold>===== THÔNG TIN BUFF: <yellow>" + target.getName() + " <gold>=====").send(sender);
+                        EMFSingleMessage.fromString("<gray> ○ <white>Thứ hạng đạt: <gold>Top " + buff.getRank()).send(sender);
+                        EMFSingleMessage.fromString("<gray> ○ <white>May mắn (Luck): <yellow>+" + String.format("%.0f", buff.getLuckBonus() * 100) + "%").send(sender);
+                        EMFSingleMessage.fromString("<gray> ○ <white>Tốc độ cắn câu (Lure): <aqua>+" + String.format("%.0f", buff.getLureBonus() * 100) + "%").send(sender);
+                        EMFSingleMessage.fromString("<gray> ○ <white>Nhân đôi cá (Double Catch): <light_purple>+" + String.format("%.0f", buff.getDoubleCatchChance() * 100) + "%").send(sender);
+                        EMFSingleMessage.fromString("<gray> ○ <white>Hệ số EXP: <green>x" + String.format("%.1f", buff.getExpMultiplier())).send(sender);
+                    }),
+                new CommandAPICommand("clear")
+                    .withSubcommands(
+                        new CommandAPICommand("all")
+                            .executes(info -> {
+                                com.oheers.fish.competition.buff.CompetitionBuffManager.getInstance().clearAllBuffs();
+                                EMFSingleMessage.fromString("<green>Đã xóa toàn bộ buff cuộc thi của tất cả người chơi.").send(info.sender());
+                            }),
+                        new CommandAPICommand("player")
+                            .withArguments(ArgumentHelper.getPlayerArgument("target"))
+                            .executes((sender, args) -> {
+                                Player target = (Player) args.getUnchecked("target");
+                                if (target != null) {
+                                    com.oheers.fish.competition.buff.CompetitionBuffManager.getInstance().clearBuff(target.getUniqueId());
+                                    EMFSingleMessage.fromString("<green>Đã xóa buff cuộc thi của <gold>" + target.getName() + "</gold>.").send(sender);
+                                }
+                            })
+                    )
+            );
+    }
+
+    private CommandAPICommand getTestEffect() {
+        return new CommandAPICommand("testeffect")
+            .withArguments(new MultiLiteralArgument("effectType", "start", "end", "rare_catch", "double_catch", "hook_bite"))
+            .executes((sender, args) -> {
+                String type = Objects.requireNonNull(args.getUnchecked("effectType"));
+                switch (type) {
+                    case "start" -> {
+                        Competition comp = new Competition(10, CompetitionType.LARGEST_FISH);
+                        com.oheers.fish.effects.AnimationManager.getInstance().playCompetitionStart(comp);
+                        EMFSingleMessage.fromString("<green>Đang phát hiệu ứng Bắt đầu cuộc thi...").send(sender);
+                    }
+                    case "end" -> {
+                        if (sender instanceof Player p) {
+                            Competition comp = new Competition(10, CompetitionType.LARGEST_FISH);
+                            var entry = new com.oheers.fish.competition.CompetitionEntry(p.getUniqueId(), null, CompetitionType.LARGEST_FISH);
+                            com.oheers.fish.effects.AnimationManager.getInstance().playCompetitionEnd(comp, List.of(entry));
+                            EMFSingleMessage.fromString("<green>Đang phát hiệu ứng Kết thúc & Vinh danh quán quân...").send(p);
+                        }
+                    }
+                    case "rare_catch" -> {
+                        if (sender instanceof Player p) {
+                            var rarity = FishManager.getInstance().getRarityMap().values().stream().findFirst().orElse(null);
+                            if (rarity != null && !rarity.getFishList().isEmpty()) {
+                                com.oheers.fish.effects.AnimationManager.getInstance().playRareFishCatch(p, rarity.getFishList().get(0));
+                            }
+                        }
+                    }
+                    case "double_catch" -> {
+                        if (sender instanceof Player p) {
+                            var rarity = FishManager.getInstance().getRarityMap().values().stream().findFirst().orElse(null);
+                            if (rarity != null && !rarity.getFishList().isEmpty()) {
+                                com.oheers.fish.effects.AnimationManager.getInstance().playDoubleFishAnimation(p, rarity.getFishList().get(0));
+                            }
+                        }
+                    }
+                    case "hook_bite" -> {
+                        if (sender instanceof Player p) {
+                            com.oheers.fish.effects.AnimationManager.getInstance().playHookBiteParticles(p.getLocation().add(0, 0.5, 0));
+                        }
+                    }
+                }
             });
     }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.FishingProcessorBiteTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:53:26.676Z" hostname="LEDAT" time="1.268">
+  <properties/>
+  <testcase name="monitorRechecksGlobalFishingPolicy()" classname="com.oheers.fish.fishing.FishingProcessorBiteTest" time="1.208"/>
+  <testcase name="monitorRequiresAcceptedUncancelledBiteAndConsumesAdmissionOnce()" classname="com.oheers.fish.fishing.FishingProcessorBiteTest" time="0.016"/>
+  <testcase name="monitorRejectsChangedHookRodAndCurrentFishingPermission()" classname="com.oheers.fish.fishing.FishingProcessorBiteTest" time="0.009"/>
+  <testcase name="monitorRechecksRequiredCustomRod()" classname="com.oheers.fish.fishing.FishingProcessorBiteTest" time="0.031"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -109,7 +109,7 @@ public abstract class AbstractFileBasedManager<T> {
         }
 
         FileUtil.regenExampleFiles(folderName, itemsFolder);
-        List<File> itemFiles = FileUtil.getFilesInDirectory(itemsFolder, true, true);
+        List<File> itemFiles = FileUtil.getFilesInDirectoryWithExtension(itemsFolder, ".yml", true, true);
 
         if (itemFiles.isEmpty()) {
             EMFPlugin.getInstance().debug("No files found in directory: " + itemsFolder);

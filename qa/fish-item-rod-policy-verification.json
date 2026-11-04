@@ -1,0 +1,13 @@
+{
+  "date": "20261017-110901",
+  "path": "plugins/EvenMoreFish/config.yml",
+  "backup": ".ledat-backups/emf-rod-policy-20261017-110901/config.yml",
+  "changedSetting": "fishing.require-custom-rod",
+  "before": true,
+  "after": false,
+  "beforeSha256": "fc8a8f7a68349fe0aee7fdf2bb6a78d1d8f2ed0387e47979ec91b02aacf4bad1",
+  "afterSha256": "971d649febad14aace4f64a3266bdc91c215835f97391fac8e9e48ffb637589a",
+  "otherYamlValuesUnchanged": true,
+  "updateJarPresent": true,
+  "activation": "pending config reload or clean restart; JAR fix requires clean restart"
+}

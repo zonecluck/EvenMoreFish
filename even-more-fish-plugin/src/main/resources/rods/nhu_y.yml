@@ -1,0 +1,39 @@
+id: nhu_y
+disabled: false
+allowed-rarities:
+  - Junk
+  - Common
+  - Rare
+  - Epic
+  - Legendary
+
+# Chỉ số sức mạnh của Cần Câu Custom
+stats:
+  luck-modifier: 0.25
+  lure-modifier: 0.20
+  double-catch-chance: 0.15
+  exp-multiplier: 1.6
+  rarity-modifiers:
+    Legendary: 1.3
+    Epic: 1.2
+
+allow-baits: true
+unbreakable: true
+
+item:
+  material: FISHING_ROD
+  displayname: "<gradient:#FFD65A:#FF8A3D><bold>Cần Câu Như Ý</gradient>"
+  glowing: true
+  lore:
+    - ' '
+    - '<dark_gray> ○ <white>Độ hiếm: <gold>Huyền Thoại (Legendary)</gold>'
+    - '<dark_gray> ○ <white>Đặc tính: <aqua>Không Thể Hỏng</aqua>'
+    - ' '
+    - '<dark_gray> ○ <white>Tăng sức mạnh:'
+    - '  <dark_gray> -<yellow> May Mắn:</yellow> <green>+25%</green>'
+    - '  <dark_gray> -<aqua> Tốc Độ Cắn Câu:</aqua> <green>+20%</green>'
+    - '  <dark_gray> -<light_purple> Nhân Đôi Cá:</light_purple> <green>15%</green>'
+    - '  <dark_gray> -<gold> Hệ Số EXP:</gold> <green>x1.6</green>'
+    - ' '
+    - '<#C797FF>Biến hóa khôn lường theo ý niệm'
+    - '<white>giúp bắt trọn mọi ước muốn!'

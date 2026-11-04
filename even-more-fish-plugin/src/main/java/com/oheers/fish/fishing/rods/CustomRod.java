@@ -17,11 +17,14 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -33,18 +36,44 @@ public class CustomRod extends ConfigBase implements ICustomRod {
     private final EMFRecipe<?> recipe;
     private final ItemFactory factory;
 
+    private final double luckModifier;
+    private final double lureModifier;
+    private final double doubleCatchChance;
+    private final double expMultiplier;
+    private final Map<String, Double> rarityModifiers;
+    private final boolean allowBaits;
+    private final boolean unbreakable;
+    private final @Nullable String particleEffect;
+
     public CustomRod(@NotNull File file) throws InvalidConfigurationException {
         super(file, EvenMoreFish.getInstance(), false);
         this.id = validateId();
         this.allowedRarities = loadAllowedRarities();
         this.allowedFish = loadAllowedFish();
+
+        this.luckModifier = getConfig().getDouble("stats.luck-modifier", getConfig().getDouble("luck-modifier", 0.0));
+        this.lureModifier = getConfig().getDouble("stats.lure-modifier", getConfig().getDouble("lure-modifier", 0.0));
+        this.doubleCatchChance = getConfig().getDouble("stats.double-catch-chance", getConfig().getDouble("double-catch-chance", 0.0));
+        this.expMultiplier = getConfig().getDouble("stats.exp-multiplier", getConfig().getDouble("exp-multiplier", 1.0));
+        this.allowBaits = getConfig().getBoolean("allow-baits", true);
+        this.unbreakable = getConfig().getBoolean("unbreakable", false);
+        this.particleEffect = getConfig().getString("particle-effect", null);
+        this.rarityModifiers = loadRarityModifiers();
+
         this.factory = ItemFactory.itemFactory(getConfig());
-        this.factory.setFinalChanges(item ->
+        this.factory.setFinalChanges(item -> {
+            if (this.unbreakable) {
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setUnbreakable(true);
+                    item.setItemMeta(meta);
+                }
+            }
             NBT.modify(item, nbt -> {
                 ReadWriteNBT emfCompound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
                 emfCompound.setString(NbtKeys.EMF_ROD_ID, getId());
-            })
-        );
+            });
+        });
         this.recipe = loadRecipe();
     }
 
@@ -54,6 +83,20 @@ public class CustomRod extends ConfigBase implements ICustomRod {
             throw new InvalidConfigurationException("CustomRod " + getFileName() + " has no configured id.");
         }
         return id;
+    }
+
+    private Map<String, Double> loadRarityModifiers() {
+        Map<String, Double> map = new HashMap<>();
+        Section section = getConfig().getSection("rarity-modifiers");
+        if (section == null) {
+            section = getConfig().getSection("stats.rarity-modifiers");
+        }
+        if (section != null) {
+            for (String key : section.getRoutesAsStrings(false)) {
+                map.put(key, section.getDouble(key, 1.0));
+            }
+        }
+        return map;
     }
 
     // Loading things
@@ -127,6 +170,46 @@ public class CustomRod extends ConfigBase implements ICustomRod {
         return getConfig().getBoolean("disabled");
     }
 
+    @Override
+    public double getLuckModifier() {
+        return this.luckModifier;
+    }
+
+    @Override
+    public double getLureModifier() {
+        return this.lureModifier;
+    }
+
+    @Override
+    public double getDoubleCatchChance() {
+        return this.doubleCatchChance;
+    }
+
+    @Override
+    public double getExpMultiplier() {
+        return this.expMultiplier;
+    }
+
+    @Override
+    public @NotNull Map<String, Double> getRarityMultipliers() {
+        return this.rarityModifiers;
+    }
+
+    @Override
+    public boolean isBaitAllowed() {
+        return this.allowBaits;
+    }
+
+    @Override
+    public boolean isUnbreakable() {
+        return this.unbreakable;
+    }
+
+    @Override
+    public @Nullable String getParticleEffect() {
+        return this.particleEffect;
+    }
+
     /**
      * Fetches the ItemFactory for this rod.
      * NOTE: Creating an ItemStack from this factory will not add the necessary NBT to identify the rod. Use {@link #create()} instead.
@@ -141,6 +224,13 @@ public class CustomRod extends ConfigBase implements ICustomRod {
     @Override
     public @NotNull ItemStack create() {
         ItemStack item = factory.createItem();
+        if (this.unbreakable) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                meta.setUnbreakable(true);
+                item.setItemMeta(meta);
+            }
+        }
         NBT.modify(item, nbt -> {
             ReadWriteNBT emfCompound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
             emfCompound.setString(NbtKeys.EMF_ROD_ID, getId());

@@ -1,0 +1,35 @@
+id: huyet_hoa
+disabled: false
+allowed-rarities:
+  - Junk
+  - Common
+  - Rare
+  - Epic
+
+# Chỉ số sức mạnh của Cần Câu Custom
+stats:
+  luck-modifier: 0.12
+  lure-modifier: 0.10
+  double-catch-chance: 0.08
+  exp-multiplier: 1.25
+
+allow-baits: true
+unbreakable: true
+
+item:
+  material: FISHING_ROD
+  displayname: "<gradient:#FF6FAE:#FFD1E8><bold>Cần Câu Huyết Hoa</gradient>"
+  glowing: true
+  lore:
+    - ' '
+    - '<dark_gray> ○ <white>Độ hiếm: <light_purple>Sử Thi (Epic)</light_purple>'
+    - '<dark_gray> ○ <white>Đặc tính: <aqua>Không Thể Hỏng</aqua>'
+    - ' '
+    - '<dark_gray> ○ <white>Tăng sức mạnh:'
+    - '  <dark_gray> -<yellow> May Mắn:</yellow> <green>+12%</green>'
+    - '  <dark_gray> -<aqua> Tốc Độ Cắn Câu:</aqua> <green>+10%</green>'
+    - '  <dark_gray> -<light_purple> Nhân Đôi Cá:</light_purple> <green>8%</green>'
+    - '  <dark_gray> -<gold> Hệ Số EXP:</gold> <green>x1.25</green>'
+    - ' '
+    - '<#C797FF>Huyết sắc hoa nở rộ giữa làn nước'
+    - '<white>thu hút những loài cá quyến rũ!'

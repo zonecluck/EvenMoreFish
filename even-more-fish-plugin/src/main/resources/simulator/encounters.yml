@@ -1,0 +1,64 @@
+# EvenMoreFish Simulator - Phase 14 Rare Encounters (STAGING ONLY)
+# Encounter effects annotate EXISTING FishAgents. They never create fish, rarity, loot or XP.
+# Requires simulator.enabled and ambient-preview.enabled plus working PacketEvents preview.
+# Optional environment sampling must be enabled for NIGHT/DEEP gated encounter types.
+config-version: 1
+enabled: false
+
+limits:
+  scan-interval-ticks: 20           # Inspect existing fish only once each 20 ticks
+  candidates-per-scan: 20          # Bound discovery work; each candidate rolls at most once
+  max-active: 8                    # Global active encounter cap
+  max-per-zone: 2                 # Per world/zone/privacy scope
+  life-ticks: 600                 # 30 seconds at 20TPS
+  zone-cooldown-ticks: 400         # 20s cooldown; staff preview does not overwrite cooldown
+  viewer-cooldown-ticks: 160      # Delay first reveal of *another* encounter to same viewer
+
+discovery:
+  activation-chance: 0.25         # Cosmetic chance per ALREADY ELIGIBLE fish; not loot weight
+  eligible-rarities: [Rare, Epic, Legendary, Mythical]
+  fish-overrides: {}               # Optional: 'Legendary:Golden Koi': GOLDEN (exact FishKey)
+                                   # Overrides pick the type only; never override eligibility/loot.
+
+visuals:
+  interval-ticks: 12              # Low-frequency decorative cues, not per-tick spam
+  max-particles-per-tick: 24
+  max-particles-per-viewer: 6
+  reveal-radius: 16.0
+
+types:
+  RARE_PRESENCE:
+    enabled: true
+    weight: 45
+    night-only: false
+    deep-only: false
+    storm-only: false
+    min-school-size: 1
+  GOLDEN:
+    enabled: true
+    weight: 20
+    night-only: false
+    deep-only: false
+    storm-only: false
+    min-school-size: 1
+  SHADOW:
+    enabled: true
+    weight: 15
+    night-only: false
+    deep-only: true                # Requires EnvironmentSampler snapshot with DEEP water
+    storm-only: false
+    min-school-size: 1
+  GHOST:
+    enabled: true
+    weight: 10
+    night-only: true               # Requires real NIGHT snapshot
+    deep-only: false
+    storm-only: false
+    min-school-size: 1
+  RARE_SCHOOL:
+    enabled: true
+    weight: 10
+    night-only: false
+    deep-only: false
+    storm-only: false
+    min-school-size: 2             # Requires existing school of 2+ eligible, unreserved fish

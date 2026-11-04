@@ -176,7 +176,36 @@ public class FishManager extends AbstractFishManager<Rarity> {
             return null;
         }
 
-        Rarity selected = selectRandomRarity(allowedRarities, boostRate, boostedRarities);
+        com.oheers.fish.fishing.rods.MMOItemsRodStats mmoStats = com.oheers.fish.fishing.rods.MMOItemsRodStats.resolve(fisher);
+        double buffLuck = fisher != null ? com.oheers.fish.competition.buff.CompetitionBuffManager.getInstance().getLuckBonus(fisher.getUniqueId()) : 0.0;
+        double rodLuck = (customRod != null ? customRod.getLuckModifier() : 0.0) + mmoStats.luckModifier();
+        double totalLuck = buffLuck + rodLuck + com.oheers.fish.autofish.AutoFishingService.getActiveAutoLuckBonus(fisher);
+        double rareFishBonus = mmoStats.rareFishModifier();
+
+        String region = regionAt(requirementContext);
+        ToDoubleFunction<Rarity> weightFunction = rarity -> {
+            double weight = RegionWeightMultiplier.apply(rarity.getWeight(), regionMultiplier(region, rarity));
+            if (customRod != null && customRod.getRarityMultipliers().containsKey(rarity.getId())) {
+                weight *= customRod.getRarityMultipliers().get(rarity.getId());
+            }
+            boolean isCommon = "common".equalsIgnoreCase(rarity.getId());
+            if (!isCommon && totalLuck > 0 && rarity.getIndex() > 0) {
+                double boostFactor = 1.0 + (totalLuck * (rarity.getIndex() * 0.4));
+                weight *= boostFactor;
+            }
+            if (!isCommon && rareFishBonus > 0 && (rarity.getIndex() >= 3 || (rarity.getWeight() > 0 && rarity.getWeight() <= 5.0))) {
+                weight *= 1.0 + (rareFishBonus * (Math.max(1, rarity.getIndex() - 1) * 0.45));
+            }
+            return com.oheers.fish.fishing.pool.FishingPool.applyWeight(weight, poolMultiplier(requirementContext, rarity));
+        };
+
+        Rarity selected = WeightedRandom.pick(
+                allowedRarities,
+                weightFunction,
+                boostRate,
+                boostedRarities,
+                EvenMoreFish.getInstance().getRandom()
+        );
         return selected != null && isRarityAllowedInCompetition(selected) ? selected : null;
     }
 
@@ -195,9 +224,12 @@ public class FishManager extends AbstractFishManager<Rarity> {
             return null;
         }
 
+        String region = regionAt(requirementContext);
         Rarity selected = WeightedRandom.pick(
             allowedRarities,
-            weightFunction,
+            rarity -> com.oheers.fish.fishing.pool.FishingPool.applyWeight(
+                RegionWeightMultiplier.apply(weightFunction.applyAsDouble(rarity), regionMultiplier(region, rarity)),
+                poolMultiplier(requirementContext, rarity)),
             EvenMoreFish.getInstance().getRandom()
         );
         return selected != null && isRarityAllowedInCompetition(selected) ? selected : null;
@@ -303,15 +335,33 @@ public class FishManager extends AbstractFishManager<Rarity> {
                                             @NotNull RequirementContext requirementContext) {
         if (fisher == null) return new ArrayList<>(totalRarities);
 
-        String region = FishUtils.getRegionName(fisher.getLocation());
+        String region = regionAt(requirementContext);
+        // Preserve the original rarity-map order for stable seeded RNG tests.
         return getItemMap().values().stream()
+            .filter(totalRarities::contains)
             .filter(r -> !shouldSkipRarity(r, boostRate, boostedRarities, fisher))
             .filter(r -> r.getRequirement().meetsRequirements(requirementContext))
-            .flatMap(r -> Collections.nCopies(
-                (int) Math.max(1, MainConfig.getInstance().getRegionBoost(region, r.getId())),
-                r
-            ).stream())
+            .filter(r -> regionMultiplier(region, r) > 0)
             .toList();
+    }
+
+    private String regionAt(@NotNull RequirementContext context) {
+        Location location = context.getHookOrPlayerLocation();
+        return location == null ? null : FishUtils.getRegionName(location);
+    }
+
+    private double poolMultiplier(RequirementContext context, Rarity rarity) {
+        var pools = EvenMoreFish.getInstance().getFishingPools();
+        // Never substitute the player's position: only the actual cast hook qualifies.
+        return pools == null || !(context instanceof com.oheers.fish.fishing.NativeFishingContext)
+            || context.getLocation() == null ? 1.0
+            : pools.multiplier(context.getPlayer(), context.getLocation(), rarity.getId());
+    }
+
+    private double regionMultiplier(@Nullable String region, @NotNull Rarity rarity) {
+        double modifier = MainConfig.getInstance().getRegionBoost(region, rarity.getId());
+        // Never silently round 0.5/1.8 to 1 or inflate disabled rarity weights.
+        return Double.isFinite(modifier) && modifier >= 0.0 ? modifier : 0.0;
     }
 
     private boolean shouldSkipRarity(Rarity rarity, double boostRate,

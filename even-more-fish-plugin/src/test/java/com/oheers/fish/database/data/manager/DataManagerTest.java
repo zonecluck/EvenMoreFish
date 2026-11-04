@@ -66,6 +66,39 @@ class DataManagerTest {
         assertEquals(List.of("value"), batchWrites.getFirst());
     }
 
+
+    @Test
+    void updateDuringSaveIsNotLostByFlushAcknowledgement() {
+        AtomicInteger saves = new AtomicInteger();
+        @SuppressWarnings("unchecked") DataManager<String>[] holder = new DataManager[1];
+        holder[0] = new DataManager<>(new BufferedSavingStrategy<>(null, values -> {
+            if (saves.getAndIncrement() == 0) {
+                assertEquals(List.of("before"), new ArrayList<>(values));
+                holder[0].update("fish", "after");
+            }
+        }, false), key -> null);
+
+        holder[0].update("fish", "before");
+        holder[0].flush();
+        holder[0].flush();
+
+        assertEquals(2, saves.get(), "second flush must persist the newer revision");
+    }
+
+    @Test
+    void failedSaveKeepsDirtyChangesForRetry() {
+        AtomicInteger saves = new AtomicInteger();
+        DataManager<String> manager = new DataManager<>(
+            new BufferedSavingStrategy<>(null, values -> {
+                if (saves.getAndIncrement() == 0) throw new IllegalStateException("db disconnected");
+            }, false), key -> null);
+
+        manager.update("fish", "keep-me");
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class, manager::flush);
+        manager.flush();
+        assertEquals(2, saves.get());
+    }
+
     private static final class RecordingImmediateStrategy implements DataSavingStrategy<String> {
         private final AtomicInteger saveCalls;
         private final AtomicInteger saveAllCalls;

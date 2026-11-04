@@ -53,7 +53,8 @@ afterEvaluate {
             register("emf.admin") {
                 children = listOf(
                     "emf.admin.update.notify",
-                    "emf.admin.migrate"
+                    "emf.admin.migrate",
+                    "emf.admin.pool"
                 )
             }
 
@@ -63,6 +64,10 @@ afterEvaluate {
 
             register("emf.admin.migrate") {
                 description = "Allows users to use the migrate command."
+            }
+
+            register("emf.admin.pool") {
+                description = "Allows managing persistent fishing pools."
             }
 
             register("emf.user") {

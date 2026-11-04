@@ -78,6 +78,7 @@ public class Competition {
     private CompetitionFile competitionFile;
     private int numberNeeded = 0;
     private Player singleWinner = null;
+    private boolean paused = false;
 
     public Competition(final @NotNull CompetitionFile competitionFile) {
         this.competitionFile = competitionFile;
@@ -210,6 +211,13 @@ public class Competition {
 
             initTimer();
             announceBegin();
+
+            // Reset previous competition buffs when a new competition starts
+            com.oheers.fish.competition.buff.CompetitionBuffManager.getInstance().clearAllBuffs();
+
+            // Play competition start animation/title/effects
+            com.oheers.fish.effects.AnimationManager.getInstance().playCompetitionStart(this);
+
             EMFCompetitionStartEvent startEvent = new EMFCompetitionStartEvent(this);
             Bukkit.getServer().getPluginManager().callEvent(startEvent);
 
@@ -377,7 +385,43 @@ public class Competition {
         return competitionType.getStrategy().getTypeFormat(this, configMessage);
     }
 
+    public boolean isPaused() {
+        return this.paused;
+    }
+
+    public void pause() {
+        this.paused = true;
+    }
+
+    public void resume() {
+        this.paused = false;
+    }
+
+    public void cancel() {
+        if (ended()) {
+            return;
+        }
+        if (timingSystem != null) {
+            timingSystem.stop();
+        }
+        if (backupSystem != null) {
+            backupSystem.stop();
+        }
+        if (statusBar != null) {
+            statusBar.hide();
+        }
+        dataFile.delete();
+        active = null;
+        if (leaderboard != null) {
+            leaderboard.clear();
+        }
+        EMFSingleMessage.fromString("<red><bold>[!]</bold> Cuộc thi câu cá đã bị hủy bỏ bởi quản trị viên.").broadcast();
+    }
+
     protected boolean decreaseTime() {
+        if (this.paused) {
+            return false;
+        }
         if (processCompetitionSecond(timeLeft)) {
             return true;
         }
@@ -422,6 +466,21 @@ public class Competition {
             ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(sender);
             return;
         }
+        EMFMessage header = getTypeFormat(ConfigMessage.LEADERBOARD_ACTIVE_HEADER);
+        header.setVariable("{competition}", getCompetitionName());
+        header.setVariable("{time-left}", Long.toString(Math.max(0, timeLeft)));
+        header.send(sender);
+        if (sender instanceof Player viewer) {
+            List<CompetitionEntry> all = leaderboard.getEntries();
+            int personalPosition = 0;
+            for (int i = 0; i < all.size(); i++) {
+                if (all.get(i).getPlayer().equals(viewer.getUniqueId())) { personalPosition = i + 1; break; }
+            }
+            EMFMessage personal = (personalPosition == 0 ? ConfigMessage.LEADERBOARD_PERSONAL_UNRANKED
+                    : ConfigMessage.LEADERBOARD_PERSONAL_RANK).getMessage();
+            personal.setPosition(Integer.toString(personalPosition));
+            personal.send(sender);
+        }
         if (leaderboard.getSize() == 0) {
             ConfigMessage.NO_FISH_CAUGHT.getMessage().send(sender);
             return;
@@ -451,8 +510,7 @@ public class Competition {
 
         for (CompetitionEntry entry : entries) {
             pos++;
-            // If we're out of colours or the max count is reached, break the loop
-            if (pos > competitionColours.size() || pos > maxCount) {
+            if (pos > maxCount) {
                 break;
             }
 
@@ -468,7 +526,10 @@ public class Competition {
             OfflinePlayer player = Bukkit.getOfflinePlayer(entry.getPlayer());
 
             String name = player.getName() == null ? "Unknown" : player.getName();
-            EMFSingleMessage colour = EMFSingleMessage.fromString(competitionColours.get(pos - 1));
+            String rawColour = Leaderboard.rowColour(competitionColours, pos)
+                .replace("{name}", name)
+                .replace("<name>", name);
+            EMFSingleMessage colour = EMFSingleMessage.fromString(rawColour);
             colour.setVariable("{name}", name);
 
             // {pos_colour} to empty, {player} to new colour
@@ -544,6 +605,12 @@ public class Competition {
             // Increment the place
             rewardPlace++;
         }
+
+        // Apply competition winner buffs to leaderboard winners
+        com.oheers.fish.competition.buff.CompetitionBuffManager.getInstance().applyCompetitionRewards(entries);
+
+        // Play victory title, sounds and fireworks animation
+        com.oheers.fish.effects.AnimationManager.getInstance().playCompetitionEnd(this, entries);
     }
 
     private void singleReward(Player player) {

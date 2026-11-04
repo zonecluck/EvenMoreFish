@@ -49,6 +49,14 @@ public abstract class MainCommandProvider<C, A> {
         return MainConfig.getInstance().getJournalSubCommandName();
     }
 
+    protected @NotNull String indexName() {
+        return MainConfig.getInstance().getIndexSubCommandName();
+    }
+
+    protected @NotNull String autofishName() {
+        return MainConfig.getInstance().getAutofishSubCommandName();
+    }
+
     protected abstract @NotNull A toggle();
 
     protected @NotNull String toggleName() {

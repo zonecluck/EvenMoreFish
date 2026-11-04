@@ -1,0 +1,74 @@
+# Premium Cinematic Director V2 (Phase 11)
+# Visual-only. NEVER triggers rewards, fish selection, events, bait consumption or XP.
+# Requires simulator/effects.yml: effects.enabled AND cinematic.enabled.
+config-version: 1
+enabled: true
+limits:
+  # Bukkit particles are network packets too; this is a separate cosmetic emission cap.
+  particle-emissions-per-tick: 12
+
+# Every duration is in ticks. Total 8..90; every stage can be skipped except
+# surface >=2, delivery >=2, fade >=1. No real camera shake or player freeze.
+# Cue sound is NONE or a Bukkit sound; particle NONE or a simple supported particle.
+# Individual cues fire ONCE on stage transition (not every tick).
+presets:
+  common:
+    stages: {anticipation: 0, vortex: 0, surface: 8, reveal: 0, delivery: 6, fade: 2}
+    arc-height: 0.5
+    orbit-width: 0.0
+    trail: {particle: NONE, interval-ticks: 10}
+    cues:
+      anticipation: {sound: NONE, particle: NONE, count: 0, radius: 0.4, volume: 0.7, pitch: 1.0}
+      vortex: {sound: NONE, particle: NONE, count: 0, radius: 0.5, volume: 0.7, pitch: 1.0}
+      surface_break: {sound: ENTITY_FISHING_BOBBER_SPLASH, particle: SPLASH, count: 4, radius: 0.4, volume: 0.7, pitch: 1.0}
+      hero_reveal: {sound: NONE, particle: NONE, count: 0, radius: 0.5, volume: 0.7, pitch: 1.0}
+      delivery: {sound: NONE, particle: NONE, count: 0, radius: 0.5, volume: 0.7, pitch: 1.0}
+      fade: {sound: NONE, particle: NONE, count: 0, radius: 0.5, volume: 0.7, pitch: 1.0}
+  rare:
+    stages: {anticipation: 3, vortex: 0, surface: 10, reveal: 6, delivery: 8, fade: 3}
+    arc-height: 0.85
+    orbit-width: 0.22
+    trail: {particle: BUBBLE_POP, interval-ticks: 6}
+    cues:
+      anticipation: {sound: NONE, particle: BUBBLE_POP, count: 3, radius: 0.4, volume: 0.7, pitch: 1.0}
+      vortex: {sound: NONE, particle: NONE, count: 0, radius: 0.5, volume: 0.7, pitch: 1.0}
+      surface_break: {sound: ENTITY_FISHING_BOBBER_SPLASH, particle: SPLASH, count: 8, radius: 0.6, volume: 0.7, pitch: 1.0}
+      hero_reveal: {sound: ENTITY_EXPERIENCE_ORB_PICKUP, particle: ENCHANT, count: 7, radius: 0.5, volume: 0.7, pitch: 1.0}
+      delivery: {sound: NONE, particle: NONE, count: 0, radius: 0.5, volume: 0.7, pitch: 1.0}
+      fade: {sound: NONE, particle: NONE, count: 0, radius: 0.5, volume: 0.7, pitch: 1.0}
+  epic:
+    stages: {anticipation: 6, vortex: 10, surface: 14, reveal: 15, delivery: 14, fade: 7}
+    arc-height: 1.7
+    orbit-width: 0.62
+    trail: {particle: ENCHANT, interval-ticks: 4}
+    cues:
+      anticipation: {sound: BLOCK_AMETHYST_BLOCK_CHIME, particle: BUBBLE_POP, count: 4, radius: 0.55, volume: 0.38, pitch: 1.0}
+      vortex: {sound: BLOCK_AMETHYST_BLOCK_RESONATE, particle: BUBBLE_POP, count: 7, radius: 1.0, volume: 0.38, pitch: 1.0}
+      surface_break: {sound: ENTITY_FISHING_BOBBER_SPLASH, particle: SPLASH, count: 9, radius: 0.75, volume: 0.38, pitch: 1.0}
+      hero_reveal: {sound: UI_TOAST_CHALLENGE_COMPLETE, particle: ENCHANT, count: 9, radius: 0.8, volume: 0.38, pitch: 1.0}
+      delivery: {sound: ENTITY_EXPERIENCE_ORB_PICKUP, particle: ENCHANT, count: 6, radius: 0.55, volume: 0.38, pitch: 1.0}
+      fade: {sound: NONE, particle: HAPPY_VILLAGER, count: 4, radius: 0.5, volume: 0.38, pitch: 1.0}
+  legendary:
+    stages: {anticipation: 9, vortex: 14, surface: 16, reveal: 19, delivery: 18, fade: 9}
+    arc-height: 2.25
+    orbit-width: 0.88
+    trail: {particle: ENCHANT, interval-ticks: 3}
+    cues:
+      anticipation: {sound: BLOCK_BEACON_AMBIENT, particle: BUBBLE_POP, count: 6, radius: 0.7, volume: 0.48, pitch: 0.9}
+      vortex: {sound: BLOCK_BEACON_POWER_SELECT, particle: BUBBLE_POP, count: 12, radius: 1.3, volume: 0.48, pitch: 1.0}
+      surface_break: {sound: ENTITY_FISHING_BOBBER_SPLASH, particle: SPLASH, count: 12, radius: 1.1, volume: 0.48, pitch: 1.0}
+      hero_reveal: {sound: UI_TOAST_CHALLENGE_COMPLETE, particle: TOTEM_OF_UNDYING, count: 14, radius: 1.1, volume: 0.48, pitch: 1.0}
+      delivery: {sound: ENTITY_PLAYER_LEVELUP, particle: ENCHANT, count: 9, radius: 0.7, volume: 0.48, pitch: 1.0}
+      fade: {sound: BLOCK_NOTE_BLOCK_CHIME, particle: HAPPY_VILLAGER, count: 6, radius: 0.55, volume: 0.48, pitch: 1.0}
+
+rarity-presets:
+  Common: common
+  Uncommon: rare
+  Rare: rare
+  Epic: epic
+  Legendary: legendary
+  Mythical: legendary
+
+# Example: 'Legendary:Golden Carp': legendary
+# Case-insensitive EMF FishKey; cosmetic only, no loot modification.
+fish-overrides: {}

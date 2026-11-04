@@ -1,0 +1,22 @@
+# Premium Phase 12 - Schooling / Natural Movement, admin preview only.
+# Schooling is cosmetic: it never creates fish, grants a reward or changes rarity/weight.
+# Requires simulator.enabled + ambient-preview.enabled; remains OFF by default.
+# No Folia claim: current Simulator preview is Paper main-thread only.
+config-version: 1
+enabled: false
+limits:
+  max-schools: 32           # Global logical group cap; NO extra packet entities
+  max-schools-per-zone: 6   # Limit groups in crowded lakes
+  max-members: 6           # 2-8 existing FishAgents per logical group
+  decisions-per-move: 36   # Bounded direction choices per ambient movement pass
+  neighbor-checks-per-move: 144 # Hard bound on zone/water adjacency validations
+  recruits-per-move: 8    # Idle fish examined for (re)joining every 20 ticks
+movement:
+  decision-interval-ticks: 6
+  join-radius: 6.0          # blocks, shared/private ownership never mixes
+  roam-radius: 12.0        # avoid drifting away from the group's origin
+  formation-gap: 1.3       # blocks; compact staggered-V follower positions
+  leader-speed: 0.12       # blocks per ambient movement pass
+  follower-speed: 0.14
+  scatter-ticks: 32        # visual response to bite/reel events
+  reform-ticks: 28

@@ -17,6 +17,10 @@ extra["variant"] = "core"
 
 description = "A fishing extension bringing an exciting new experience to fishing."
 
+val ledatPlatformApiJar = providers.gradleProperty("ledatPlatformApiJar").orElse(
+    rootProject.file("../../SMP Plugins/LeDatCanvas/ledat-platform-api/build/libs/ledat-platform-api-2.0.0-core-rewrite-no-common-phase58j-hidename2.jar").absolutePath
+)
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
@@ -27,6 +31,8 @@ java {
 
 dependencies {
     api(project(":even-more-fish-api"))
+    // Optional journal presentation only; the server supplies the API at runtime.
+    compileOnly(files(ledatPlatformApiJar))
 
 
     compileOnly(libs.paper.api) {
@@ -36,6 +42,7 @@ dependencies {
     }
 
     compileOnly(libs.vault.api)
+    testRuntimeOnly(libs.vault.api)
     compileOnly(libs.placeholder.api)
 
     compileOnly(libs.bundles.worldguard) {
@@ -148,15 +155,19 @@ testing {
 
             dependencies {
                 implementation(project(":even-more-fish-api"))
+                implementation(files(ledatPlatformApiJar))
                 implementation(libs.junit.jupiter.api)
                 implementation(libs.mockito.core)
                 implementation(libs.boostedyaml)
+                // NBT API's item signatures reference the server authlib even in boundary tests.
+                implementation("com.mojang:authlib:1.5.21")
                 implementation(libs.paper.api) {
                     version {
                         strictly("1.20.1-R0.1-SNAPSHOT")
                     }
                 }
                 runtimeOnly(libs.junit.jupiter.engine)
+                runtimeOnly(libs.connectors.sqlite)
             }
 
             targets {

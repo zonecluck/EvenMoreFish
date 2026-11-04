@@ -1,0 +1,39 @@
+# Premium Phase 13 - Fish Personality, Environment Snapshot and Water Presence FX.
+# ADMIN STAGING PREVIEW ONLY. Must also enable simulator.yml / ambient preview.
+# No changes to EMF rarity weights, fishing rewards, loot tables, hook timing or progression.
+# No chunk loading, block changes, fake items or independent entity spawning.
+# Paper main thread only; no Folia compatibility claim.
+config-version: 1
+enabled: false
+
+environment:
+  enabled: true
+  # Max source reads per owner tick; cache avoids repeated biome/time/weather probes.
+  max-samples-per-tick: 4   # 1..32
+  cache-entries: 256       # 16..2048
+  cache-ttl-ticks: 200     # 20..2400
+  depth-scan-blocks: 8     # 2..16, downward water block checks, loaded chunk only
+
+personality:
+  enabled: true
+  shy-disturb-radius: 5.0  # 1..16 blocks, only unreserved fish flee
+  rarity-profiles:
+    Common: CALM
+    Uncommon: CURIOUS
+    Rare: SHY
+    Epic: AGGRESSIVE
+    Legendary: MYTHIC
+    Mythical: MYTHIC
+  # Exact key format is rarityId:fishId from EMF fish catalog.
+  # Supported: CALM, CURIOUS, SHY, AGGRESSIVE, NOCTURNAL, DEEP_DWELLER, MYTHIC.
+  fish-overrides: {}
+  # Example: 'Rare:River Eel': DEEP_DWELLER
+
+water-fx:
+  enabled: false
+  # Effects use Bukkit per-viewer particles, not world-wide particles.
+  interval-ticks: 10            # 2..80; default 2Hz, no per-player task
+  max-particles-per-tick: 32     # 1..128, actual particle count ceiling
+  max-particles-per-viewer: 8   # 1..32; cannot exceed global cap
+  candidates-per-viewer: 24     # 1..160; early-out for large populations
+  radius: 16.0                  # 3..32, avoid visual noise for distant players

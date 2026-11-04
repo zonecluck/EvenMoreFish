@@ -1,0 +1,39 @@
+id: long_sinh
+disabled: false
+allowed-rarities:
+  - Common
+  - Rare
+  - Epic
+  - Legendary
+  - Mythic
+
+# Chỉ số sức mạnh của Cần Câu Custom
+stats:
+  luck-modifier: 0.35
+  lure-modifier: 0.30
+  double-catch-chance: 0.22
+  exp-multiplier: 2.0
+  rarity-modifiers:
+    Mythic: 1.5
+    Legendary: 1.4
+
+allow-baits: true
+unbreakable: true
+
+item:
+  material: FISHING_ROD
+  displayname: "<gradient:#64E8FF:#7F6BFF><bold>Cần Câu Long Sinh</gradient>"
+  glowing: true
+  lore:
+    - ' '
+    - '<dark_gray> ○ <white>Độ hiếm: <blue>Thần Thoại (Mythic)</blue>'
+    - '<dark_gray> ○ <white>Đặc tính: <aqua>Không Thể Hỏng</aqua>'
+    - ' '
+    - '<dark_gray> ○ <white>Tăng sức mạnh:'
+    - '  <dark_gray> -<yellow> May Mắn:</yellow> <green>+35%</green>'
+    - '  <dark_gray> -<aqua> Tốc Độ Cắn Câu:</aqua> <green>+30%</green>'
+    - '  <dark_gray> -<light_purple> Nhân Đôi Cá:</light_purple> <green>22%</green>'
+    - '  <dark_gray> -<gold> Hệ Số EXP:</gold> <green>x2.0</green>'
+    - ' '
+    - '<#C797FF>Mang trong mình long tức uy nghiêm'
+    - '<white>khắc chế và hiệu triệu long tộc biển cả!'

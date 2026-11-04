@@ -5,19 +5,36 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 public final class DbExecutor implements AutoCloseable {
-    private final ExecutorService executor;
+    private final ThreadPoolExecutor executor;
 
     public DbExecutor(int threads, String threadNamePrefix) {
-        if (threads <= 0) {
-            throw new IllegalArgumentException("threads must be > 0");
+        this(threads, threadNamePrefix, 8192);
+    }
+
+    public DbExecutor(int threads, String threadNamePrefix, int maxQueued) {
+        if (threads <= 0 || maxQueued <= 0) {
+            throw new IllegalArgumentException("threads and maxQueued must be positive");
         }
-        this.executor = Executors.newFixedThreadPool(threads, namedThreadFactory(threadNamePrefix));
+        this.executor = new ThreadPoolExecutor(threads, threads, 0L, TimeUnit.MILLISECONDS,
+            new ArrayBlockingQueue<>(maxQueued), namedThreadFactory(threadNamePrefix),
+            new ThreadPoolExecutor.AbortPolicy());
+    }
+
+    public boolean hasCapacity() {
+        return !executor.isShutdown() && executor.getQueue().remainingCapacity() > 0;
+    }
+
+    public boolean awaitShutdown(long timeout, TimeUnit unit) throws InterruptedException {
+        executor.shutdown();
+        return executor.awaitTermination(timeout, unit);
     }
 
     public <T> @NotNull CompletableFuture<T> queryAsync(Supplier<T> work) {

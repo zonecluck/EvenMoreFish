@@ -87,8 +87,10 @@ public class ConfigGui {
             );
             return;
         }
-        String title = this.config.getString("title");
+        String title = this.config.getString("inventory-title", this.config.getString("title"));
         String[] layout = this.config.getStringList("layout").stream().limit(6).toArray(String[]::new);
+        title = InventoryTitle.forLayout(title, layout,
+            this.config.contains("rows") ? this.config.getInt("rows") : null);
         InventoryGui gui = new InventoryGui(
             EvenMoreFish.getInstance(),
             title == null ? null : EMFSingleMessage.fromString(title).getLegacyMessage(),

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.database.DatabaseTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:46:09.667Z" hostname="LEDAT" time="1.427">
+  <properties/>
+  <testcase name="bindUserReportInsertPersistsRecentFishAsLastFish()" classname="com.oheers.fish.database.DatabaseTest" time="1.062"/>
+  <testcase name="createCompetitionReportUsesCompetitionStartTimeForStartTimestamp()" classname="com.oheers.fish.database.DatabaseTest" time="0.345"/>
+  <testcase name="bindUserReportUpdatePersistsRecentFishAsLastFish()" classname="com.oheers.fish.database.DatabaseTest" time="0.016"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+]]></system-err>
+</testsuite>

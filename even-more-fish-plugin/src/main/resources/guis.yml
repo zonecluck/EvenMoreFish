@@ -1,5 +1,9 @@
 # Configuration for all EMF GUIs.
 # This file will soon be split into multiple, just like the rest of the configs.
+# Inventory titles: optional inventory-title overrides title. {rows} is the actual
+# chest layout height (1–6), and row_1..row_6 glyphs follow it automatically.
+# Optional rows must match layout; omit it to derive the height from layout.
+# Use pack glyphs only on servers that provide those glyphs. Item names are unchanged.
 
 # An example button, to hopefully help with understanding what they can do.
 # See the wiki for all item options: https://evenmorefish.github.io/EvenMoreFish/docs/configuration/items
@@ -24,108 +28,134 @@ general:
   first-page:
     item:
       material: arrow
-      displayname: <aqua>First Page
+      displayname: "<aqua><bold>Trang Đầu Tiên</bold></aqua>"
       lore:
-        - <yellow>Go to the first page
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <aqua>Trở về trang đầu tiên</aqua>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để chuyển về đầu!'
   # Character: p
   previous-page:
     item:
       material: paper
-      displayname: <aqua>Previous Page
+      displayname: "<yellow><bold>Trang Trước</bold></yellow>"
       lore:
-        - <yellow>Go to the previous page
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <yellow>Quay lại trang trước</yellow>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để xem lại!'
   # Character: n
   next-page:
     item:
       material: paper
-      displayname: <aqua>Next Page
+      displayname: "<yellow><bold>Trang Kế Tiếp</bold></yellow>"
       lore:
-        - <yellow>Go to the next page
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <yellow>Chuyển sang trang sau</yellow>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để xem tiếp!'
   # Character: l
   last-page:
     item:
       material: arrow
-      displayname: <aqua>Last Page
+      displayname: "<aqua><bold>Trang Cuối Cùng</bold></aqua>"
       lore:
-        - <yellow>Go to the last page
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <aqua>Chuyển đến trang cuối cùng</aqua>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để xem cuối!'
 
 main-menu:
   title: <#006F86>EvenMoreFish - Main Menu
+  rows: 3
   layout:
-    - "126515621"
-    - "23     32"
-    - "4 t s h 4"
-    - "4  j b  4"
-    - "23     32"
-    - "1265x5621"
-  # This should be the most used filler item.
-  filler: black_stained_glass_pane
+    - "         "
+    - " t s j b "
+    - "h   x    "
+  filler: "AIR"
 
   fish-toggle:
     item:
       material: tropical_fish
-      displayname: <gold>» Toggle Custom Fish
+      displayname: "<gradient:#00D2FF:#3A7BD5><bold>Bật/Tắt Cá Tùy Chỉnh</bold></gradient>"
       lore:
-        - ""
-        - <gray>Click this button to
-        - <gray>toggle custom fish.
-        - ""
+        - " "
+        - "<dark_gray> ○ <white>Tính năng: <aqua>Cá EvenMoreFish</aqua>"
+        - "<dark_gray> ○ <white>Mô tả: <gray>Bật hoặc tắt khả năng câu trúng cá đặc biệt</gray>"
+        - " "
+        - "<#A8D8EA>Nhấp chuột <white>để chuyển đổi trạng thái!"
     character: t
     click-action: fish-toggle
 
   open-shop:
     item:
       material: gold_ingot
-      displayname: <gold>» Open Fish Shop
+      displayname: "<gradient:#FFE000:#799F0C><bold>Cửa Hàng Bán Cá</bold></gradient>"
       lore:
-        - ""
-        - <gray>Sell the fish you catch to
-        - <gray>earn a bit of extra money.
-        - ""
+        - " "
+        - "<dark_gray> ○ <white>Mục đích: <gold>Kiếm Tiền/Kinh Tế</gold>"
+        - "<dark_gray> ○ <white>Chi tiết:"
+        - "  <dark_gray> -<yellow> Bán cá bắt được</yellow> <dark_gray>lấy tiền tệ"
+        - "  <dark_gray> -<gold> Giá trị theo độ hiếm và kích thước</gold>"
+        - " "
+        - "<#A8D8EA>Nhấp chuột <white>để mở cửa hàng!"
     character: s
     click-action: open-shop
 
   help-button:
     item:
       material: COMPASS
-      displayname: <gold>» Command Help
+      displayname: "<gradient:#FF512F:#DD2476><bold>Trợ Giúp Lệnh</bold></gradient>"
       lore:
-        - ""
-        - <gray>Shows a list of commands
-        - <gray>you can use for this plugin.
-        - ""
+        - " "
+        - "<dark_gray> ○ <white>Thông tin: <light_purple>Hướng Dẫn & Trợ Giúp</light_purple>"
+        - "<dark_gray> ○ <white>Chi tiết:"
+        - "  <dark_gray> -<gray> Danh sách tất cả các lệnh câu cá</gray>"
+        - "  <dark_gray> -<gray> Hướng dẫn sử dụng tính năng</gray>"
+        - " "
+        - "<#A8D8EA>Nhấp chuột <white>để xem hướng dẫn!"
     character: h
     click-action: show-command-help
 
   open-baits:
     item:
       material: nautilus_shell
-      displayname: "<gold>» View Baits"
+      displayname: "<gradient:#F37335:#FDC830><bold>Danh Sách Mồi Câu</bold></gradient>"
       lore:
-        - ""
-        - <gray>Shows all loaded baits
-        - ""
+        - " "
+        - "<dark_gray> ○ <white>Vật phẩm: <gold>Mồi Câu Cá</gold>"
+        - "<dark_gray> ○ <white>Chi tiết:"
+        - "  <dark_gray> -<yellow> Xem tất cả mồi câu hiện có</yellow>"
+        - "  <dark_gray> -<yellow> Mua mồi để tăng cơ hội câu cá hiếm</yellow>"
+        - " "
+        - "<#A8D8EA>Nhấp chuột <white>để mở danh sách mồi!"
     character: b
     click-action: open-baits-menu
 
   open-journal:
     item:
       material: writable_book
-      displayname: "<gold>» Fish Journal"
+      displayname: "<gradient:#11998E:#38EF7D><bold>Nhật Ký Thủy Sinh</bold></gradient>"
       lore:
-        - ""
-        - <gray>Keep track of all the
-        - <gray>fish you have caught.
-        - ""
+        - " "
+        - "<dark_gray> ○ <white>Bộ sưu tập: <green>Sổ Tay Đánh Bắt</green>"
+        - "<dark_gray> ○ <white>Chi tiết:"
+        - "  <dark_gray> -<white> Lưu trữ thông tin cá đã câu</white>"
+        - "  <dark_gray> -<white> Kỷ lục kích thước lớn nhất & nhỏ nhất</white>"
+        - " "
+        - "<#A8D8EA>Nhấp chuột <white>để mở nhật ký!"
     character: j
     click-action: open-journal-menu
 
   exit:
     item:
       material: pufferfish
-      displayname: <red>Exit
+      displayname: "<red><bold>Thoát</bold></red>"
       lore:
-        - <yellow>Exit to the Menu
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <red>Đóng giao diện</red>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để thoát menu!'
     glowing: true
     character: x
     click-action: full-exit
@@ -137,22 +167,23 @@ sell-menu-normal:
     - "iiiiiiiii"
     - "iiiiiiiii"
     - "   s a   "
-  filler: light_blue_stained_glass_pane
+  filler: "AIR"
   # The character to use for the slots where players can place fish.
   deposit-character: i
 
   sell-item:
     item:
       material: GOLD_INGOT
-      displayname: <bold><gold>Sell
+      displayname: "<gradient:#FFE000:#799F0C><bold>Bán Cá Trong Menu</bold></gradient>"
       lore:
-        - <dark_gray>Fish Shop
-        - ''
-        - <gray>Click this button to sell all
-        - <gray>the fish inside the shop menu.
-        - ''
-        - <yellow>» (Left-click) sell the fish.
-        - <gray>» (Right-click) cancel.
+        - " "
+        - "<dark_gray> ○ <white>Khu vực bán: <yellow>Các ô trong menu</yellow>"
+        - "<dark_gray> ○ <white>Thao tác:"
+        - "  <dark_gray> -<green> Chuột trái:</green> <white>Bán tất cả cá trong menu</white>"
+        - "  <dark_gray> -<red> Chuột phải:</red> <white>Hủy bỏ & thoát</white>"
+        - " "
+        - "<#A8D8EA>Đặt cá vào các ô trên"
+        - "<white>rồi nhấn để bán!"
     character: s
     click-action:
       left: sell-shop
@@ -161,15 +192,16 @@ sell-menu-normal:
   sell-all-item:
     item:
       material: COD_BUCKET
-      displayname: <bold><gold>Sell All
+      displayname: "<gradient:#FF512F:#F09819><bold>Bán Tất Cả Cá Trong Túi</bold></gradient>"
       lore:
-        - <dark_gray>Inventory
-        - ''
-        - <gray>Click this button to sell all
-        - <gray>the fish in your inventory.
-        - ''
-        - <yellow>» (Left-click) sell the fish.
-        - <gray>» (Right-click) cancel.
+        - " "
+        - "<dark_gray> ○ <white>Khu vực bán: <gold>Toàn bộ kho đồ cá nhân</gold>"
+        - "<dark_gray> ○ <white>Thao tác:"
+        - "  <dark_gray> -<green> Chuột trái:</green> <white>Bán tất cả cá trong túi</white>"
+        - "  <dark_gray> -<red> Chuột phải:</red> <white>Hủy bỏ & thoát</white>"
+        - " "
+        - "<#A8D8EA>Nhấp chuột trái"
+        - "<white>để bán sạch cá kiếm tiền!"
     character: a
     click-action:
       left: sell-inventory
@@ -182,22 +214,23 @@ sell-menu-confirm:
     - "iiiiiiiii"
     - "iiiiiiiii"
     - "   s a   "
-  filler: light_blue_stained_glass_pane
+  filler: "AIR"
   # The character to use for the slots where players can place fish.
   deposit-character: i
 
   sell-item:
     item:
       material: GOLD_INGOT
-      displayname: <bold><gold>Confirm Sell
+      displayname: "<gradient:#FFE000:#799F0C><bold>Xác Nhận Bán Trong Menu</bold></gradient>"
       lore:
-        - <dark_gray>Fish Shop
-        - ''
-        - <gray>Sell your fish here to make
-        - <gray>some extra money.
-        - ''
-        - <yellow>» (Left-click) sell the fish.
-        - <gray>» (Right-click) cancel.
+        - " "
+        - "<dark_gray> ○ <white>Khu vực bán: <yellow>Các ô trong menu</yellow>"
+        - "<dark_gray> ○ <white>Thao tác:"
+        - "  <dark_gray> -<green> Chuột trái:</green> <white>Bán toàn bộ cá trong menu</white>"
+        - "  <dark_gray> -<red> Chuột phải:</red> <white>Hủy bỏ & thoát</white>"
+        - " "
+        - "<#A8D8EA>Nhấp chuột trái"
+        - "<white>để xác nhận bán cá!"
     character: s
     click-action:
       left: sell-shop-confirm
@@ -206,16 +239,16 @@ sell-menu-confirm:
   sell-all-item:
     item:
       material: COD_BUCKET
-      displayname: <bold><gold>Confirm Sell All
+      displayname: "<gradient:#FF512F:#F09819><bold>Xác Nhận Bán Tất Cả</bold></gradient>"
       lore:
-        - <dark_gray>Inventory
-        - ''
-        - <gray>Click this button to sell
-        - <gray>the fish in your inventory to
-        - <gray>make some extra money.
-        - ''
-        - <yellow>» (Left-click) sell the fish.
-        - <gray>» (Right-click) cancel.
+        - " "
+        - "<dark_gray> ○ <white>Khu vực bán: <gold>Toàn bộ kho đồ cá nhân</gold>"
+        - "<dark_gray> ○ <white>Thao tác:"
+        - "  <dark_gray> -<green> Chuột trái:</green> <white>Bán tất cả cá trong túi</white>"
+        - "  <dark_gray> -<red> Chuột phải:</red> <white>Hủy bỏ & thoát</white>"
+        - " "
+        - "<#A8D8EA>Nhấp chuột trái"
+        - "<white>để bán sạch cá kiếm tiền!"
     character: a
     click-action:
       left: sell-inventory-confirm
@@ -229,7 +262,7 @@ baits-menu:
     - "4 bbbbb 4"
     - "23 4 4 32"
     - "p 23x32 n"
-  filler: black_stained_glass_pane
+  filler: "AIR"
   # The character to use for the bait items.
   bait-character: b
 
@@ -239,14 +272,22 @@ baits-menu:
   # The lore to use when a bait can be purchased.
   # Supported variables: {quantity}, {price}, {bait}
   purchase-lore:
-    - Click to purchase {quantity}x {bait} for {price}
+    - ' '
+    - '<dark_gray> ○ <white>Số lượng: <yellow>{quantity}x {bait}</yellow>'
+    - '<dark_gray> ○ <white>Giá mua: <gold>{price}</gold>'
+    - ' '
+    - '<#C797FF>Nhấp chuột'
+    - '<white>để mua mồi câu!'
 
   exit:
     item:
       material: pufferfish
-      displayname: <red>Exit
+      displayname: "<red><bold>Thoát</bold></red>"
       lore:
-        - <yellow>Exit to the Menu
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <red>Quay lại menu chính</red>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để quay lại!'
     glowing: true
     character: x
     click-action: open-main-menu
@@ -254,38 +295,47 @@ baits-menu:
   next-page:
     item:
       material: paper
-      displayname: <yellow>Next Page
+      displayname: "<yellow><bold>Trang Kế Tiếp</bold></yellow>"
       lore:
-        - <yellow>Navigate to the next page
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <yellow>Chuyển sang trang sau</yellow>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để xem tiếp!'
     character: n
     click-action: next-page
 
   previous-page:
     item:
       material: paper
-      displayname: <yellow>Previous Page
+      displayname: "<yellow><bold>Trang Trước</bold></yellow>"
       lore:
-        - <yellow>Navigate to the previous page
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <yellow>Quay lại trang trước</yellow>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để xem lại!'
     character: p
     click-action: previous-page
 
 apply-baits-menu:
-  title: <#006F86>EvenMoreFish - Apply Baits
+  title: <#006F86>EvenMoreFish - Gắn Mồi Câu
   layout:
     - "bbbbbbbbb"
     - "bbbbbbbbb"
     - "bbbbbbbbb"
     - "    x    "
-  filler: light_blue_stained_glass_pane
+  filler: "AIR"
   # The character to use for the bait slots.
   bait-character: b
 
   exit:
     item:
       material: pufferfish
-      displayname: <red>Exit
+      displayname: "<red><bold>Thoát</bold></red>"
       lore:
-        - <yellow>Exit to the Menu
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <red>Đóng giao diện</red>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để thoát menu!'
     glowing: true
     character: x
     click-action: full-exit
@@ -294,7 +344,7 @@ apply-baits-menu:
 
 # The main menu for selecting the rarity you'd like to view
 journal-menu:
-  title: <#006F86>EvenMoreFish - Fish Journal
+  title: <#006F86>EvenMoreFish - Nhật Ký Bắt Cá
   layout:
     - "232323232"
     - "3rrrrrrr3"
@@ -302,7 +352,7 @@ journal-menu:
     - "3rrrrrrr3"
     - "2rrrrrrr2"
     - "p323x323n"
-  filler: gray_stained_glass_pane
+  filler: GRAY_STAINED_GLASS_PANE
   # The character to use for rarity items
   rarity-character: r
 
@@ -316,34 +366,55 @@ journal-menu:
   undiscovered-rarity:
     item:
       material: iron_bars
-      displayname: <dark_gray>Undiscovered Rarity
+      displayname: "<dark_gray><bold>Phẩm Chất Chưa Mở Khóa</bold></dark_gray>"
       lore:
-        - ''
-        - <white>Catch a fish from this
-        - <white>rarity to unlock it here.
-
+        - " "
+        - "<dark_gray> ○ <white>Trạng thái: <red>Chưa mở khóa</red>"
+        - " "
+        - "<dark_gray> ○ <white><#C797FF>Hãy câu cá thuộc phẩm chất này"
+        - "<dark_gray> ○ <white>để mở khóa nhật ký!"
   rarity-item:
     item:
       # This will be overwritten by the rarity's material.
       material: cod
       displayname: '{rarity}'
       lore:
-        - ''
-        - <aqua>→ Click to view caught fish
+        - ' '
+        - '<dark_gray> ○ <white>Mục: <aqua>Xem danh mục cá đã câu</aqua>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để xem chi tiết!'
 
   exit:
     item:
       material: pufferfish
-      displayname: <red>Exit
+      displayname: "<red><bold>Thoát</bold></red>"
       lore:
-        - <yellow>Exit to the Menu
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <red>Đóng giao diện</red>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để thoát menu!'
     glowing: true
     character: x
     click-action: full-exit
 
+  light_blue_stained_glass_pane-filler:
+    item:
+      material: LIGHT_BLUE_STAINED_GLASS_PANE
+      displayname: ' '
+      hide-tooltip: true
+    character: '2'
+    click-action: none
+  cyan_stained_glass_pane-filler:
+    item:
+      material: CYAN_STAINED_GLASS_PANE
+      displayname: ' '
+      hide-tooltip: true
+    character: '3'
+    click-action: none
+
 # The menu for the chosen rarity
 journal-rarity:
-  title: <dark_blue>Fish Journal
+  title: <dark_blue>Nhật Ký Bắt Cá
   layout:
     - "    a    "
     - " fffffff "
@@ -351,7 +422,7 @@ journal-rarity:
     - " fffffff "
     - " fffffff "
     - "p   x   n"
-  filler: gray_stained_glass_pane
+  filler: "AIR"
   # The character to use for fish items
   fish-character: f
 
@@ -363,53 +434,65 @@ journal-rarity:
 
   # The message to display when a fish has no data.
   # This does not support formatting.
-  unknown-message: "Unknown"
+  unknown-message: "Chưa rõ"
 
   # How undiscovered fish should look
   undiscovered-fish:
     item:
       material: iron_bars
-      displayname: <dark_gray>Undiscovered Fish
-    lore:
-      - ''
-      - <white>Catch this fish
-      - <white>to unlock it here.
-
-  # How caught fish should look. Changing the material will not work, as it always uses the fish item as a base
+      displayname: "<dark_gray><bold>Cá Chưa Mở Khóa</bold></dark_gray>"
+      lore:
+        - " "
+        - "<dark_gray> ○ <white>Trạng thái: <red>Chưa bắt được</red>"
+        - " "
+        - "<dark_gray> ○ <white><#C797FF>Hãy thử vận may đi câu"
+        - "<dark_gray> ○ <white>để mở khóa cá này!"
   fish-item:
     item:
-      displayname: <white>{fishname}
+      displayname: "<yellow><bold>{fishname}</bold></yellow>"
       lore:
-        - ''
-        - '<white>Caught: {times-caught}x'
-        - '<white>Largest Size: {largest-size}cm'
-        - '<white>Smallest Size: {smallest-size}cm'
-        - '<white>Found: {discover-date}'
-        - ''
-        - '<white>Discovered by: {discoverer}'
-        - '<white>Server Largest: {server-largest}cm'
-        - '<white>Server Smallest: {server-smallest}cm'
-        - '<white>Server Caught: {server-caught}x'
+        - ' '
+        - '<dark_gray> ○ <white>Thành tích cá nhân:'
+        - '  <dark_gray> -<white> Đã câu: <yellow>{times-caught} lần</yellow>'
+        - '  <dark_gray> -<white> Lớn nhất: <green>{largest-size}cm</green>'
+        - '  <dark_gray> -<white> Nhỏ nhất: <aqua>{smallest-size}cm</aqua>'
+        - '  <dark_gray> -<white> Ngày phát hiện: <gold>{discover-date}</gold>'
+        - ' '
+        - '<dark_gray> ○ <white>Kỷ lục máy chủ:'
+        - '  <dark_gray> -<white> Người đầu tiên: <light_purple>{discoverer}</light_purple>'
+        - '  <dark_gray> -<white> Lớn nhất server: <green>{server-largest}cm</green>'
+        - '  <dark_gray> -<white> Nhỏ nhất server: <aqua>{server-smallest}cm</aqua>'
+        - '  <dark_gray> -<white> Tổng đã câu: <yellow>{server-caught} lần</yellow>'
+        - ' '
+        - '<#A8D8EA>Nhật ký sinh vật biển'
+        - '<white>chi tiết của EvenMoreFish'
 
   rarity-item:
     item:
-      displayname: <white>{rarityname}
+      displayname: "<white>{rarityname}</white>"
 
   info:
     item:
       material: book
-      displayname: <red>INFO
+      displayname: "<aqua><bold>Thông Tin Phẩm Chất</bold></aqua>"
       lore:
-        - <yellow>Here you can see all the fish you have caught.
-        - <yellow>From this rarity.
+        - ' '
+        - '<dark_gray> ○ <white>Mô tả: <yellow>Danh sách toàn bộ các loại cá</yellow>'
+        - '<dark_gray> ○ <white>Phẩm chất: <white>Thuộc độ hiếm đang chọn</white>'
+        - ' '
+        - '<#A8D8EA>Theo dõi tiến trình'
+        - '<white>để hoàn thành bộ sưu tập!'
     character: a
 
   exit:
     item:
       material: pufferfish
-      displayname: <red>Exit
+      displayname: "<red><bold>Quay Lại</bold></red>"
       lore:
-        - <yellow>Exit to the Menu
+        - ' '
+        - '<dark_gray> ○ <white>Thao tác: <red>Trở về danh sách phẩm chất</red>'
+        - ' '
+        - '<#A8D8EA>Nhấp chuột <white>để quay lại!'
     glowing: true
     character: x
     click-action: open-journal-menu

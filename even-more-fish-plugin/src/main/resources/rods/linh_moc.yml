@@ -1,0 +1,35 @@
+id: linh_moc
+disabled: false
+allowed-rarities:
+  - Junk
+  - Common
+  - Rare
+  - Epic
+
+# Chỉ số sức mạnh của Cần Câu Custom
+stats:
+  luck-modifier: 0.15
+  lure-modifier: 0.12
+  double-catch-chance: 0.10
+  exp-multiplier: 1.35
+
+allow-baits: true
+unbreakable: true
+
+item:
+  material: FISHING_ROD
+  displayname: "<gradient:#6BFF95:#D9FF8C><bold>Cần Câu Linh Mộc</gradient>"
+  glowing: true
+  lore:
+    - ' '
+    - '<dark_gray> ○ <white>Độ hiếm: <green>Sử Thi (Epic)</green>'
+    - '<dark_gray> ○ <white>Đặc tính: <aqua>Không Thể Hỏng</aqua>'
+    - ' '
+    - '<dark_gray> ○ <white>Tăng sức mạnh:'
+    - '  <dark_gray> -<yellow> May Mắn:</yellow> <green>+15%</green>'
+    - '  <dark_gray> -<aqua> Tốc Độ Cắn Câu:</aqua> <green>+12%</green>'
+    - '  <dark_gray> -<light_purple> Nhân Đôi Cá:</light_purple> <green>10%</green>'
+    - '  <dark_gray> -<gold> Hệ Số EXP:</gold> <green>x1.35</green>'
+    - ' '
+    - '<#C797FF>Được gọt đẽo từ thân linh mộc ngàn năm'
+    - '<white>mang lại sinh khí dồi dào khi câu!'

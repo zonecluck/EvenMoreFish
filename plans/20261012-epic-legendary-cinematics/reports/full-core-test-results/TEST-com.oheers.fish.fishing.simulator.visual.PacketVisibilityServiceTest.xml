@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.simulator.visual.PacketVisibilityServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:53:29.789Z" hostname="LEDAT" time="0.09">
+  <properties/>
+  <testcase name="destroyPacketsTakePriorityOverNewSpawns()" classname="com.oheers.fish.fishing.simulator.visual.PacketVisibilityServiceTest" time="0.015"/>
+  <testcase name="partialSpawnRequiresConfirmedDestroyBeforeRetry()" classname="com.oheers.fish.fishing.simulator.visual.PacketVisibilityServiceTest" time="0.001"/>
+  <testcase name="privateFishCannotLeakAcrossViewers()" classname="com.oheers.fish.fishing.simulator.visual.PacketVisibilityServiceTest" time="0.001"/>
+  <testcase name="manyViewerSoakNeverExceedsBudgetOrLeaks()" classname="com.oheers.fish.fishing.simulator.visual.PacketVisibilityServiceTest" time="0.069"/>
+  <testcase name="failedDestroyIsRetriedOnNextTickNotLooped()" classname="com.oheers.fish.fishing.simulator.visual.PacketVisibilityServiceTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,15 @@
+{
+  "backup": "/.emf-hook-hologram-20261012-233244",
+  "files": {
+    "plugins/even-more-fish-2.3.6-SNAPSHOT-1.21.jar": {
+      "remote": "/plugins/even-more-fish-2.3.6-SNAPSHOT-1.21.jar",
+      "old_sha256": "c9db5e1500fd4f80f3b87909c1697b4ab2266346f09d26c29b2f8fbd95eae64d",
+      "sha256": "0f21fb8eeb4140afd9467114c701e731db13ee1655ffd58f9a59965d40337271",
+      "size": 2944223
+    }
+  },
+  "applied": [
+    "plugins/even-more-fish-2.3.6-SNAPSHOT-1.21.jar"
+  ],
+  "status": "VERIFIED_RESTART_PENDING"
+}

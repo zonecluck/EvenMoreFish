@@ -38,6 +38,19 @@ import java.util.UUID;
 public class Fish implements IFish, Sortable {
 
     private static final Random random = new Random();
+    private static final @Nullable ItemFlag ITEM_SPECIFICS_FLAG = findItemSpecificsFlag();
+
+    private static @Nullable ItemFlag findItemSpecificsFlag() {
+        // Paper renamed this flag after 1.20; avoid linking the legacy enum field on newer servers.
+        for (String name : List.of("HIDE_ADDITIONAL_TOOLTIP", "HIDE_ITEM_SPECIFICS", "HIDE_POTION_EFFECTS")) {
+            try {
+                return ItemFlag.valueOf(name);
+            } catch (IllegalArgumentException ignored) {
+                // Tooltip decoration must not prevent fish item creation if a flag is unavailable.
+            }
+        }
+        return null;
+    }
 
     private final @NotNull Section section;
     private final String name;
@@ -84,7 +97,7 @@ public class Fish implements IFish, Sortable {
 
         factory.setFinalChanges(fish -> {
             fish.editMeta(meta -> {
-                meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+                if (ITEM_SPECIFICS_FLAG != null) meta.addItemFlags(ITEM_SPECIFICS_FLAG);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             });
@@ -265,7 +278,20 @@ public class Fish implements IFish, Sortable {
     // prepares it to be given to the player
     @Override
     public void init() {
+        prepareCatch();
+        applyCatchEffects();
+    }
+
+    /**
+     * Pure catch preparation. Unlike init(), this does not send messages or apply
+     * effects before a cancellable catch event has been accepted.
+     */
+    public void prepareCatch() {
         generateSize();
+    }
+
+    /** Side effects must run only after the corresponding catch event succeeds. */
+    public void applyCatchEffects() {
         checkMessage();
         checkEffects();
     }
@@ -517,6 +543,17 @@ public class Fish implements IFish, Sortable {
         return factory;
     }
 
+    public boolean matchesMMOItemId(@NotNull String mmoId) {
+        String suffix = ":" + mmoId.toLowerCase(java.util.Locale.ROOT);
+        for (String path : new String[]{"item.raw-material", "item.material"}) {
+            String val = section.getString(path);
+            if (val != null && val.trim().toLowerCase(java.util.Locale.ROOT).endsWith(suffix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public @NotNull Requirement getRequirement() {
         return this.requirement;
@@ -592,6 +629,10 @@ public class Fish implements IFish, Sortable {
     @Override
     public boolean getShowInJournal() {
         return showInJournal;
+    }
+
+    public @NotNull Section getConfig() {
+        return section;
     }
 
     @Override

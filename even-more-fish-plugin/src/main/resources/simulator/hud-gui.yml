@@ -1,0 +1,42 @@
+# Phase 10B — player-friendly Simulator HUD preset selector.
+# Disabled until Paper GUI safety checklist has been executed.
+# All GUI text lives here, not in Java. /emf hud <preset> always remains available.
+config-version: 1
+enabled: false
+size: 27
+title: '<dark_gray>✦ <aqua>Fishing Simulator</aqua> <gray>• HUD Settings'
+filler:
+  material: GRAY_STAINED_GLASS_PANE
+  name: ' '
+click-sound: minecraft:ui.button.click
+buttons:
+  'OFF':
+    slot: 10
+    material: BARRIER
+    name: '<red>🚫 Tắt HUD & hiệu ứng</red>'
+    lore: ['<gray>Ẩn các lớp hiển thị của Simulator.', '<yellow>Click để chọn</yellow>']
+    glow: false
+  MINIMAL:
+    slot: 11
+    material: PAPER
+    name: '<white>◌ Tối giản</white>'
+    lore: ['<gray>Chỉ tín hiệu cắn câu quan trọng.', '<yellow>Click để chọn</yellow>']
+    glow: false
+  BALANCED:
+    slot: 13
+    material: COMPASS
+    name: '<aqua>⚖ Cân bằng</aqua>'
+    lore: ['<gray>HUD, âm thanh, cinematic nhẹ.', '<yellow>Click để chọn</yellow>']
+    glow: false
+  CINEMATIC:
+    slot: 15
+    material: NETHER_STAR
+    name: '<gold>✦ Điện ảnh</gold>'
+    lore: ['<gray>Trải nghiệm hiệu ứng đầy đủ.', '<yellow>Click để chọn</yellow>']
+    glow: true
+  REDUCED_MOTION:
+    slot: 16
+    material: FEATHER
+    name: '<green>♿ Giảm chuyển động</green>'
+    lore: ['<gray>Giữ thông báo câu, giảm hiệu ứng.', '<yellow>Click để chọn</yellow>']
+    glow: false

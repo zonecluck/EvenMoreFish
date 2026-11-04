@@ -20,6 +20,7 @@ import java.util.Optional;
 public class SellGui extends ConfigGui {
 
     private final Inventory fishInventory;
+    private boolean transitioning = false;
 
     public SellGui(@NotNull Player player, @NotNull SellState sellState, @Nullable Inventory fishInventory) {
         super(sellState.getGuiConfig(), player);
@@ -35,10 +36,15 @@ public class SellGui extends ConfigGui {
         addReplacement("{sell-all-price}", economy.getWorthFormat(playerSaleValue, true));
 
         setCloseAction(close -> {
-            if (MainConfig.getInstance().sellOverDrop()) {
-                new SellHelper(this.fishInventory, this.player).sell();
+            if (!this.transitioning) {
+                if (MainConfig.getInstance().sellOverDrop() && !this.fishInventory.isEmpty()) {
+                    SellHelper helper = new SellHelper(this.fishInventory, this.player);
+                    if (helper.getCount() > 0) {
+                        helper.sell();
+                    }
+                }
+                doRescue();
             }
-            doRescue();
             return false;
         });
 
@@ -52,6 +58,10 @@ public class SellGui extends ConfigGui {
 
     public Inventory getFishInventory() {
         return this.fishInventory;
+    }
+
+    public void setTransitioning(boolean transitioning) {
+        this.transitioning = transitioning;
     }
 
     public enum SellState {

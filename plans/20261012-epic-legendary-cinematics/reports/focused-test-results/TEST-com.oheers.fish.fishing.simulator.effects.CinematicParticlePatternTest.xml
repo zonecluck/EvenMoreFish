@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.simulator.effects.CinematicParticlePatternTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:53:01.179Z" hostname="LEDAT" time="0.119">
+  <properties/>
+  <testcase name="hiddenVortexRotatesAndLegendaryGetsTheLargerHalo()" classname="com.oheers.fish.fishing.simulator.effects.CinematicParticlePatternTest" time="0.073"/>
+  <testcase name="bothRenderersShareTheReservationAndFailureDoesNotFreeSlots()" classname="com.oheers.fish.fishing.simulator.effects.CinematicParticlePatternTest" time="0.004"/>
+  <testcase name="allStagesStayBoundedAndRespectRemainingAllowance()" classname="com.oheers.fish.fishing.simulator.effects.CinematicParticlePatternTest" time="0.003"/>
+  <testcase name="standardScenesDoNotGainExtraParticles()" classname="com.oheers.fish.fishing.simulator.effects.CinematicParticlePatternTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

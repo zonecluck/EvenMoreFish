@@ -16,6 +16,7 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import de.themoep.inventorygui.GuiStorageElement;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -58,7 +59,9 @@ public class ApplyBaitsGui extends ConfigGui {
         }
         boolean changedRod = false;
         List<String> ignoredBaits = new ArrayList<>();
-        for (ItemStack item : baitInventory.getContents()) {
+
+        for (int slot = 0; slot < this.baitInventory.getSize(); slot++) {
+            ItemStack item = this.baitInventory.getItem(slot);
             if (item == null || item.isEmpty()) {
                 continue;
             }
@@ -69,36 +72,52 @@ public class ApplyBaitsGui extends ConfigGui {
             if (ignoredBaits.contains(bait.getId())) {
                 continue;
             }
-            ApplicationResult result;
 
-            // Try to apply all the baits.
+            int amount = item.getAmount();
+            ApplicationResult result;
+            boolean rodMaxed = false;
+
             try {
-                result = BaitNBTManager.applyBaitedRodNBT(handItem, bait, item.getAmount());
-                EvenMoreFish.getInstance().getMetricsManager().incrementBaitsApplied(item.getAmount());
-                // When a specific bait is maxed.
+                result = BaitNBTManager.applyBaitedRodNBT(handItem, bait, amount);
+                int applied = -result.cursorItemModifier();
+                EvenMoreFish.getInstance().getMetricsManager().incrementBaitsApplied(applied > 0 ? applied : amount);
             } catch (MaxBaitReachedException exception) {
                 EMFMessage message = ConfigMessage.BAITS_MAXED_ON_ROD.getMessage();
                 message.setBait(bait);
                 message.send(this.player);
-                // We should now start to ignore this bait.
                 ignoredBaits.add(bait.getId());
-                continue;
-                // When the rod cannot contain any more baits.
+                result = exception.getRecoveryResult();
             } catch (MaxBaitsReachedException exception) {
                 ConfigMessage.BAITS_MAXED.getMessage().send(this.player);
-                // Return here as the fishing rod cannot fit any more baits.
-                return;
+                result = exception.getRecoveryResult();
+                rodMaxed = true;
             }
 
-            // Remove the bait items from the inventory.
-            this.baitInventory.remove(item);
-            // Set the handItem variable.
-            handItem = result.fishingRod();
-            changedRod = true;
+            if (result != null) {
+                handItem = result.fishingRod();
+                int cursorModifier = result.cursorItemModifier();
+                int remainingAmount = amount + cursorModifier;
+
+                if (remainingAmount <= 0) {
+                    this.baitInventory.setItem(slot, null);
+                } else {
+                    item.setAmount(remainingAmount);
+                    this.baitInventory.setItem(slot, item);
+                }
+
+                if (cursorModifier < 0) {
+                    changedRod = true;
+                }
+            }
+
+            if (rodMaxed) {
+                break;
+            }
         }
 
         if (changedRod) {
             this.player.getInventory().setItemInMainHand(handItem);
+            this.player.playSound(this.player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 1.4f);
         }
     }
 

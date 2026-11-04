@@ -4,9 +4,12 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.fishing.rods.AbstractRodManager;
 import com.oheers.fish.utils.nbt.NbtKeys;
 import com.oheers.fish.utils.nbt.NbtUtils;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Locale;
 
 public class RodManager extends AbstractRodManager<CustomRod> {
 
@@ -74,7 +77,24 @@ public class RodManager extends AbstractRodManager<CustomRod> {
         if (NbtUtils.hasKey(item, NbtKeys.EMF_ROD_NBT)) {
             return getItem("default");
         }
-        return null;
+        if (item.getType() != Material.FISHING_ROD || item.isEmpty()) {
+            return null;
+        }
+        String mmoItemId = MMOItemsRodStats.getMMOItemId(item);
+        if (mmoItemId == null) {
+            return null;
+        }
+        // Existing MMOItems rods use the configured EMF tier's eligibility without
+        // rewriting their identity or accepting ordinary/unknown fishing rods.
+        String profileId = switch (mmoItemId.trim().toUpperCase(Locale.ROOT)) {
+            case "FISHING_ROD_1" -> "default";
+            case "FISHING_ROD_2" -> "linh_moc";
+            case "FISHING_ROD_3" -> "dia_mach";
+            case "FISHING_ROD_4" -> "nhu_y";
+            case "FISHING_ROD_5" -> "tan_the";
+            default -> null;
+        };
+        return getItem(profileId);
     }
 
     @Override

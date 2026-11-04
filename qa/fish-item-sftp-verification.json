@@ -1,0 +1,10 @@
+{
+  "date": "20261017-105619",
+  "backup": ".ledat-backups/emf-fishing-fix-20261017-105619/even-more-fish-2.3.6-SNAPSHOT-1.21.jar",
+  "staged": "plugins/update/even-more-fish-2.3.6-SNAPSHOT-1.21.jar",
+  "installedSha256": "ba09dfbe6ad4db5e930f87cd44468cd8bd7a72e5372b114ee977e2654d847f81",
+  "stagedSha256": "2ea4bed6edc36b594d2b3e1d64d70ea1299fdceff4fa0cadd6bc935ee33bc386",
+  "runtimeYamlUnchanged": true,
+  "activation": "pending clean restart",
+  "installedHasLegacyTooltipReference": true
+}

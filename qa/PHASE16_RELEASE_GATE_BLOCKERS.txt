@@ -1,0 +1,11 @@
+RELEASE BLOCKED. Outstanding evidence:
+ - GRADLE_COMPILE: missing verified real-world evidence
+ - GRADLE_JUNIT: missing verified real-world evidence
+ - G3_NATIVE_HOOK: missing verified real-world evidence
+ - G5_PACKET_CLIENT: missing verified real-world evidence
+ - G7_CATCH_REWARD: missing verified real-world evidence
+ - G15_CUSTOM_MODEL: missing verified real-world evidence
+ - RUNTIME_LOAD_TEST: missing verified real-world evidence
+ - RELOAD_SHUTDOWN: missing verified real-world evidence
+ - ROLLBACK_TEST: missing verified real-world evidence
+ - SIGNOFF: missing server owner/reviewer, date or exact Paper build

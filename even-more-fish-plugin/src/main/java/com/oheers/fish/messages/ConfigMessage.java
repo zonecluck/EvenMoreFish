@@ -135,6 +135,9 @@ public enum ConfigMessage {
     LEADERBOARD_LARGEST_TOTAL(PrefixType.DEFAULT, "leaderboard.largest-total"),
     LEADERBOARD_MOST_FISH(PrefixType.DEFAULT, "leaderboard.most-fish"),
     LEADERBOARD_TOTAL_PLAYERS(PrefixType.DEFAULT, "leaderboard.total-players"),
+    LEADERBOARD_ACTIVE_HEADER(PrefixType.DEFAULT, "leaderboard.active-header"),
+    LEADERBOARD_PERSONAL_RANK(PrefixType.DEFAULT, "leaderboard.personal-rank"),
+    LEADERBOARD_PERSONAL_UNRANKED(PrefixType.DEFAULT, "leaderboard.personal-unranked"),
     LEADERBOARD_SHORTEST_FISH(
         PrefixType.DEFAULT,
         "leaderboard.shortest-fish"

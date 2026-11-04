@@ -1,0 +1,1 @@
+package org.bukkit; public record NamespacedKey(String id) { public static NamespacedKey fromString(String s){return s.contains(":")?new NamespacedKey(s):null;} public static NamespacedKey minecraft(String s){return new NamespacedKey("minecraft:"+s);} }

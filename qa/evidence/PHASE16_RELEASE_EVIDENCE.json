@@ -1,0 +1,17 @@
+{
+  "schema-version": 1,
+  "description": "Staging evidence only; PENDING until verified on a real Paper server/client",
+  "target": "Paper 1.21.4+ / Java 21 / PacketEvents external",
+  "gates": {
+    "GRADLE_COMPILE": {"status": "PENDING", "log": "", "sha256": ""},
+    "GRADLE_JUNIT": {"status": "PENDING", "log": "", "sha256": ""},
+    "G3_NATIVE_HOOK": {"status": "PENDING", "log": "", "sha256": ""},
+    "G5_PACKET_CLIENT": {"status": "PENDING", "log": "", "sha256": ""},
+    "G7_CATCH_REWARD": {"status": "PENDING", "log": "", "sha256": ""},
+    "G15_CUSTOM_MODEL": {"status": "PENDING", "log": "", "sha256": ""},
+    "RUNTIME_LOAD_TEST": {"status": "PENDING", "log": "", "sha256": ""},
+    "RELOAD_SHUTDOWN": {"status": "PENDING", "log": "", "sha256": ""},
+    "ROLLBACK_TEST": {"status": "PENDING", "log": "", "sha256": ""}
+  },
+  "release_signoff": {"reviewer": "", "date": "", "server_build": ""}
+}

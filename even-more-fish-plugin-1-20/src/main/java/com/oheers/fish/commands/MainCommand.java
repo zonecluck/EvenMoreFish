@@ -12,12 +12,14 @@ import com.oheers.fish.gui.guis.ApplyBaitsGui;
 import com.oheers.fish.gui.guis.FishJournalGui;
 import com.oheers.fish.gui.guis.MainMenuGui;
 import com.oheers.fish.gui.guis.SellGui;
+import com.oheers.fish.gui.guis.StorageFishShopGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.PrefixType;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.permissions.UserPerms;
 import com.oheers.fish.selling.SellHelper;
+import com.oheers.fish.selling.TurtleStorageFishBridge;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import org.bukkit.entity.Player;
@@ -44,6 +46,8 @@ public class MainCommand {
                         getSellAll(),
                         getApplyBaits(),
                         getJournal(),
+                        getIndex(),
+                        getAutoFish(),
                         new AdminCommand(adminName).getCommand()
                 )
                 .executesPlayer(info -> {
@@ -144,20 +148,27 @@ public class MainCommand {
                     return;
                 }
                 if (sender == player) {
-                    new SellGui(player, SellGui.SellState.NORMAL, null).open();
+                    openShopGui(player);
                     return;
                 }
                 if (!sender.hasPermission(AdminPerms.ADMIN)) {
                     ConfigMessage.NO_PERMISSION.getMessage().send(sender);
                     return;
                 }
-                new SellGui(player, SellGui.SellState.NORMAL, null).open();
+                openShopGui(player);
                 EMFMessage message = ConfigMessage.ADMIN_OPEN_FISH_SHOP.getMessage();
                 message.setPlayer(player);
                 message.send(sender);
             });
     }
 
+    private static void openShopGui(Player target) {
+        if (TurtleStorageFishBridge.isAvailable()) {
+            StorageFishShopGui.open(target);
+        } else {
+            new SellGui(target, SellGui.SellState.NORMAL, null).open();
+        }
+    }
 
     private CommandAPICommand getSellAll() {
         String name = MainConfig.getInstance().getSellAllSubCommandName();
@@ -187,8 +198,58 @@ public class MainCommand {
     }
 
 
-    private CommandAPICommand getJournal() {
-        String name = MainConfig.getInstance().getJournalSubCommandName();
+    public static CommandAPICommand getJournal() {
+        return createJournalCommand(MainConfig.getInstance().getJournalSubCommandName());
+    }
+
+    public static CommandAPICommand getIndex() {
+        return createJournalCommand(MainConfig.getInstance().getIndexSubCommandName());
+    }
+
+    public static CommandAPICommand getAutoFish() {
+        String name = MainConfig.getInstance().getAutofishSubCommandName();
+        return new CommandAPICommand(name)
+            .withSubcommand(
+                new CommandAPICommand("toggle")
+                    .executesPlayer(info -> {
+                        var service = EvenMoreFish.getInstance().getAutoFishing();
+                        if (service != null) {
+                            service.toggle(info.sender());
+                        }
+                    })
+            )
+            .withSubcommand(
+                new CommandAPICommand("give")
+                    .withPermission(AdminPerms.ADMIN)
+                    .withArguments(
+                        ArgumentHelper.getPlayerArgument("target"),
+                        new dev.jorel.commandapi.arguments.IntegerArgument("minutes", 1, 525600)
+                    )
+                    .executes((sender, args) -> {
+                        Player target = args.getUnchecked("target");
+                        Integer minutes = args.getUnchecked("minutes");
+                        var service = EvenMoreFish.getInstance().getAutoFishing();
+                        if (service == null || target == null || minutes == null) {
+                            return;
+                        }
+                        var profile = service.getProfile(target.getUniqueId());
+                        long addedSeconds = minutes * 60L;
+                        profile.addSeconds(addedSeconds);
+                        service.getDataStore().saveIfDirtyAsync();
+                        String formattedAdded = com.oheers.fish.autofish.AutoFishProfile.formatDuration(addedSeconds);
+                        String formattedTotal = com.oheers.fish.autofish.AutoFishProfile.formatDuration(profile.getRemainingSeconds());
+                        sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
+                            "<dark_gray>[<aqua>⚡</aqua>]</dark_gray> <green>Đã cộng <yellow>+" + formattedAdded + "</yellow> thời gian Auto-Fishing cho <white>"
+                                + target.getName() + "</white>! <gray>(Tổng: <aqua>" + formattedTotal + "</aqua>)</gray>"
+                        ));
+                    })
+            )
+            .executesPlayer(info -> {
+                com.oheers.fish.autofish.AutoFishMenuManager.getInstance().open(info.sender());
+            });
+    }
+
+    private static CommandAPICommand createJournalCommand(String name) {
         return new CommandAPICommand(name)
             .withPermission(UserPerms.JOURNAL)
             .withArguments(

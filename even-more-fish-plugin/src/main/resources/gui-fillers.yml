@@ -1,6 +1,6 @@
 seagrass-filler:
   item:
-    material: seagrass
+    material: "AIR"
     displayname: ' '
     hide-tooltip: true
   character: '1'
@@ -8,7 +8,7 @@ seagrass-filler:
 
 light_blue_stained_glass_pane-filler:
   item:
-    material: light_blue_stained_glass_pane
+    material: "AIR"
     displayname: ' '
     hide-tooltip: true
   character: '2'
@@ -16,7 +16,7 @@ light_blue_stained_glass_pane-filler:
 
 cyan_stained_glass_pane-filler:
   item:
-    material: cyan_stained_glass_pane
+    material: "AIR"
     displayname: ' '
     hide-tooltip: true
   character: '3'
@@ -24,7 +24,7 @@ cyan_stained_glass_pane-filler:
 
 gray_stained_glass_pane-filler:
   item:
-    material: gray_stained_glass_pane
+    material: "AIR"
     displayname: ' '
     hide-tooltip: true
   character: '4'
@@ -32,7 +32,7 @@ gray_stained_glass_pane-filler:
 
 kelp-filler:
   item:
-    material: kelp
+    material: "AIR"
     displayname: ' '
     hide-tooltip: true
   character: '5'
@@ -40,7 +40,7 @@ kelp-filler:
 
 grass-filler:
   item:
-    material: short_grass
+    material: "AIR"
     displayname: ' '
     hide-tooltip: true
   character: '6'

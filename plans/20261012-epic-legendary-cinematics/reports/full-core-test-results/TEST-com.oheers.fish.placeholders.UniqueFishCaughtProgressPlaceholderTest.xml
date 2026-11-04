@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.placeholders.UniqueFishCaughtProgressPlaceholderTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:53:30.004Z" hostname="LEDAT" time="0.021">
+  <properties/>
+  <testcase name="rarityPlaceholderReturnsNullForInvalidRarity()" classname="com.oheers.fish.placeholders.UniqueFishCaughtProgressPlaceholderTest" time="0.001"/>
+  <testcase name="totalPlaceholderReturnsNullForInvalidPlayerTarget()" classname="com.oheers.fish.placeholders.UniqueFishCaughtProgressPlaceholderTest" time="0.001"/>
+  <testcase name="rarityPlaceholderReturnsNullForMalformedPayload()" classname="com.oheers.fish.placeholders.UniqueFishCaughtProgressPlaceholderTest" time="0.001"/>
+  <testcase name="totalPlaceholderReturnsDistinctCaughtOutOfTotalFish()" classname="com.oheers.fish.placeholders.UniqueFishCaughtProgressPlaceholderTest" time="0.008"/>
+  <testcase name="totalPlaceholderReturnsZeroWhenPlayerHasCaughtNothing()" classname="com.oheers.fish.placeholders.UniqueFishCaughtProgressPlaceholderTest" time="0.003"/>
+  <testcase name="rarityPlaceholderReturnsDistinctCaughtOutOfRarityTotal()" classname="com.oheers.fish.placeholders.UniqueFishCaughtProgressPlaceholderTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

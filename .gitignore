@@ -128,3 +128,8 @@ build
 .PR-REQUEST.md
 
 docker
+# Standalone offline smoke artifacts
+qa/out/
+qa/out*/
+# Isolated local Gradle cache used by feature verification.
+/qa/gradle-cache/

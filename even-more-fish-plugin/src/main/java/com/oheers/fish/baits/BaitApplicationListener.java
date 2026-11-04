@@ -17,6 +17,7 @@ import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -79,14 +80,12 @@ public class BaitApplicationListener implements Listener {
         }
 
         try {
-            if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                result = BaitNBTManager.applyBaitedRodNBT(potentialFishingRod, bait, event.getCursor().getAmount());
-                EvenMoreFish.getInstance().getMetricsManager().incrementBaitsApplied(event.getCursor().getAmount());
-            } else {
-                result = BaitNBTManager.applyBaitedRodNBT(potentialFishingRod, bait, 1);
-                EvenMoreFish.getInstance().getMetricsManager().incrementBaitsApplied(1);
-            }
-
+            int applyAmount = (event.isShiftClick() || event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY)
+                    ? event.getCursor().getAmount()
+                    : 1;
+            result = BaitNBTManager.applyBaitedRodNBT(potentialFishingRod, bait, applyAmount);
+            int applied = -result.cursorItemModifier();
+            EvenMoreFish.getInstance().getMetricsManager().incrementBaitsApplied(applied > 0 ? applied : applyAmount);
         } catch (MaxBaitsReachedException exception) {
             ConfigMessage.BAITS_MAXED.getMessage().send(event.getWhoClicked());
             result = exception.getRecoveryResult();
@@ -106,50 +105,49 @@ public class BaitApplicationListener implements Listener {
         event.setCurrentItem(resultRod);
 
         int cursorModifier = result.cursorItemModifier();
+        int newAmount = cursor.getAmount() + cursorModifier;
 
-        if (cursor.getAmount() - cursorModifier == 0) {
-            event.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
+        if (newAmount <= 0) {
+            event.getWhoClicked().setItemOnCursor(null);
         } else {
-            cursor.setAmount(cursor.getAmount() + cursorModifier);
+            cursor.setAmount(newAmount);
             event.getWhoClicked().setItemOnCursor(cursor);
+        }
+
+        if (cursorModifier < 0 && event.getWhoClicked() instanceof Player player) {
+            player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 1.4f);
         }
     }
 
     private void convertToCompatNbtItem(final NbtVersion nbtVersion, final ItemStack fishingRod) {
         final String appliedBaitString = NbtUtils.getString(fishingRod, NbtKeys.EMF_APPLIED_BAIT);
+        if (appliedBaitString == null || appliedBaitString.isEmpty()) {
+            return;
+        }
 
         if (nbtVersion == NbtVersion.LEGACY) {
             final String namespacedKey = NbtKeys.EMF_COMPOUND + ":" + NbtKeys.EMF_APPLIED_BAIT;
-            NBT.modify(fishingRod,nbt -> {
+            NBT.modify(fishingRod, nbt -> {
                 ReadWriteNBT compound = nbt.getCompound(NbtKeys.PUBLIC_BUKKIT_VALUES);
                 if (compound != null) {
                     compound.removeKey(namespacedKey);
                 }
-            });
-
-            if (NBT.get(fishingRod, nbt -> {
-                return nbt.hasTag(namespacedKey);
-            })) {
-                NBT.modify(fishingRod, nbt -> {
+                if (nbt.hasTag(namespacedKey)) {
                     nbt.removeKey(namespacedKey);
-                    ReadWriteNBT compound = nbt.getCompound("display");
-                    if (compound != null) {
-                        compound.getStringList("Lore").clear();
-                    }
-                });
-            }
+                }
+            });
         }
 
         if (nbtVersion == NbtVersion.NBTAPI) {
+            final String namespacedKey = NbtKeys.EMF_COMPOUND + ":" + NbtKeys.EMF_APPLIED_BAIT;
             NBT.modify(fishingRod, nbt -> {
-                nbt.removeKey(NbtKeys.EMF_COMPOUND + ":" + NbtKeys.EMF_APPLIED_BAIT);
+                nbt.removeKey(namespacedKey);
             });
         }
 
         NBT.modify(fishingRod, nbt -> {
             nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND).setString(NbtKeys.EMF_APPLIED_BAIT, appliedBaitString);
         });
-
     }
 
     private boolean anvilCheck(InventoryClickEvent event) {

@@ -1,0 +1,41 @@
+id: tan_the
+disabled: false
+allowed-rarities:
+  - Common
+  - Rare
+  - Epic
+  - Legendary
+  - Mythic
+  - Anomaly
+
+# Chỉ số sức mạnh của Cần Câu Custom
+stats:
+  luck-modifier: 0.50
+  lure-modifier: 0.40
+  double-catch-chance: 0.30
+  exp-multiplier: 2.5
+  rarity-modifiers:
+    Anomaly: 2.0
+    Mythic: 1.8
+    Legendary: 1.5
+
+allow-baits: true
+unbreakable: true
+
+item:
+  material: FISHING_ROD
+  displayname: "<gradient:#FF385C:#7B2CFF><bold>Cần Câu Tận Thế</gradient>"
+  glowing: true
+  lore:
+    - ' '
+    - '<dark_gray> ○ <white>Độ hiếm: <dark_red>Dị Biệt (Anomaly)</dark_red>'
+    - '<dark_gray> ○ <white>Đặc tính: <aqua>Không Thể Hỏng</aqua>'
+    - ' '
+    - '<dark_gray> ○ <white>Tăng sức mạnh:'
+    - '  <dark_gray> -<yellow> May Mắn:</yellow> <green>+50%</green>'
+    - '  <dark_gray> -<aqua> Tốc Độ Cắn Câu:</aqua> <green>+40%</green>'
+    - '  <dark_gray> -<light_purple> Nhân Đôi Cá:</light_purple> <green>30%</green>'
+    - '  <dark_gray> -<gold> Hệ Số EXP:</gold> <green>x2.5</green>'
+    - ' '
+    - '<#C797FF>Sức mạnh hủy diệt và hỗn mang'
+    - '<white>thâu tóm mọi sinh vật huyền bí trong vũ trụ!'

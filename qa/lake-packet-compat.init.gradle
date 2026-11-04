@@ -1,0 +1,25 @@
+allprojects {
+    afterEvaluate {
+        if (project.name == 'even-more-fish-plugin-1-21') {
+            def installed = files('C:/Users/hp/IdeaProjects/Skyblock/plans/20261012-lake-evenmorefish/runtime-dependencies/packetevents-spigot-2.13.0.jar')
+            def core = project(':even-more-fish-plugin')
+            def checkClasspath = sourceSets.main.compileClasspath.filter { !it.name.contains('packetevents') } + installed + core.sourceSets.test.runtimeClasspath
+            def output = layout.buildDirectory.dir('lake-packet-compat')
+            tasks.register('compileLakePacketCompatibility', JavaCompile) {
+                dependsOn(':even-more-fish-plugin:classes')
+                source(file('src/main/java/com/oheers/fish/Paper121PacketEventsTransport.java'))
+                source(rootProject.file('qa/lake/PacketTransportRecoveryCheck.java'))
+                classpath = checkClasspath
+                destinationDirectory = output
+                javaCompiler = javaToolchains.compilerFor(java.toolchain)
+                options.encoding = 'UTF-8'
+            }
+            tasks.register('checkLakePacketRecovery', JavaExec) {
+                dependsOn('compileLakePacketCompatibility')
+                classpath = files(output) + checkClasspath
+                mainClass = 'com.oheers.fish.PacketTransportRecoveryCheck'
+                javaLauncher = javaToolchains.launcherFor(java.toolchain)
+            }
+        }
+    }
+}

@@ -23,7 +23,7 @@ public class JournalSubcommand {
         this.name = name;
     }
 
-    public ArgumentBuilder<CommandSourceStack, ?> get() {
+    public com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack> get() {
         return Commands.literal(name)
             .requires(stack -> stack.getSender().hasPermission(UserPerms.JOURNAL))
             .executes(ctx -> {

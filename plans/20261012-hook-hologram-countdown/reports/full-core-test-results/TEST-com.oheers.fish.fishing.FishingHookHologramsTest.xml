@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.FishingHookHologramsTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-12T16:26:37.405Z" hostname="LEDAT" time="0.851">
+  <properties/>
+  <testcase name="absentNativeBiteWindowResumesActualWaitingCountdownWithoutTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.812"/>
+  <testcase name="clearDoesNotClearUnrelatedTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.005"/>
+  <testcase name="offlineOwnerRemovesDisplayAndStopsUpdaterWithoutTouchingTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.006"/>
+  <testcase name="waitingCountdownTracksNativeSecondsAndCachesUnchangedText()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.007"/>
+  <testcase name="missedTransitionDoesNotSendOrClearTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.004"/>
+  <testcase name="biteAnimationUpdatesHookDisplayWithoutSendingTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.004"/>
+  <testcase name="explicitRemovalDoesNotClearUnrelatedTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.003"/>
+  <testcase name="invalidHookRemovesDisplayAndStopsIdleUpdater()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.004"/>
+  <testcase name="ownerWorldChangeRemovesDisplayAndStopsUpdaterWithoutTouchingTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

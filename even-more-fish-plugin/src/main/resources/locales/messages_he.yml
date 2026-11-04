@@ -10,23 +10,23 @@ prefix-admin: '<gradient:#FFECEC:#FF5555>[EvenMoreFish] '
 # The prefix shown when errors occur e.g. no permission to run a command.
 prefix-error: '<gradient:#FFECEC:#FF5555>[EvenMoreFish] '
 # Sent to players when they catch a fish with a length.
-fish-caught: <white><b>{player}</b> has fished a {length}cm <b>{rarity}</b> {fish}!
+fish-caught: '<#57C7FF>{player} <#BFC7D5>vừa câu được <white>{fish} <#BFC7D5>dài <white>{length}<#BFC7D5>cm • <white>{rarity}'
 # Sent to players when they catch a fish without a length.
-lengthless-fish-caught: <white><b>{player}</b> has fished a <b>{rarity}</b> {fish}!
+lengthless-fish-caught: '<#57C7FF>{player} <#BFC7D5>vừa câu được <white>{fish} <#BFC7D5>• <white>{rarity}'
 # Sent to players when they hunt a fish with a length.
-fish-hunted: <white><b>{player}</b> has hunted a {length}cm <b>{rarity}</b> {fish}!
+fish-hunted: '<#57C7FF>{player} <#BFC7D5>vừa săn được <white>{fish} <#BFC7D5>dài <white>{length}<#BFC7D5>cm • <white>{rarity}'
 # Sent to players when they hunt a fish without a length.
-lengthless-fish-hunted: <white><b>{player}</b> has hunted a <b>{rarity}</b> {fish}!
+lengthless-fish-hunted: '<#57C7FF>{player} <#BFC7D5>vừa săn được <white>{fish} <#BFC7D5>• <white>{rarity}'
 # Sent to a player when they don't have permission to execute a command.
-no-permission: <red>You don't have permission to run that command.
+no-permission: '<#FF5A6E>Bạn không có quyền.'
 # Sent when a competition starts.
-contest-start: <white>A fishing contest for {type} has started.
+contest-start: '<#BFC7D5>Cuộc thi câu cá <white>{type} <#7DDCFF>đã bắt đầu!'
 # Sent when a competition ends.
-contest-end: <white>The fishing contest has ended.
+contest-end: '<#BFC7D5>Cuộc thi câu cá đã kết thúc.'
 # Sent when a player joins while a competition is active.
-contest-join: <white>A fishing contest for {type} is occurring.
+contest-join: '<#BFC7D5>Cuộc thi <white>{type} <#BFC7D5>đang diễn ra.'
 # Sent when a new player takes the #1 spot in a competition.
-new-first: "<white>{player} is now #1"
+new-first: "<#57C7FF>{player}<#BFC7D5> is now #1"
 # Should this message appear in chat (false) or above the exp bar (true)
 action-bar-message: true
 # What competition types should the action bar be used for? (recommended: MOST_FISH)
@@ -35,19 +35,19 @@ action-bar-types:
 # What should replace the {type} variable for each competition type?
 competition-types:
   # MOST_FISH
-  most: כמות דגים הגדולה ביותר
+  most: '<#BFC7D5>כמות דגים הגדולה ביותר'
   # LARGEST_FISH
-  largest: הדג הגדול ביותר
+  largest: '<#BFC7D5>הדג הגדול ביותר'
   # LARGEST_TOTAL_FISH
-  largest-total: the largest total fish length
+  largest-total: '<#BFC7D5>tổng chiều dài cá lớn nhất'
   # SHORTEST_FISH
-  shortest: the shortest fish
+  shortest: '<#BFC7D5>cá nhỏ nhất'
   # SHORTEST_TOTAL_FISH
-  shortest-total: the shortest total fish length
+  shortest-total: '<#BFC7D5>tổng chiều dài cá nhỏ nhất'
   # SPECIFIC_FISH
-  specific: '{amount} <b>{rarity}</b> {fish}'
+  specific: '<white>{amount} {rarity} {fish}'
   # SPECIFIC_RARITY
-  specific-rarity: '{amount} <b>{rarity}</b> fish'
+  specific-rarity: '<white>{amount} {rarity}<#BFC7D5> fish'
 # Segments shown in the bossbar when competitions run
 bossbar:
   # {prefix} is defined inside the competition files.
@@ -67,221 +67,287 @@ duration:
 # replace the {fish_lore}, however if it's empty the line will be removed. DO NOT ADD ANYTHING OTHER THAN THIS VARIABLE
 # TO THAT LINE.
 fish-lore:
-  - '{fisherman_lore}'
-  - '{length_lore}'
+  - '<white>{fisherman_lore}'
+  - '<white>{length_lore}'
   - ''
-  - '{fish_lore}'
-  - '<b>{rarity}'
+  - '<white>{fish_lore}'
+  - '<white>{rarity}'
 # Sets what to replace with the {fisherman_lore} or {length_lore} with above ^
 fisherman-lore:
-  - <white>Caught by {player}
+  - '<#BFC7D5>Caught by <#57C7FF>{player}'
 length-lore:
-  - <white>Measures {length}cm.
+  - '<#BFC7D5>Measures <white>{length}<#BFC7D5>cm.'
 # The format of the leaderboard after a competition is over
 leaderboard:
-  largest-fish: '<white>#{position} | {player} (<b>{rarity}</b> {fish}, {length}cm)'
-  largest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
-  most-fish: '<white>#{position} | {player} <white>({amount} <white>fish)'
-  shortest-fish: '<white>#{position} | {player} <white>(<b>{rarity}</b> {fish}<white>, {length}cm<white>)'
-  shortest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
+  largest-fish: '<white>#{position}<#BFC7D5> | <#57C7FF>{player}<#BFC7D5> (<white>{rarity} {fish}<#BFC7D5>, <white>{length}<#BFC7D5>cm)'
+  largest-total: '<white>#{position}<#BFC7D5> | <#57C7FF>{player} <white>({amount}<#BFC7D5>cm<white>)'
+  most-fish: '<white>#{position}<#BFC7D5> | <#57C7FF>{player} <white>({amount}<#BFC7D5> fish)'
+  shortest-fish: '<white>#{position}<#BFC7D5> | <#57C7FF>{player} <white>({rarity} {fish}<#BFC7D5>, <white>{length}<#BFC7D5>cm<white>)'
+  shortest-total: '<white>#{position}<#BFC7D5> | <#57C7FF>{player} <white>({amount}<#BFC7D5>cm<white>)'
   # Sent when a competition only has a single winner, in place of the leaderboard.
-  single-winner: <white>{player} has won the competition for {type}. Congratulations!
+  single-winner: '<#BFC7D5>★ <#57C7FF>{player} <#BFC7D5>đã chiến thắng cuộc thi <white>{type}!'
   # This shows the number of players currently in the competition, set to "" to disable.
-  total-players: <white>There are a total of {amount} player(s) in the leaderboard.
+  total-players: ' <dark_gray>○ <gray>Tổng người trên bảng xếp hạng: <white>{amount}'
   # The number of positions shown in the leaderboard - can't be less than 1.
   leaderboard-count: 5
   # Sent to players when nobody got a record during a competition
-  no-winners: <white>There were no fishing records.
+  no-winners: '<#BFC7D5>Không có người chơi đạt thành tích trong cuộc thi.'
   # When an individual player didn't get a record
-  no-record: <white>You didn't catch any fish.
+  no-record: '<#BFC7D5>Bạn chưa câu được cá nào trong cuộc thi.'
 # Sent when an admin tries to start a competition where the type doesn't exist.
-invalid-type: "<white>That isn't a valid competition type. Click <click:open_url:'https://evenmorefish.github.io/EvenMoreFish/docs/features/competitions/types'><u>here</u></click> for available types."
+invalid-type: "<#FF5A6E>Loại cuộc thi không hợp lệ."
 # Sent to all online players when not enough players are on to start a competition
-not-enough-players: <white>There are not enough players online to start the scheduled fishing competition.
+not-enough-players: '<#BFC7D5>Chưa đủ người chơi online để bắt đầu cuộc thi câu cá theo lịch.'
 # Sent to all players at specific times to show the remaining time left
 # {time_formatted} shows the time (e.g. 5m left, 10m 30s left)
 # {time_raw} is the amount of seconds remaining
-time-alert: <white>There is {time_formatted} left on the competition for {type}
+time-alert: '<#5899ee>{time_formatted} <#BFC7D5>nữa cuộc thi <white>{type} <#BFC7D5>sẽ kết thúc.'
 # The message sent to players when they've sold their fish in the /emf shop
-fish-sale: <white>You've sold <green>{amount} <white>fish for <green>{sell-price}<white>.
+fish-sale: '<#55D68A>Đã bán <white>{amount}<#55D68A> cá <#BFC7D5>với giá <white>{sell-price}.'
 # The message sent to players when they attempt to sell and there are no sellable fish
-no-sellable-fish: <white>You have nothing to sell!
+no-sellable-fish: '<#BFC7D5>Bạn không có cá nào có thể bán.'
 # Help messages
 # General help (/emf help) - Commands locked behind permissions will not show for players.
-help-format: "[noPrefix]<aqua>{command} <yellow>- <white>{description}"
+help-format: "<white>{command}<#BFC7D5> - <white>{description}"
 help-general:
-  title: "[noPrefix]<gradient:#f1ffed:#73ff6b><st>         </st> <b><gradient:#E6F9FF:#8FD9FB>EvenMoreFish </b><st><gradient:#73ff6b:#f1ffed>         "
-  top: "[noPrefix]Shows an ongoing competition's leaderboard."
-  help: "[noPrefix]Shows you this page."
-  shop: "[noPrefix]Opens a shop to sell your fish."
-  toggle: "[noPrefix]Toggles various features of the plugin."
+  title: "<#BFC7D5>EvenMoreFish <st>"
+  top: "<#BFC7D5>Xem bảng xếp hạng cuộc thi đang diễn ra."
+  help: "<#BFC7D5>Xem trang trợ giúp."
+  shop: "<#BFC7D5>Mở cửa hàng bán cá."
+  toggle: "<#BFC7D5>Bật/tắt các tính năng câu cá."
   gui: "[noPrefix]Opens the Main Menu GUI."
-  admin: "[noPrefix]Admin command help page."
-  sellall: "[noPrefix]Sell all the fish in your inventory."
+  admin: "<#BFC7D5>Xem trợ giúp dành cho quản trị viên."
+  sellall: "<#BFC7D5>Bán toàn bộ cá trong túi đồ."
   next: "[noPrefix]Shows when the next competition will start."
-  applybaits: "[noPrefix]Apply baits to your fishing rod."
-  journal: "[noPrefix]View a journal of caught fish and their stats."
+  applybaits: "<#BFC7D5>Gắn mồi vào cần câu."
+  journal: "<#BFC7D5>Xem nhật ký cá đã câu và thống kê."
 help-list:
-  fish: "[noPrefix]Display all fish in a specific rarity."
+  fish: "<#BFC7D5>Hiển thị toàn bộ cá của một độ hiếm."
   rarities: "[noPrefix]Display all rarities."
 # Competition help (/emf admin competition help)
 help-competition:
-  start: "[noPrefix]Starts a configured competition."
-  end: "[noPrefix]Ends the current competition."
-  test: "[noPrefix]Allows testing a competition with the chosen type."
-  extend: "[noPrefix]Extends the active competition by the chosen duration."
+  start: "<#BFC7D5>Bắt đầu một cuộc thi đã cấu hình."
+  end: "<#BFC7D5>Kết thúc cuộc thi hiện tại."
+  test: "<#BFC7D5>Chạy thử cuộc thi với loại đã chọn."
+  extend: "<#BFC7D5>Gia hạn thời gian cuộc thi đang diễn ra."
 # Admin help (/emf admin help)
 help-admin:
-  bait: "[noPrefix]Gives baits to a player."
-  competition: "[noPrefix]Starts or stops a competition"
-  clearbaits: "[noPrefix]Removes all applied baits from a fishing rod."
-  fish: "[noPrefix]Gives a fish to a player."
-  nbt-rod: "[noPrefix]Gives a custom NBT rod to a player required for catching EMF fish."
-  custom-rod: "[noPrefix]Gives a custom fishing rod to a player."
-  reload: "[noPrefix]Reloads the plugin's config files."
-  migrate: "[noPrefix]Migrate the database from Legacy (V2) to V3"
-  addons: "[noPrefix]Display all addons."
-  version: "[noPrefix]Displays plugin information."
-  rawitem: "[noPrefix]Displays the item in your main hand as raw NBT."
+  bait: "<#BFC7D5>Trao mồi câu cho người chơi."
+  competition: "<#BFC7D5>Quản lý cuộc thi câu cá."
+  clearbaits: "<#BFC7D5>Xóa toàn bộ mồi đang gắn trên cần câu."
+  fish: "<#BFC7D5>Trao cá cho người chơi."
+  nbt-rod: "<#BFC7D5>Trao cần câu NBT tùy chỉnh."
+  custom-rod: "<#BFC7D5>Trao cần câu tùy chỉnh."
+  reload: "<#BFC7D5>Tải lại cấu hình plugin."
+  migrate: "<#BFC7D5>Chuyển dữ liệu database từ Legacy V2 sang V3."
+  addons: "<#BFC7D5>Hiển thị toàn bộ addon đã đăng ký."
+  version: "<#BFC7D5>Hiển thị thông tin phiên bản plugin."
+  rawitem: "<#BFC7D5>Hiển thị Raw NBT của vật phẩm đang cầm."
   database: "[noPrefix]Manage the plugin's database."
 # Shown when the %emf_competition_place_player_*% placeholder requests a position in the leaderboard that doesn't exist
-no-player-in-place: <white>Start fishing to take this place
+no-player-in-place: '<#BFC7D5>Hãy câu cá để chiếm vị trí này.'
 # Shown when the %emf_competition_place_fish_*% placeholder requests a position in the leaderboard that doesn't exist
-no-fish-in-place: <white>Start fishing to take this place
+no-fish-in-place: '<#BFC7D5>Hãy câu cá để chiếm vị trí này.'
 # Shown when the %emf_competition_place_size_*% placeholder requests a position in the leaderboard that doesn't exist
-no-size-in-place: <white>Start fishing to take this place
+no-size-in-place: '<#BFC7D5>Hãy câu cá để chiếm vị trí này.'
 # Shown when the %emf_competition_place_player_*% placeholder is used when there's no competition running
-no-competition-running: <white>No competition running right now.
+no-competition-running: '<#BFC7D5>Hiện không có cuộc thi câu cá.'
 # Shown when the %emf_competition_place_fish_*% placeholder is used when there's no competition running
-no-competition-running-fish: <white>No competition running right now.
+no-competition-running-fish: '<#BFC7D5>Hiện không có cuộc thi câu cá.'
 # Shown when the %emf_competition_place_size_*% placeholder is used when there's no competition running
-no-competition-running-size: <white>No competition running right now.
+no-competition-running-size: '<#BFC7D5>Hiện không có cuộc thi câu cá.'
 # Shown in %emf_competition_time_left% when there are no scheduled competitions.
-no-competitions-scheduled: <white>No competitions are scheduled.
+no-competitions-scheduled: '<#BFC7D5>Hiện không có cuộc thi nào được lên lịch.'
 # Broadcasted to all players when a competition is extended.
-competition-time-extended: <white>The active competition has been extended by {duration}!
+competition-time-extended: '<#BFC7D5>Cuộc thi hiện tại đã được gia hạn thêm <#5899ee>{duration}!'
 # How should %emf_custom_fishing_status% be formatted?
-custom-fishing-enabled: <green>Enabled
-custom-fishing-disabled: <red>Disabled
+custom-fishing-enabled: '<#55D68A>Đã bật'
+custom-fishing-disabled: '<#55D68A>Đã tắt'
 # How should the %emf_competition_place_fish_*% placeholder be formatted when the fish has length?
-emf-competition-fish-format: "<white>{length}cm <b>{rarity}</b> {fish}"
+emf-competition-fish-format: "<white>{length}<#BFC7D5>cm <white>{rarity} {fish}"
 # How should the %emf_competition_place_fish_*% placeholder be formatted when the fish has no length?
-emf-lengthless-fish-format: "<white><b>{rarity}</b> {fish}"
+emf-lengthless-fish-format: "<white>{rarity} {fish}"
 # How should %emf_competition_place_fish_*% be formatted during MOST/SPECIFIC_FISH competitions?
-emf-most-fish-format: "<white>{amount} fish"
+emf-most-fish-format: "<white>{amount}<#BFC7D5> fish"
 # What should be displayed for %emf_competition_place_size_*% during the MOST_FISH competition?
-emf-size-during-most-fish: N/A
+emf-size-during-most-fish: '<#BFC7D5>N/A'
 # How the %emf_competition_time_left% placeholder should be formatted.
 emf-time-remaining:
   # When there is not an active competition.
-  inactive: "<white>Time left until next competition: {days}d, {hours}h, {minutes}m."
+  inactive: "<#BFC7D5>Cuộc thi tiếp theo sau <#5899ee>{days}<#BFC7D5> ngày <#5899ee>{hours}<#BFC7D5> giờ <#5899ee>{minutes}<#BFC7D5> phút."
   # When there is an active competition.
-  active: "<white>Time left in competition: {time-left}"
+  active: "<#BFC7D5>Thời gian còn lại: <#5899ee>{time-left}"
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
-max-baits-reached: <white>You have reached the maximum number of unique baits for this fishing rod.
+max-baits-reached: '<#FF5A6E>Cần câu đã đạt giới hạn số loại mồi.'
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: <white>You have reached the maximum number of {bait} <white>on this fishing rod.
+max-bait-reached: '<#FF5A6E>Đã đạt giới hạn mồi <white>{bait}<#FF5A6E> trên cần câu này.'
 # Sent when a player catches a bait from fishing
-bait-catch: <white><b>{player}</b> has caught a <b>{bait}</b> bait!
+bait-catch: '<#57C7FF>{player} <#BFC7D5>vừa câu được mồi <white>{bait}!'
 # Sent when a bait is applied and a fish is caught.
-bait-use: <white>You have used one of your rod's <b>{bait}</b> bait.
+bait-use: '<#55D68A>Đã sử dụng một mồi <white>{bait}<#55D68A> trên cần câu.'
 # Sent when someone tries to use a bait in creative
-bait-survival-limited: <white>You must be in <u>survival or adventure mode</u> to apply baits to fishing rods.
+bait-survival-limited: '<#BFC7D5>Bạn phải ở chế độ Sinh Tồn hoặc Phiêu Lưu để gắn mồi.'
 # Sent when someone tries to merge a baited rod into an unbaited rod
-bait-rod-protection: <white>Protected your baited fishing rod. If you are trying to repair it, please put it in the first slot instead.
+bait-rod-protection: '<#55D68A>Đã bảo vệ cần câu có mồi. Nếu muốn sửa, hãy đặt cần câu vào ô đầu tiên.'
 # Sent when someone tries to apply a bait to a fishing rod they cannot use to fish
-bait-invalid-rod: <white>You cannot apply bait to this fishing rod!
+bait-invalid-rod: '<#FF5A6E>Không thể gắn mồi vào cần câu này.'
 # Sent when a bait is purchased from the menu.
-bait-purchased: <white>You have purchased {amount}x {bait} for {price}.
+bait-purchased: '<#55D68A>Đã mua <white>{amount}<#55D68A>x <white>{bait} <#BFC7D5>với giá <#55D68A>{price}$.'
 # Sent when a player attempts to purchase a bait, asking them to confirm.
-bait-confirm-purchase: <white>Click again within 5 seconds to confirm bait purchase.
+bait-confirm-purchase: '<#BFC7D5>Nhấn lại trong vòng <white>5 s <#BFC7D5>để xác nhận mua mồi.'
 # Sent when a player attempts to purchase a bait they cannot afford.
-bait-cannot-afford: <white>You cannot afford to purchase that bait. You need {price}.
+bait-cannot-afford: '<#FF5A6E>Không đủ tiền! <#BFC7D5>Cần <#55D68A>{price}$.'
 # Sent when a player attempts to purchase a bait that is not for sale.
-bait-not-for-sale: <white>That bait is not for sale.
+bait-not-for-sale: '<#BFC7D5>Loại mồi này không được bán.'
 toggle:
   fishing:
-    off: <white>You will no longer catch custom fish.
-    on: <white>You will now catch custom fish.
+    off: '<#55D68A>Đã tắt cá tùy chỉnh.'
+    on: '<#55D68A>Đã bật cá tùy chỉnh.'
   bossbar:
     off: <white>You will no longer see competition bossbars.
     on: <white>You will now see competition bossbars.
 admin:
   # Opens an /emf shop for another player
-  open-fish-shop: <white>Opened a shop inventory for {player}.
+  open-fish-shop: '<#55D68A>Đã mở cửa hàng cá cho <#57C7FF>{player}.'
   # When a fish is given to a player
-  given-player-fish: <white>You have given {player} a {fish}.
+  given-player-fish: '<#55D68A>Đã trao <white>{fish} <#BFC7D5>cho <#57C7FF>{player}.'
   # When a bait is given to a player
-  given-player-bait: <white>You have given {player} a {bait}.
+  given-player-bait: '<#55D68A>Đã trao mồi <white>{bait} <#BFC7D5>cho <#57C7FF>{player}.'
   # When an admin runs /emf admin bait without a bait name.
-  no-bait-specified: <white>You must specify a bait name.
+  no-bait-specified: '<#BFC7D5>Bạn phải chỉ định tên loại mồi.'
   # When the admin tries the command /emf admin clearbaits whe not holding a fishing rod.
-  must-be-holding-rod: <white>You need to be holding a fishing rod to run that command.
+  must-be-holding-rod: '<#BFC7D5>Bạn phải cầm cần câu để dùng lệnh này.'
   # When /emf admin clearbaits command is run.
-  all-baits-cleared: <white>You have removed all {amount} baits from your fishing rod.
+  all-baits-cleared: '<#55D68A>Đã xóa toàn bộ <white>{amount} <#BFC7D5>mồi khỏi cần câu.'
   # /emf admin clearbaits is run, but there are no baits on the rod.
-  no-baits-on-rod: <white>The fishing rod does not have any baits applied.
+  no-baits-on-rod: '<#BFC7D5>Cần câu này không có mồi.'
   # When economy is disabled for the plugin
-  economy-disabled: <white>EvenMoreFish's economy features are disabled.
+  economy-disabled: '<#FF5A6E>Hệ thống kinh tế của EvenMoreFish đang bị tắt.'
   # When the specified player can't be found .
-  player-not-found: <white>{player} could not be found.
+  player-not-found: '<#FF5A6E>Không tìm thấy <#57C7FF>{player}.'
   # When the specified number is not a number.
-  number-format-error: <white>{amount} is not a valid number.
+  number-format-error: '<white>{amount}<#FF5A6E> không phải số hợp lệ.'
   # When the specified number in item quantity is too large.
-  number-range-error: <white>{amount} is not a number between 1-64.
+  number-range-error: '<white>{amount}<#BFC7D5> phải là số trong khoảng 1-64.'
   # When a command cannot be run from the console.
-  cannot-run-on-console: <white>Command cannot be run from console.
+  cannot-run-on-console: '<#FF5A6E>Lệnh này không thể chạy từ console.'
   # Sent when a competition is already running when using /emf admin competition start
-  competition-already-running: <white>There's already a competition running.
+  competition-already-running: '<#BFC7D5>Đang có một cuộc thi khác diễn ra.'
   # When an invalid competition type is provided
-  competition-type-invalid: "<white>That isn't a valid competition type. Click <click:open_url:'https://evenmorefish.github.io/EvenMoreFish/docs/features/competitions/types'><u>here</u></click> for available types."
+  competition-type-invalid: "<#FF5A6E>Loại cuộc thi không hợp lệ."
   # When an invalid competition id is provided
-  competition-id-invalid: <white>That isn't a valid competition id.
+  competition-id-invalid: '<#FF5A6E>ID cuộc thi không hợp lệ.'
   # When the command /emf admin custom-rod is run.
-  custom-rod-given: <white>You have given {player} a custom fishing rod.
+  custom-rod-given: '<#55D68A>Đã trao cần câu tùy chỉnh cho <#57C7FF>{player}.'
   # When there's a modrinth update available, don't translate the URL otherwise it won't direct to the correct page.
-  update-available: "<white>There is an update available: https://modrinth.com/plugin/evenmorefish/versions?l=paper"
+  update-available: "<#BFC7D5>EvenMoreFish có bản cập nhật mới trên Modrinth."
   # When the plugin is reloaded
-  reload: <white>Successfully reloaded the plugin.
+  reload: '<#55D68A>Đã tải lại cấu hình. EvenMoreFish.'
   # When checking a list of registered addons. The actual list is added to the end of this message.
-  list-addons: "<white>Registered {addon-type}s: "
+  list-addons: "<#BFC7D5>Registered <white>{addon-type}s<#BFC7D5>:"
 # When an invalid rarity is provided for a command.
-rarity-invalid: <white>That is not a valid rarity!
+rarity-invalid: '<#FF5A6E>Độ hiếm không hợp lệ.'
 # When the player can't access the Fishing Journal
-journal-disabled: <white>The Fishing Journal is not accessible. Please enable the plugin's database.
+journal-disabled: '<#BFC7D5>Nhật ký câu cá chưa khả dụng. Hãy bật database của plugin.'
 # Reward messages
 reward:
-  catch-up: <white>You received rewards while you were offline. Delivering them now.
+  catch-up: '<#BFC7D5>Bạn có phần thưởng nhận khi vắng mặt. Đang trao phần thưởng...'
 # Bait messages
 bait:
   # How the lore should look ({baits} is a multi-line variable)
   rod-lore:
-    - <white>
-    - "<gray>Bait Slots: <yellow>({current_baits}/{max_baits})"
-    - <white>
-    - "{baits}"
-    - <white>
+    - ''
+    - "<#BFC7D5>Ô mồi: <#FFE681>(<white>{current_baits}<#BFC7D5>/<white>{max_baits}<#BFC7D5>)"
+    - ''
+    - "<white>{baits}"
+    - ''
   # The default lore of the bait, changing this will not modify existing baits, but any new baits will have this format.
   bait-lore:
-    - <white>
-    - "Increases the catch rates for:"
-    - "{boosts}"
-    - "{lore}"
-    - <white>
-    - '<#dadada>Drop onto a fishing rod to apply,'
-    - '<#dadada>or hold <u>SHIFT</u> to apply all.'
-    - <white>
+    - ''
+    - "<#BFC7D5>Tăng tỉ lệ câu được:"
+    - "<white>{boosts}"
+    - "<white>{lore}"
+    - ''
+    - '<#BFC7D5>Thả lên cần câu để gắn,'
+    - '<#BFC7D5>hoặc giữ <u>SHIFT để gắn toàn bộ.'
+    - ''
   # How the baits should look in each line of the {baits} variable above ^. {baits} respects the display name setting,
   # the <gold> is there for baits without a display name set.
-  baits: <gold>► {amount} {bait}
+  baits: '<#FFA94D>► <white>{amount} {bait}'
   # These are listed in the {boosts} variable above in bait-lore
   # boost-rarity/rarities: shown when the bait only impacts 1 rarity or when it impacts multiple rarities.
   # boost-fish: shown when the bait impacts some fish individually.
-  boosts-rarity: '► <white>1 Rarity'
-  boosts-rarities: '► <white>{amount} Rarities'
-  boosts-fish: '► <white>{amount} Fish'
+  boosts-rarity: '<#BFC7D5>► <white>1 Rarity'
+  boosts-rarities: '<#BFC7D5>► <white>{amount}<#BFC7D5> Rarities'
+  boosts-fish: '<#BFC7D5>► <white>{amount}<#BFC7D5> Fish'
   # This is added to the lore in place of a bait if show-unused-slots is enabled in the general section.
-  unused-slot: <gray>► ? <i>Available Slot
+  unused-slot: '<#BFC7D5>► ? <i>Ô trống'
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
 version: 13
+
+# English fallback messages for Simulator preview (Phase 2-8).
+simulator:
+  generic-error: '<#FF5A6E>Simulator message is missing; see console.'
+  help: '<#BFC7D5>Simulator commands: status, zone list, zone info [id], here, reload, off, on'
+  status: '<#BFC7D5>Simulator: enabled=<white>{enabled}<#BFC7D5>, emergencyOff=<white>{emergency}<#BFC7D5>, mode=<white>{mode}<#BFC7D5>, revision=<white>{revision}<#BFC7D5>, packetEvents=<white>{packets}<#BFC7D5>, hookBridge=<white>{hook}<#BFC7D5>, nativeProbe=<white>{probe}'
+  ambient-status: '<#BFC7D5>Admin fish preview: active=<white>{active}<#BFC7D5>, agents=<white>{agents}<#BFC7D5> (private=<white>{private}<#BFC7D5>), viewers=<white>{viewers}<#BFC7D5>, shown=<white>{visible}<#BFC7D5>, water cells=<white>{water}<#BFC7D5>, scan queue=<white>{queue}<#BFC7D5>, packets=<white>{sent}<#BFC7D5>, deferred=<white>{deferred}'
+  schooling-status: '<#BFC7D5>Fish schooling (preview): enabled=<white>{enabled}<#BFC7D5> | schools=<white>{schools}<#BFC7D5>, members=<white>{members}<#BFC7D5> | decisions=<white>{decisions}<#BFC7D5>, cell checks=<white>{checks}<#BFC7D5>, budget hits=<white>{budget}<#BFC7D5>, scatters=<white>{scatters}'
+  ecosystem-status: '<#BFC7D5>Fish ecosystem (preview): enabled=<white>{enabled}<#BFC7D5> | cache=<white>{cache}<#BFC7D5>, samples=<white>{samples}<#BFC7D5>, budget drops=<white>{sample-drops}<#BFC7D5>, errors=<white>{sample-failures}<#BFC7D5> | shy flee=<white>{shy}<#BFC7D5>, particles=<white>{particles}<#BFC7D5>, FX drops=<white>{fx-drops}'
+  model-status: '<#BFC7D5>Packet fish models: enabled=<white>{enabled}<#BFC7D5>, resource-pack-ready=<white>{loaded}<#BFC7D5>, visual replacements=<white>{swaps}<#BFC7D5>, pack accepted=<white>{accepted}<#BFC7D5>, declined/failed=<white>{rejected}'
+  encounter-status: '<#BFC7D5>Rare encounters (preview): enabled=<white>{enabled}<#BFC7D5>, active=<white>{active}<#BFC7D5>, created=<white>{spawned}<#BFC7D5>, viewed=<white>{observed}<#BFC7D5>, expired=<white>{expired}<#BFC7D5>, committed=<white>{completed}<#BFC7D5>, particles=<white>{particles}<#BFC7D5>, dropped=<white>{dropped}<#BFC7D5>, failures=<white>{failures}'
+  encounter-invalid: '<#FF5A6E>Invalid encounter kind: rare_presence, golden, shadow, ghost, rare_school.'
+  encounter-preview-ok: '<#55D68A>Applied <white>{type}<#55D68A> to an existing visible EMF fish (no reward).'
+  encounter-preview-unavailable: '<#FFA94D>No eligible visible rare fish, or encounter preview is disabled.'
+  trace-header: '<#FFA94D>Latest native-hook probe events (<white>{count} s<#FFA94D>tored, showing up to 15):'
+  trace-row: '<white>{row}'
+  metrics: '{prefix}<gray>Zones={zones} | Pending casts={pending} | Probe sessions={sessions} | Native catches blocked={catches} | Native bites escaped={bites} | Probe reels={reels}</gray>'
+  zone-list: '<#FFA94D>Configured Simulator zones (<white>{count}<#FFA94D>), page <white>{page}<#FFA94D>/<white>{pages}<#FFA94D>:'
+  zone-item: '<#BFC7D5>- <white>{id}<#BFC7D5>: type=<white>{type}<#BFC7D5>, world=<#5899ee>{world}<#BFC7D5>, priority=<white>{priority}<#BFC7D5>, enabled=<white>{enabled}<#BFC7D5>, deny=<white>{deny}'
+  zone-info: '<#FFA94D>Zone <white>{id}<#FFA94D>: type=<white>{type}<#FFA94D>, world=<#5899ee>{world}<#FFA94D>, region=<white>{region}<#FFA94D>, priority=<white>{priority}<#FFA94D>, enabled=<white>{enabled}<#FFA94D>, deny=<white>{deny}'
+  zone-not-found: '<#FF5A6E>Unknown Simulator zone: <white>{id}'
+  here: '<#FFA94D>Current position: world=<#5899ee>{world}<#FFA94D>, block=(<#5899ee>{x}<#FFA94D>,<#5899ee>{y}<#FFA94D>,<#5899ee>{z}<#FFA94D>), zone=<#5899ee>{zone}<#FFA94D>, denied=<white>{denied}'
+  here-player-only: '<#FF5A6E>Only players can inspect a location.'
+  reload-ok: '<#55D68A>Simulator config reloaded. Existing probe sessions were cleaned.'
+  reload-failed: '<#FF5A6E>Simulator config invalid. Previous valid snapshot remains active; see console.'
+  emergency-off: '<#FFA94D>Simulator router suspended; active probes cleaned up.'
+  emergency-on: '<#55D68A>Simulator router resumed. Production Simulator is still gated.'
+  no-permission: '<#FF5A6E>You lack permission for this Simulator action.'
+  unavailable-deny: '<#FF5A6E>Simulator is unavailable in this area. Cast denied by admin policy.'
+  ai-interested: '<#BFC7D5>🐟 A fish has noticed your bait...'
+  ai-bite: '<#55D68A>⚡ Bite! Reel in now! <#BFC7D5>(<#5899ee>{time}<#55D68A> ticks)'
+  ai-success-preview: '<#55D68A>✅ Perfect reel! <white>AI PREVIEW — no fish or EXP awarded.'
+  ai-success-committed: '<#55D68A>✅ EMF fish delivered successfully (admin test mode).'
+  ai-commit-rejected: '<#FF5A6E>⛔ Catch rejected by requirements or EMF event; bait was not spent.'
+  ai-commit-failed: '<#BFC7D5>️ Delivery failed. Check console; catch cannot be replayed.'
+  reward-status: '<#BFC7D5>Reward bridge (admin test): enabled=<white>{enabled}<#BFC7D5>, paper-ack=<white>{verified}<#BFC7D5>, legacy loot required=<white>{legacy}<#BFC7D5>, delivered=<white>{delivered}<#BFC7D5>, rejected=<white>{rejected}<#BFC7D5>, delivery errors=<white>{failed}'
+  ai-early: '<#FF5A6E>❌ Too early! The fish escaped.'
+  ai-missed: '<#FF5A6E>❌ Too late! The fish swam away.'
+  ai-no-target: '<#BFC7D5>No eligible fish reached this hook. Preview closed.'
+  ai-lost: '<#BFC7D5>Fish was lost or the preview session was cancelled.'
+  ai-status: '<#BFC7D5>AI preview: enabled=<white>{enabled}<#BFC7D5>, active=<white>{active}<#BFC7D5>, success (preview/test)=<white>{success}<#BFC7D5>, fail=<white>{failure}<#BFC7D5>, timeout=<white>{missed}'
+
+# Phase 8 Simulator visual preview messages
+  effects-on: '<#55D68A>Simulator preview effects enabled for your session.'
+  effects-off: '<#FFA94D>Simulator preview effects disabled for your session.'
+  effects-status: '<#BFC7D5>Visual preview: enabled=<white>{enabled}<#BFC7D5> | cinematic=<white>{cinematics}<#BFC7D5> | HUD=<white>{hud}<#BFC7D5> | packets=<white>{sent}<#BFC7D5> | failures=<white>{failed}<#BFC7D5> | rejected=<white>{rejected}<#BFC7D5> | cues=<white>{cues}<#BFC7D5> | pending destroy=<white>{pending}'
+  presentation-status: '<#BFC7D5>Presentation: sent=<white>{sent}<#BFC7D5> | stale=<white>{stale}<#BFC7D5> | lower-priority drops=<white>{priority}<#BFC7D5> | preference I/O errors=<white>{io-failures}'
+  presentation-bite: '<#BFC7D5>🎣 FISH BITES! <white>{bar} <#5899ee>{time} <#BFC7D5>• Right-click to reel'
+  presentation-current: '<#BFC7D5>Simulator HUD: <white>{profile} <#BFC7D5>• /emf hud off|minimal|balanced|cinematic|reduced-motion'
+  presentation-changed: '<#55D68A>Simulator HUD preset set to <white>{profile}<#55D68A>. Saving asynchronously.'
+  ai-bite-hud: '<#55D68A>🎣 REEL NOW! <white>{bar} <#5899ee>{time}<#55D68A> ticks'
+
+# Phase 9 diagnostic messages. The English baseline is used for untranslated locales.
+  performance-status: '<#BFC7D5>Preview profile: avg=<white>{avg-ms}ms<#BFC7D5> max=<white>{max-ms}ms<#BFC7D5> over2ms=<white>{slow}<#BFC7D5> | packet peak=<white>{peak}<#BFC7D5> pending destroys=<white>{pending}<#BFC7D5> | errors=<white>{failures}<#BFC7D5> destroy errors=<white>{destroy-failures}<#BFC7D5> | dropped water jobs=<white>{jobs}<#BFC7D5> | ticker failures=<white>{crashes}<#BFC7D5> last=<white>{reason}'
+  doctor-gates: '<#BFC7D5>Simulator Doctor: PacketEvents backend=<white>{packet}<#BFC7D5>, native hook bridge=<white>{hook}<#BFC7D5>, simulator config=<white>{enabled}<#BFC7D5>, ambient=<white>{preview}<#BFC7D5>, probe=<white>{probe}<#BFC7D5>, admin reward=<white>{reward}<#BFC7D5>, manual Paper acknowledgment=<white>{declared}<#BFC7D5>, emergency=<white>{emergency}'
+  doctor-warning: '<#FFA94D>G3/G5/G7 cannot be certified by this command. Full Gradle build + Paper/client tests remain mandatory. Do not enable player rewards before sign-off.'
+
+# Phase 11 — Premium cinematic localized visuals (V2)
+  cinematic-reveal-title: '<#FFA94D>✦ <white>{rarity}<#FFA94D> ✦'
+  cinematic-reveal-subtitle: '<#BFC7D5>🐟 <white>{fish}'
+  cinematic-preview-invalid: '<#FF5A6E>Invalid preset: common, rare, epic, legendary.'
+  cinematic-preview-water: '<#FFA94D>Look at a water block within 12 blocks to preview the cinematic.'
+  cinematic-preview-started: '<#55D68A>Playing <white>{preset}<#55D68A> cinematic (visual-only, no reward).'
+  cinematic-preview-unavailable: '<#FF5A6E>Preview unavailable: check simulator/effects/cinematics, PacketEvents, permissions and limits.'
+  cinematic-preview-stopped: '<#FFA94D>Your cinematic has been stopped.'
+  premium-status: '<#BFC7D5>Premium V2: enabled=<white>{enabled}<#BFC7D5> | scenes=<white>{scenes}<#BFC7D5> | cues=<white>{cues}<#BFC7D5> | trails=<white>{trails}<#BFC7D5> | failures=<white>{failed}'

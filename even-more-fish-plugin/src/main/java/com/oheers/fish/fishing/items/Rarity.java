@@ -73,9 +73,21 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     }
 
     public @NotNull EMFSingleMessage format(@NotNull String name) {
-        EMFSingleMessage message = getFormat();
+        String rawFormat = getConfig().getString("format", "<white>{name}");
+        String resolved = applyNamePlaceholders(rawFormat, name);
+        EMFSingleMessage message = EMFSingleMessage.fromString(resolved);
         message.setVariable("{name}", name);
         return message;
+    }
+
+    private static @NotNull String applyNamePlaceholders(@NotNull String template, @NotNull String name) {
+        return template
+            .replace("{name}", name)
+            .replace("<name>", name)
+            .replace("{rarity}", name)
+            .replace("<rarity>", name)
+            .replace("{rarity_name}", name)
+            .replace("<rarity_name>", name);
     }
 
     @Override
@@ -116,11 +128,12 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     public @NotNull EMFSingleMessage getLorePrep() {
         String loreOverride = getConfig().getString("override-lore");
         if (loreOverride != null) {
-            return EMFSingleMessage.fromString(loreOverride);
+            String displayName = getConfig().getString("displayname", this.id);
+            return EMFSingleMessage.fromString(applyNamePlaceholders(loreOverride, displayName));
         }
         String displayName = getConfig().getString("displayname");
         if (displayName != null) {
-            return EMFSingleMessage.fromString(displayName);
+            return format(displayName);
         }
         String finalName = getId();
         if (!getUseConfigCasing()) {

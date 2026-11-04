@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.NativeHookTimersTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-12T16:26:38.486Z" hostname="LEDAT" time="0.088">
+  <properties/>
+  <testcase name="biteUsesActualNativeNibbleIncludingZeroWithoutWaitingFallback()" classname="com.oheers.fish.fishing.NativeHookTimersTest" time="0.037"/>
+  <testcase name="modernApproachCounterTakesPriorityOverWaitingAndNativeApproach()" classname="com.oheers.fish.fishing.NativeHookTimersTest" time="0.001"/>
+  <testcase name="exactLegacyApproachFieldTakesPriorityOverWaiting()" classname="com.oheers.fish.fishing.NativeHookTimersTest" time="0.0"/>
+  <testcase name="ordinarySdkHookReadsWaitingAndKeepsUnknownBiteUnknown()" classname="com.oheers.fish.fishing.NativeHookTimersTest" time="0.001"/>
+  <testcase name="missingNativeMappingOmitsNumericBiteInsteadOfGuessingOtherIntegers()" classname="com.oheers.fish.fishing.NativeHookTimersTest" time="0.046"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

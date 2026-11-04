@@ -34,6 +34,7 @@ public class SellHelper {
 
     private final @NotNull Player player;
     private final @NotNull List<SoldFish> fish;
+    private final boolean includesPlayerStorage;
 
     public int getCount() {
         return count;
@@ -48,6 +49,7 @@ public class SellHelper {
 
     public SellHelper(@NotNull Inventory inventory, @NotNull Player player, boolean removeFromInventory) {
         this.player = player;
+        this.includesPlayerStorage = inventory instanceof PlayerInventory;
         this.fish = fetchFish(inventory, removeFromInventory);
         this.saleValue = fish.stream().mapToDouble(SoldFish::getTotalValue).sum();
         this.count = fish.stream().mapToInt(SoldFish::getAmount).sum();
@@ -55,6 +57,7 @@ public class SellHelper {
 
     public SellHelper(@Nullable ItemStack @NotNull[] itemStacks, @NotNull Player player, boolean removeStacks) {
         this.player = player;
+        this.includesPlayerStorage = false;
         this.fish = fetchFish(itemStacks, removeStacks);
         this.saleValue = fish.stream().mapToDouble(SoldFish::getTotalValue).sum();
         this.count = fish.stream().mapToInt(SoldFish::getAmount).sum();
@@ -82,40 +85,80 @@ public class SellHelper {
             return;
         }
 
+        TurtleStorageFishBridge.SellSummary storageSummary = TurtleStorageFishBridge.SellSummary.EMPTY;
+        if (includesPlayerStorage && TurtleStorageFishBridge.isAvailable()) {
+            storageSummary = TurtleStorageFishBridge.sellStoredFish(
+                player,
+                null,
+                null,
+                Long.MAX_VALUE,
+                fish.isEmpty()
+            );
+        }
+
         if (fish.isEmpty()) {
-            ConfigMessage.NO_SELLABLE_FISH.getMessage().send(player);
+            if (storageSummary.soldCount() <= 0L) {
+                ConfigMessage.NO_SELLABLE_FISH.getMessage().send(player);
+            }
             return;
         }
 
         // Fire the sell event and check for cancellation.
         EMFFishSellEvent event = new EMFFishSellEvent(fish, player, saleValue, LocalDateTime.now());
         if (!event.callEvent()) {
-            // This could be the wrong message to send?
-            ConfigMessage.NO_SELLABLE_FISH.getMessage().send(player);
+            if (storageSummary.soldCount() <= 0L) {
+                ConfigMessage.NO_SELLABLE_FISH.getMessage().send(player);
+            }
             return;
         }
 
-        // Give sell rewards
-        fish.forEach(fish ->
-            fish.getFish().getSellRewards().forEach(
-                reward -> reward.rewardPlayer(player, player.getLocation())
-            )
-        );
+        // Calculate bonus & deposit money first so player is always paid
+        double vipBonusPct = com.oheers.fish.autofish.AutoFishingService.getActiveSellBonusPercent(player);
+        int comboStreak = com.oheers.fish.fishing.FishingProcessor.getComboStreak(player.getUniqueId());
+        int comboBonusPct = com.oheers.fish.fishing.FishingProcessor.getComboBonusPercent(comboStreak);
+        double totalBonusPct = vipBonusPct + comboBonusPct;
+        double finalSaleValue = totalBonusPct > 0.0D ? saleValue * (1.0D + totalBonusPct / 100.0D) : saleValue;
+        Economy.getInstance().deposit(player, finalSaleValue, true);
 
-        logSoldFish(fish, saleValue, count);
+        double combinedFinalWorth = finalSaleValue + storageSummary.finalWorth();
+        double combinedBaseWorth = saleValue + storageSummary.baseWorth();
+        long combinedCount = count + storageSummary.soldCount();
 
-        // Give money
-        Economy.getInstance().deposit(player, saleValue, true);
+        if (totalBonusPct > 0.0D) {
+            double bonusMoney = Math.max(0.0D, combinedFinalWorth - combinedBaseWorth);
+            player.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
+                "<dark_gray>[<gold>★ Thưởng Câu Cá</gold>]</dark_gray> <green>Cộng thêm <gold>+" + com.oheers.fish.autofish.AutoFishingService.formatMoney(bonusMoney)
+                    + "</gold> <yellow>(+" + (int) totalBonusPct + "% Ưu đãi VIP & Combo)</yellow> khi bán cá!</green>"
+            ));
+        }
 
         // Send message
         EMFMessage message = ConfigMessage.FISH_SALE.getMessage();
-        message.setSellPrice(Economy.getInstance().getWorthFormat(saleValue, true));
-        message.setAmount(count);
+        message.setSellPrice(Economy.getInstance().getWorthFormat(combinedFinalWorth, true));
+        message.setAmount((int) Math.min(Integer.MAX_VALUE, combinedCount));
         message.setPlayer(player);
         message.send(player);
 
         // Play sound
         player.playSound(this.player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.06f);
+
+        // Give sell rewards safely
+        try {
+            fish.forEach(sold ->
+                sold.getFish().getSellRewards().forEach(
+                    reward -> reward.rewardPlayer(player, player.getLocation())
+                )
+            );
+        } catch (Throwable exception) {
+            EvenMoreFish.getInstance().debug("Error executing sell rewards: " + exception.getMessage(), exception);
+        }
+
+        // Log sold fish to database safely
+        try {
+            logSoldFish(player, fish, finalSaleValue, count);
+        } catch (Throwable exception) {
+            EvenMoreFish.getInstance().debug("Error logging sold fish: " + exception.getMessage(), exception);
+        }
     }
 
     private static List<SoldFish> fetchFish(@NotNull Inventory inventory, boolean removeFromInventory) {
@@ -129,7 +172,7 @@ public class SellHelper {
             try {
                 SoldFish fish = new SoldFish(item);
                 list.add(fish);
-                if (removeFromInventory) {
+                if (removeFromInventory && Economy.getInstance().isEnabled()) {
                     inventory.setItem(slot, null);
                 }
             } catch (IllegalArgumentException exception) {
@@ -149,7 +192,7 @@ public class SellHelper {
             try {
                 SoldFish fish = new SoldFish(item);
                 list.add(fish);
-                if (removeStack) {
+                if (removeStack && Economy.getInstance().isEnabled()) {
                     item.setAmount(0);
                 }
             } catch (IllegalArgumentException exception) {
@@ -168,7 +211,7 @@ public class SellHelper {
             .anyMatch(armorItem -> armorItem.isSimilar(item));
     }
 
-    private void logSoldFish(@NotNull List<SoldFish> soldFish, double totalWorth, int fishSold) {
+    public static void logSoldFish(@NotNull Player player, @NotNull List<SoldFish> soldFish, double totalWorth, int fishSold) {
         if (!DatabaseUtil.isDatabaseOnline()) {
             return;
         }
@@ -191,11 +234,14 @@ public class SellHelper {
         ));
 
         final DataManager<UserReport> userReportDataManager = EvenMoreFish.getInstance().getPluginDataManager().getUserReportDataManager();
-        final UserReport report = userReportDataManager.get(uuid.toString());
-        report.incrementFishSold(fishSold);
-        report.incrementMoneyEarned(totalWorth);
-
-        userReportDataManager.update(uuid.toString(), report);
+        if (userReportDataManager != null) {
+            final UserReport report = userReportDataManager.get(uuid.toString());
+            if (report != null) {
+                report.incrementFishSold(fishSold);
+                report.incrementMoneyEarned(totalWorth);
+                userReportDataManager.update(uuid.toString(), report);
+            }
+        }
     }
 
     public static void sellInventoryGui(@NotNull InventoryGui gui, @NotNull HumanEntity humanEntity) {
@@ -218,6 +264,10 @@ public class SellHelper {
 
     public static double calculateInventoryWorth(@NotNull Inventory inventory) {
         return fetchFish(inventory, false).stream().mapToDouble(SoldFish::getTotalValue).sum();
+    }
+
+    public static int calculateInventoryCount(@NotNull Inventory inventory) {
+        return fetchFish(inventory, false).stream().mapToInt(SoldFish::getAmount).sum();
     }
 
 }

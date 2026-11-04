@@ -72,12 +72,12 @@ public class FishUtils {
         throw new UnsupportedOperationException();
     }
 
-    // checks for the "emf-fish-name" nbt tag, to determine if this ItemStack is a fish or not.
+    // checks for the "emf-fish-name" nbt tag or MMOItems fish ID, to determine if this ItemStack is a fish or not.
     public static boolean isFish(@Nullable ItemStack item) {
         if (item == null || item.isEmpty()) {
             return false;
         }
-        return NbtUtils.hasKey(item, NbtKeys.EMF_FISH_NAME);
+        return NbtUtils.hasKey(item, NbtKeys.EMF_FISH_NAME) || getFish(item) != null;
     }
 
     public static boolean isFish(@Nullable Skull skull) {
@@ -98,6 +98,20 @@ public class FishUtils {
         Integer randomIndex = NbtUtils.getInteger(item, NbtKeys.EMF_FISH_RANDOM_INDEX);
 
         if (nameString == null || rarityString == null) {
+            String mmoId = com.oheers.fish.fishing.rods.MMOItemsRodStats.getMMOItemId(item);
+            if (mmoId != null && !mmoId.isBlank()) {
+                for (Rarity r : FishManager.getInstance().getRarityMap().values()) {
+                    for (Fish f : r.getOriginalFishList()) {
+                        if (f.matchesMMOItemId(mmoId)) {
+                            return f.createCopy();
+                        }
+                    }
+                }
+            }
+            Fish fallbackByMeta = matchFishByDisplayAndLore(item);
+            if (fallbackByMeta != null) {
+                return fallbackByMeta;
+            }
             return null;
         }
 
@@ -126,6 +140,52 @@ public class FishUtils {
             }
         }
         return fish;
+    }
+
+    private static @Nullable Fish matchFishByDisplayAndLore(@NotNull ItemStack item) {
+        try {
+            if (!item.hasItemMeta()) {
+                return null;
+            }
+            org.bukkit.inventory.meta.ItemMeta meta = item.getItemMeta();
+            if (meta == null || !meta.hasDisplayName() || !meta.hasLore()) {
+                return null;
+            }
+            net.kyori.adventure.text.Component displayComp = meta.displayName();
+            if (displayComp == null) {
+                return null;
+            }
+            String plainDisplay = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(displayComp).trim();
+            if (plainDisplay.isEmpty()) {
+                return null;
+            }
+            List<net.kyori.adventure.text.Component> loreComps = meta.lore();
+            if (loreComps == null || loreComps.isEmpty()) {
+                return null;
+            }
+            boolean hasFishingLore = false;
+            for (net.kyori.adventure.text.Component line : loreComps) {
+                String plainLine = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(line);
+                if (plainLine.contains("Câu Cá Vạn Cân") || plainLine.contains("Nguồn: Câu cá") || plainLine.contains("Cấp độ hiếm:")) {
+                    hasFishingLore = true;
+                    break;
+                }
+            }
+            if (!hasFishingLore) {
+                return null;
+            }
+            for (Rarity r : FishManager.getInstance().getRarityMap().values()) {
+                for (Fish f : r.getOriginalFishList()) {
+                    String fishPlain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+                        .serialize(f.getDisplayName().getComponentMessage()).trim();
+                    if (plainDisplay.equalsIgnoreCase(fishPlain) || plainDisplay.equalsIgnoreCase(f.getName())) {
+                        return f.createCopy();
+                    }
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        return null;
     }
 
     public static @Nullable Fish getFish(@Nullable Skull skull, @Nullable Player fisher) throws InvalidFishException {
@@ -171,6 +231,67 @@ public class FishUtils {
         return fish;
     }
 
+    private static final java.lang.invoke.MethodHandle HAS_GLINT_OVERRIDE_HANDLE;
+    private static final java.lang.invoke.MethodHandle SET_GLINT_OVERRIDE_HANDLE;
+
+    static {
+        java.lang.invoke.MethodHandle hasHandle = null;
+        java.lang.invoke.MethodHandle setHandle = null;
+        try {
+            hasHandle = java.lang.invoke.MethodHandles.publicLookup().findVirtual(
+                org.bukkit.inventory.meta.ItemMeta.class,
+                "hasEnchantmentGlintOverride",
+                java.lang.invoke.MethodType.methodType(boolean.class)
+            );
+            setHandle = java.lang.invoke.MethodHandles.publicLookup().findVirtual(
+                org.bukkit.inventory.meta.ItemMeta.class,
+                "setEnchantmentGlintOverride",
+                java.lang.invoke.MethodType.methodType(void.class, Boolean.class)
+            );
+        } catch (Throwable ignored) {
+        }
+        HAS_GLINT_OVERRIDE_HANDLE = hasHandle;
+        SET_GLINT_OVERRIDE_HANDLE = setHandle;
+    }
+
+    /**
+     * Suppresses enchantment glint on Paper 1.20.4+ without mutating non-enchanted items
+     * (such as MMOItems raw-material fish) that have no glint override component.
+     */
+    public static void disableGlintOverride(@Nullable org.bukkit.inventory.meta.ItemMeta meta) {
+        if (meta == null || SET_GLINT_OVERRIDE_HANDLE == null) {
+            return;
+        }
+        try {
+            if (meta.hasEnchants()) {
+                SET_GLINT_OVERRIDE_HANDLE.invokeExact(meta, Boolean.FALSE);
+            } else if (HAS_GLINT_OVERRIDE_HANDLE != null && (boolean) HAS_GLINT_OVERRIDE_HANDLE.invokeExact(meta)) {
+                SET_GLINT_OVERRIDE_HANDLE.invokeExact(meta, (Boolean) null);
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
+    public static void disableGlintOverride(@Nullable ItemStack stack) {
+        if (stack == null || stack.isEmpty() || SET_GLINT_OVERRIDE_HANDLE == null || !stack.hasItemMeta()) {
+            return;
+        }
+        try {
+            org.bukkit.inventory.meta.ItemMeta meta = stack.getItemMeta();
+            if (meta == null) {
+                return;
+            }
+            if (meta.hasEnchants()) {
+                SET_GLINT_OVERRIDE_HANDLE.invokeExact(meta, Boolean.FALSE);
+                stack.setItemMeta(meta);
+            } else if (HAS_GLINT_OVERRIDE_HANDLE != null && (boolean) HAS_GLINT_OVERRIDE_HANDLE.invokeExact(meta)) {
+                SET_GLINT_OVERRIDE_HANDLE.invokeExact(meta, (Boolean) null);
+                stack.setItemMeta(meta);
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
     public static void giveItems(@NotNull List<@Nullable ItemStack> items, @NotNull Player player) {
         if (items.isEmpty()) {
             return; // Early return if the list is null or empty
@@ -178,6 +299,7 @@ public class FishUtils {
 
         List<ItemStack> filteredItems = items.stream()
             .filter(Objects::nonNull)
+            .peek(FishUtils::disableGlintOverride)
             .toList();
 
         // Do not proceed if there are no valid items to give
@@ -191,8 +313,12 @@ public class FishUtils {
         // Add items to the player's inventory
         Map<Integer, ItemStack> leftoverItems = player.getInventory().addItem(filteredItems.toArray(ItemStack[]::new));
 
-        // Drop any leftover items in the world
-        leftoverItems.values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
+        // Drop any leftover items in the world without glowing outline
+        leftoverItems.values().forEach(item -> {
+            disableGlintOverride(item);
+            org.bukkit.entity.Item dropped = player.getWorld().dropItem(player.getLocation(), item);
+            dropped.setGlowing(false);
+        });
     }
 
 

@@ -37,8 +37,15 @@ public class FishJournalGui extends ConfigGui {
     private final int userId;
     private final Rarity rarity;
     private final SortType sortType;
+    private final JournalFilterState filters;
+    private final JournalDiscoverySnapshot discovery;
 
     public FishJournalGui(@NotNull HumanEntity player, @Nullable Rarity rarity) {
+        this(player, rarity, null, null, 0);
+    }
+
+    FishJournalGui(@NotNull HumanEntity player, @Nullable Rarity rarity,
+                   @Nullable JournalFilterState filters, @Nullable JournalDiscoverySnapshot discovery, int knownUserId) {
         super(
             GuiConfig.getInstance().getConfig().getSection(
                 rarity == null ? "journal-menu" : "journal-rarity"
@@ -47,20 +54,40 @@ public class FishJournalGui extends ConfigGui {
         );
 
         this.rarity = rarity;
-        this.userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(player.getUniqueId());
+        this.discovery = discovery;
+        this.userId = discovery == null
+                ? EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(player.getUniqueId())
+                : knownUserId;
+        if (discovery != null && knownUserId <= 0) throw new IllegalArgumentException("Missing journal user identity");
+        actions.put("journal-filter", (gui, click) -> {
+            if (click.getWhoClicked().getUniqueId().equals(this.player.getUniqueId())) JournalFilterController.instance().open(this);
+        });
         createGui();
 
         Section config = getGuiConfig();
         if (config != null) {
-            sortType = FishUtils.getEnumValue(
+            SortType configured = FishUtils.getEnumValue(
                 SortType.class,
                 config.getString("sort-type"),
                 SortType.ALPHABETICAL
             );
+            this.filters = filters == null ? new JournalFilterState("", configured, false) : filters;
+            sortType = this.filters.sort();
             getGui().addElement(getGroup(config));
         } else {
             sortType = SortType.ALPHABETICAL;
+            this.filters = filters == null ? new JournalFilterState("", sortType, false) : filters;
         }
+    }
+
+    org.bukkit.entity.Player viewer() { return player; }
+    Rarity selectedRarity() { return rarity; }
+    int userId() { return userId; }
+    JournalFilterState filterState() { return filters; }
+
+    @Override
+    public void open() {
+        FishIndexMenuManager.getInstance().open(this.player, this.rarity);
     }
 
     private GuiElement getGroup(Section section) {
@@ -72,7 +99,10 @@ public class FishJournalGui extends ConfigGui {
 
         GuiElementGroup group = new GuiElementGroup(character);
         sortType.sort(this.rarity.getFishList()).forEach(fish -> {
-            if (!fish.getShowInJournal()) {
+            boolean caught = discovery != null && discovery.caught(fish.getRarity().getId(), fish.getName());
+            if (!filters.includes(fish.getShowInJournal(), caught, section.getBoolean("hide-undiscovered-fish", true),
+                    fish.getName() + " " + net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+                            .serialize(fish.getDisplayName().getComponentMessage(player)))) {
                 return;
             }
             ItemStack item = getFishItem(fish, section);
@@ -89,15 +119,16 @@ public class FishJournalGui extends ConfigGui {
     }
 
     private ItemStack getFishItem(Fish fish, Section section) {
-        final Database database = requireDatabase("Can not show fish in the Journal Menu, please enable the database!");
+        final Database database = discovery == null ? requireDatabase("Can not show fish in the Journal Menu, please enable the database!") : null;
 
-        if (database == null) {
+        if (discovery == null && database == null) {
             return ItemFactory.itemFactory(section, "undiscovered-fish").createItem(player.getUniqueId());
         }
 
         boolean hideUndiscovered = section.getBoolean("hide-undiscovered-fish", true);
         // If undiscovered fish should be hidden
-        if (hideUndiscovered && !database.userHasFish(fish.getRarity().getId(), fish.getName(), userId)) {
+        if (hideUndiscovered && !(discovery != null ? discovery.caught(fish.getRarity().getId(), fish.getName())
+                : database.userHasFish(fish.getRarity().getId(), fish.getName(), userId))) {
             return ItemFactory.itemFactory(section, "undiscovered-fish").createItem(player.getUniqueId());
         }
 
@@ -126,27 +157,31 @@ public class FishJournalGui extends ConfigGui {
     }
 
     private @NotNull EMFListMessage prepareLore(@NotNull ItemFactory factory, @NotNull Fish fish) {
-        final UserFishStats userFishStats = EvenMoreFish.getInstance().getPluginDataManager().getUserFishStatsDataManager().get(UserFishRarityKey.of(userId, fish).toString());
-        final FishStats fishStats = EvenMoreFish.getInstance().getPluginDataManager().getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
+        final UserFishStats userFishStats = discovery == null ? EvenMoreFish.getInstance().getPluginDataManager().getUserFishStatsDataManager().get(UserFishRarityKey.of(userId, fish).toString()) : null;
+        final FishStats fishStats = discovery == null ? EvenMoreFish.getInstance().getPluginDataManager().getFishStatsDataManager().get(FishRarityKey.of(fish).toString()) : null;
+        final JournalDiscoverySnapshot.Entry entry = discovery == null ? null : discovery.entries().get(
+                new JournalDiscoverySnapshot.Key(fish.getRarity().getId(), fish.getName()));
 
-        final String discoverDate = getValueOrDefault(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE), getUnknownMessage());
+        final String discoverDate = discovery == null ? getValueOrDefault(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE), getUnknownMessage())
+                : entry == null || entry.date() == null ? getUnknownMessage() : entry.date();
 
         @SuppressWarnings("Convert2MethodRef") // Suppressed as it introduces an unwanted Objects#requireNonNull when compiled.
-        final String discoverer = getValueOrDefault(() -> fishStats.getDiscovererName(), getUnknownMessage());
+        final String discoverer = discovery == null ? getValueOrDefault(() -> fishStats.getDiscovererName(), getUnknownMessage())
+                : getValueOrDefault(() -> FishUtils.getPlayerName(java.util.UUID.fromString(entry.discoverer())), getUnknownMessage());
 
         EMFListMessage lore = EMFListMessage.ofList(
             Optional.ofNullable(factory.getLore().getConfiguredValue())
                 .orElse(Collections.emptyList())
         );
 
-        lore.setVariable("{times-caught}", getValueOrDefault(() -> userFishStats == null ? null : Integer.toString(userFishStats.getQuantity()), "0"));
-        lore.setVariable("{largest-size}", getValueOrDefault(() -> userFishStats == null ? null : String.valueOf(userFishStats.getLongestLength()), "0"));
-        lore.setVariable("{smallest-size}", getValueOrDefault(() -> userFishStats == null ? null : String.valueOf(userFishStats.getShortestLength()), "0"));
+        lore.setVariable("{times-caught}", discovery == null ? getValueOrDefault(() -> userFishStats == null ? null : Integer.toString(userFishStats.getQuantity()), "0") : String.valueOf(entry == null ? 0 : entry.quantity()));
+        lore.setVariable("{largest-size}", discovery == null ? getValueOrDefault(() -> userFishStats == null ? null : String.valueOf(userFishStats.getLongestLength()), "0") : String.valueOf(entry == null ? 0 : entry.longest()));
+        lore.setVariable("{smallest-size}", discovery == null ? getValueOrDefault(() -> userFishStats == null ? null : String.valueOf(userFishStats.getShortestLength()), "0") : String.valueOf(entry == null ? 0 : entry.shortest()));
         lore.setVariable("{discover-date}", discoverDate);
         lore.setVariable("{discoverer}", discoverer);
-        lore.setVariable("{server-largest}", getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getLongestLength()), "0"));
-        lore.setVariable("{server-smallest}", getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getShortestLength()), "0"));
-        lore.setVariable("{server-caught}", getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getQuantity()), "0"));
+        lore.setVariable("{server-largest}", discovery == null ? getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getLongestLength()), "0") : String.valueOf(entry == null ? 0 : entry.serverLongest()));
+        lore.setVariable("{server-smallest}", discovery == null ? getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getShortestLength()), "0") : String.valueOf(entry == null ? 0 : entry.serverShortest()));
+        lore.setVariable("{server-caught}", discovery == null ? getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getQuantity()), "0") : String.valueOf(entry == null ? 0 : entry.serverQuantity()));
 
         return lore;
     }
@@ -169,7 +204,10 @@ public class FishJournalGui extends ConfigGui {
 
         GuiElementGroup group = new GuiElementGroup(character);
         sortType.sort(FishManager.getInstance().getRarityMap().values()).forEach(rarity -> {
-            if (!rarity.getShowInJournal()) {
+            boolean caught = discovery != null && discovery.caughtRarity(rarity.getId());
+            if (!filters.includes(rarity.getShowInJournal(), caught, section.getBoolean("hide-undiscovered-rarity", true),
+                    rarity.getId() + " " + net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+                            .serialize(rarity.getDisplayName().getComponentMessage(player)))) {
                 return;
             }
             ItemStack item = getRarityItem(rarity, section);
@@ -187,14 +225,14 @@ public class FishJournalGui extends ConfigGui {
     }
 
     private ItemStack getRarityItem(Rarity rarity, Section section) {
-        final Database database = requireDatabase("Can not show rarities in the Journal Menu, please enable the database!");
+        final Database database = discovery == null ? requireDatabase("Can not show rarities in the Journal Menu, please enable the database!") : null;
 
-        if (database == null) {
+        if (discovery == null && database == null) {
             return ItemFactory.itemFactory(section, "undiscovered-rarity").createItem(player.getUniqueId());
         }
 
         boolean hideUndiscovered = section.getBoolean("hide-undiscovered-rarity", true);
-        if (hideUndiscovered && !database.userHasRarity(rarity.getId(), userId)) {
+        if (hideUndiscovered && !(discovery != null ? discovery.caughtRarity(rarity.getId()) : database.userHasRarity(rarity.getId(), userId))) {
             return ItemFactory.itemFactory(section, "undiscovered-rarity").createItem(player.getUniqueId());
         }
 
