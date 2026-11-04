@@ -1,0 +1,29 @@
+Phase 08 -> Phase 09 cumulative source changes (2026-10-11)
+
+MODIFIED:
+  even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/visual/PacketVisibilityService.java
+  even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/AmbientPreviewService.java
+  even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/SimulatorModule.java
+  even-more-fish-plugin-1-21/src/main/java/com/oheers/fish/commands/admin/subcommand/SimulatorSubcommand.java
+  even-more-fish-plugin/src/main/resources/locales/messages_*.yml (18 files)
+  README.md
+  AGENTS.md
+  .gitignore
+
+ADDED:
+  even-more-fish-plugin/src/test/java/com/oheers/fish/fishing/simulator/visual/PacketVisibilityServiceTest.java
+  qa/SimulatorPhase9Smoke.java
+  qa/run-simulator-phase9-smoke.sh
+  qa/run-phase9-regression.sh
+  qa/PHASE_09_PAPER_TEST_MATRIX.md
+  qa/PHASE09_VALIDATION_LOG.txt
+  qa/PHASE09_GRADLE_BUILD.log
+  docs/simulator/PHASE_09_ADMIN_OPERATIONS.md
+  PHASE_09_IMPLEMENTATION_REPORT.md
+
+STATUS:
+  All headless smoke/regression tests pass.
+  JUnit source locally compiled/tested under local assertion stubs ONLY, not Gradle.
+  Gradle build blocked before Java compilation (services.gradle.org DNS).
+  Paper G3/G5/G7 and release G9 NOT verified.
+  Simulator still admin-only; production flags OFF.

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.pool.HookedFishPacketServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:46:15.150Z" hostname="LEDAT" time="0.824">
+  <properties/>
+  <testcase name="failedSpawnCompensatesAndUnresolvedDestroyBlocksNewSpawnsUntilBoundedRetry()" classname="com.oheers.fish.fishing.pool.HookedFishPacketServiceTest" time="0.175"/>
+  <testcase name="missingTransportOrLakeVisualAndProviderWithdrawalLeaveLegacyUnaffected()" classname="com.oheers.fish.fishing.pool.HookedFishPacketServiceTest" time="0.012"/>
+  <testcase name="hudOffMinimalAndReducedMotionAndEffectsOptOutRejectPackets()" classname="com.oheers.fish.fishing.pool.HookedFishPacketServiceTest" time="0.558"/>
+  <testcase name="noIdlePacketsUntrackedCastRejectedAndDuplicateBiteNeverCreatesSecondFish()" classname="com.oheers.fish.fishing.pool.HookedFishPacketServiceTest" time="0.023"/>
+  <testcase name="terminalRecastWorldReloadAndDisconnectCleanThePrivateEntity()" classname="com.oheers.fish.fishing.pool.HookedFishPacketServiceTest" time="0.014"/>
+  <testcase name="concurrentScenesAreGloballyBoundedAndDisableCleansEveryId()" classname="com.oheers.fish.fishing.pool.HookedFishPacketServiceTest" time="0.037"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

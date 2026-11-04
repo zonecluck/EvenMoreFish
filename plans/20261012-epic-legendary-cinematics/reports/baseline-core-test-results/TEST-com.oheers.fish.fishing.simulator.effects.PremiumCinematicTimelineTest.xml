@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.simulator.effects.PremiumCinematicTimelineTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:46:16.011Z" hostname="LEDAT" time="0.059">
+  <properties/>
+  <testcase name="skippingRevealDoesNotJumpFromSurfaceToAnUnvisitedHeroPose()" classname="com.oheers.fish.fishing.simulator.effects.PremiumCinematicTimelineTest" time="0.047"/>
+  <testcase name="validationRejectsOversizedOrNonFiniteScenes()" classname="com.oheers.fish.fishing.simulator.effects.PremiumCinematicTimelineTest" time="0.003"/>
+  <testcase name="deliveryAndRevealJoinWithZeroVelocity()" classname="com.oheers.fish.fishing.simulator.effects.PremiumCinematicTimelineTest" time="0.001"/>
+  <testcase name="skippedStagesRemainMonotonicAndBounded()" classname="com.oheers.fish.fishing.simulator.effects.PremiumCinematicTimelineTest" time="0.002"/>
+  <testcase name="legendaryHasSixStagesWithoutTeleportJumps()" classname="com.oheers.fish.fishing.simulator.effects.PremiumCinematicTimelineTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

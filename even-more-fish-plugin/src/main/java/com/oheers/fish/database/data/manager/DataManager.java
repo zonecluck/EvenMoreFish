@@ -6,19 +6,26 @@ import com.oheers.fish.database.data.strategy.DataSavingStrategy;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class DataManager<T> {
     private final Map<String, T> cache = new ConcurrentHashMap<>();
-    private final Set<String> dirtyKeys = ConcurrentHashMap.newKeySet();
+    /** Revision guard: a completed flush may only clear the version it actually wrote. */
+    private final Map<String, Long> dirtyVersions = new HashMap<>();
+    private final Object stateLock = new Object();
+    private final ReentrantLock flushLock = new ReentrantLock();
+    private long revisionClock;
     private final DataSavingStrategy<T> savingStrategy;
     private final Function<String, T> defaultLoader;
     private final ScheduledExecutorService flushScheduler;
@@ -67,15 +74,26 @@ public class DataManager<T> {
         }
 
         T fallbackValue = fallbackValueSupplier.get();
-        if (fallbackValue != null) {
-            cache.put(key, fallbackValue);
-            if (savingStrategy.writesThroughOnCreate()) {
-                savingStrategy.save(fallbackValue);
-            } else {
-                dirtyKeys.add(key);
-            }
-            debug("Using fallback value.");
+        if (fallbackValue == null) {
+            return null;
         }
+        long createVersion;
+        synchronized (stateLock) {
+            T existing = cache.putIfAbsent(key, fallbackValue);
+            if (existing != null) {
+                return existing;
+            }
+            createVersion = ++revisionClock;
+            dirtyVersions.put(key, createVersion);
+        }
+        if (savingStrategy.writesThroughOnCreate()) {
+            // Failed writes leave the revision dirty for a later retry.
+            savingStrategy.save(fallbackValue);
+            synchronized (stateLock) {
+                dirtyVersions.remove(key, createVersion);
+            }
+        }
+        debug("Using fallback value.");
         return fallbackValue;
     }
 
@@ -97,22 +115,35 @@ public class DataManager<T> {
     }
 
     public void update(String key, T data) {
-        cache.put(key, data);
+        long version;
+        synchronized (stateLock) {
+            cache.put(key, data);
+            version = ++revisionClock;
+            dirtyVersions.put(key, version);
+        }
         if (savingStrategy.writesThrough()) {
             savingStrategy.save(data);
-            dirtyKeys.remove(key);
-        } else {
-            dirtyKeys.add(key);
+            synchronized (stateLock) {
+                dirtyVersions.remove(key, version);
+            }
         }
     }
 
     public void updateAll(Map<String, T> data) {
-        cache.putAll(data);
+        Map<String, Long> versions = new HashMap<>();
+        synchronized (stateLock) {
+            for (Map.Entry<String, T> entry : data.entrySet()) {
+                cache.put(entry.getKey(), entry.getValue());
+                long version = ++revisionClock;
+                dirtyVersions.put(entry.getKey(), version);
+                versions.put(entry.getKey(), version);
+            }
+        }
         if (savingStrategy.writesThrough()) {
             savingStrategy.saveAll(data.values());
-            dirtyKeys.removeAll(data.keySet());
-        } else {
-            dirtyKeys.addAll(data.keySet());
+            synchronized (stateLock) {
+                versions.forEach((key, version) -> dirtyVersions.remove(key, version));
+            }
         }
     }
 
@@ -124,30 +155,35 @@ public class DataManager<T> {
         if (flushScheduler != null) {
             flushScheduler.shutdown();
         }
+        // The lock serializes periodic/manual/shutdown flushes and avoids stale writes.
         flushDirty();
     }
 
     private void flushDirty() {
-        if (dirtyKeys.isEmpty()) {
-            return;
-        }
-
-        Map<String, T> dirtySnapshot = new LinkedHashMap<>();
-        for (String key : dirtyKeys) {
-            T value = cache.get(key);
-            if (value != null) {
-                dirtySnapshot.put(key, value);
+        flushLock.lock();
+        try {
+            Map<String, T> values = new LinkedHashMap<>();
+            Map<String, Long> versions = new HashMap<>();
+            synchronized (stateLock) {
+                for (Map.Entry<String, Long> entry : dirtyVersions.entrySet()) {
+                    T value = cache.get(entry.getKey());
+                    if (value != null) {
+                        values.put(entry.getKey(), value);
+                        versions.put(entry.getKey(), entry.getValue());
+                    }
+                }
             }
+            if (values.isEmpty()) {
+                return;
+            }
+            // Never mutate/clear dirty versions before the save succeeds.
+            savingStrategy.saveAll(values.values());
+            synchronized (stateLock) {
+                versions.forEach((key, version) -> dirtyVersions.remove(key, version));
+            }
+        } finally {
+            flushLock.unlock();
         }
-
-        if (dirtySnapshot.isEmpty()) {
-            dirtyKeys.clear();
-            return;
-        }
-
-        Collection<T> dirtyValues = dirtySnapshot.values();
-        savingStrategy.saveAll(dirtyValues);
-        dirtyKeys.removeAll(dirtySnapshot.keySet());
     }
 
     private ScheduledExecutorService createFlushScheduler(Long flushInterval, TimeUnit flushUnit) {
@@ -161,7 +197,13 @@ public class DataManager<T> {
             thread.setDaemon(true);
             return thread;
         });
-        scheduler.scheduleAtFixedRate(this::flushDirty, flushInterval, flushInterval, flushUnit);
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                flushDirty();
+            } catch (RuntimeException exception) {
+                LOGGER.log(Level.SEVERE, "EMF data flush failed; pending changes will be retried", exception);
+            }
+        }, flushInterval, flushInterval, flushUnit);
         return scheduler;
     }
 
@@ -175,4 +217,5 @@ public class DataManager<T> {
     }
 
     private static final AtomicInteger THREAD_COUNTER = new AtomicInteger(1);
+    private static final Logger LOGGER = Logger.getLogger(DataManager.class.getName());
 }

@@ -1,0 +1,22 @@
+Phase 05 → Phase 06 source changes:
+PHASE_06_IMPLEMENTATION_REPORT.md
+README.md
+even-more-fish-plugin/src/main/java/com/oheers/fish/config/simulator/SimulatorConfigLoader.java
+even-more-fish-plugin/src/main/java/com/oheers/fish/config/simulator/SimulatorSettings.java
+even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/AmbientPreviewService.java
+even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/SimulatorMessages.java
+even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/SimulatorModule.java
+even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/ai/FishAiDirector.java
+even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/ai/FishAttractionPolicy.java
+even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/population/FishAgent.java
+even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/population/FishPopulationService.java
+even-more-fish-plugin/src/main/java/com/oheers/fish/fishing/simulator/water/WaterIndexService.java
+even-more-fish-plugin/src/main/resources/locales/messages_en.yml
+even-more-fish-plugin/src/main/resources/locales/messages_vi.yml
+even-more-fish-plugin/src/main/resources/locales/messages_vn.yml
+even-more-fish-plugin/src/main/resources/simulator.yml
+even-more-fish-plugin-1-21/src/main/java/com/oheers/fish/commands/admin/subcommand/SimulatorSubcommand.java
+qa/PHASE06_GRADLE_EXIT.txt
+qa/PHASE_06_PAPER_TEST_MATRIX.md
+qa/SimulatorPhase6Smoke.java
+qa/run-simulator-phase6-smoke.sh

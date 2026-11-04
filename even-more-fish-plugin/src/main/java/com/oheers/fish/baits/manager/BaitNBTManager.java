@@ -23,11 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -107,7 +105,8 @@ public class BaitNBTManager {
         }
 
         if (itemStack.hasItemMeta()) {
-            return NbtUtils.hasKey(itemStack, NbtKeys.EMF_APPLIED_BAIT);
+            String baitString = NbtUtils.getString(itemStack, NbtKeys.EMF_APPLIED_BAIT);
+            return baitString != null && !baitString.isEmpty();
         }
 
         return false;
@@ -125,6 +124,19 @@ public class BaitNBTManager {
      * @throws MaxBaitReachedException  When one of the baits has hit maximum set by max-baits in baits.yml
      */
     public static ApplicationResult applyBaitedRodNBT(ItemStack item, BaitHandler bait, int quantity) throws MaxBaitsReachedException, MaxBaitReachedException {
+        try {
+            Map<String, Integer> quantities = BaitQuantities.parse(NbtUtils.getString(item, NbtKeys.EMF_APPLIED_BAIT));
+            Integer existing = quantities.get(bait.getId());
+            if (existing != null && existing != UNLIMITED_BAIT && quantity > 0
+                    && bait.getBaitData().maxApplications() == UNLIMITED_BAIT && !bait.getBaitData().infinite())
+                Math.addExact(existing, quantity);
+        } catch (IllegalArgumentException | ArithmeticException malformed) {
+            return new ApplicationResult(item, 0);
+        }
+        if (!isBaitedRod(item) && quantity <= 0) {
+            return new ApplicationResult(item, 0);
+        }
+
         boolean doingLoreStuff = MainConfig.getInstance().getBaitAddToLore();
         AtomicBoolean maxBait = new AtomicBoolean(false);
         AtomicInteger cursorModifier = new AtomicInteger();
@@ -133,16 +145,14 @@ public class BaitNBTManager {
         if (isBaitedRod(item)) {
             removeOldLoreIfNecessary(item, bait);
 
-            boolean foundBait = applyToExistingBaits(item, bait, quantity, combined,cursorModifier,maxBait);
+            boolean foundBait = applyToExistingBaits(item, bait, quantity, combined, cursorModifier, maxBait);
 
             // We can manage the last character not being a colon if we have to add it in ourselves.
             if (!foundBait) {
                 addNewBait(item, bait, quantity, combined, cursorModifier, maxBait, doingLoreStuff);
-            } else {
-                if (!combined.isEmpty()) {
-                    combined.deleteCharAt(combined.length() - 1);
-                }
             }
+            if (!combined.isEmpty() && combined.charAt(combined.length() - 1) == ',')
+                combined.deleteCharAt(combined.length() - 1);
             updateNBT(item, combined);
         } else {
             applyInitialBait(item, bait, quantity, combined, cursorModifier, maxBait);
@@ -164,6 +174,10 @@ public class BaitNBTManager {
             StringBuilder combined, AtomicInteger cursorModifier, AtomicBoolean maxBait,
             boolean doingLoreStuff) throws MaxBaitsReachedException {
 
+        if (quantity <= 0) {
+            return;
+        }
+
         if (getNumBaitsApplied(item) >= MainConfig.getInstance().getBaitsPerRod()) {
             if (doingLoreStuff) {
                 item.editMeta(meta -> meta.lore(newApplyLore(item)));
@@ -172,10 +186,14 @@ public class BaitNBTManager {
         }
 
         int maxApplications = bait.getBaitData().maxApplications();
-        if (quantity > maxApplications && maxApplications != UNLIMITED_BAIT) {
-            cursorModifier.set(-maxApplications);
-            combined.append(bait.getId()).append(BAIT_SEPARATOR).append(maxApplications);
-            maxBait.set(true);
+        if (maxApplications != UNLIMITED_BAIT) {
+            int toApply = Math.min(quantity, maxApplications);
+            if (toApply <= 0) { maxBait.set(true); return; }
+            cursorModifier.set(-toApply);
+            combined.append(bait.getId()).append(BAIT_SEPARATOR).append(toApply);
+            if (quantity > maxApplications) {
+                maxBait.set(true);
+            }
         } else {
             combined.append(bait.getId()).append(BAIT_SEPARATOR).append(quantity);
             cursorModifier.set(-quantity);
@@ -186,10 +204,9 @@ public class BaitNBTManager {
     private static void removeOldLoreIfNecessary(@NotNull ItemStack item, BaitHandler bait) {
         try {
             item.editMeta(meta -> meta.lore(deleteOldLore(item)));
-        } catch (IndexOutOfBoundsException ex) {
-            EvenMoreFish.getInstance().getLogger().severe(
-                    "Failed to apply bait: " + bait.getId() + " to a user's fishing rod. Check baits.yml format.");
-            throw new RuntimeException("Lore removal failed.", ex); // Optionally make this a custom exception
+        } catch (Exception ex) {
+            EvenMoreFish.getInstance().getLogger().warning(
+                    "Failed to update bait lore for: " + bait.getId());
         }
     }
 
@@ -200,6 +217,9 @@ public class BaitNBTManager {
         boolean foundBait = false;
         for (String baitName : NbtUtils.getBaitArray(item)) {
             String[] split = baitName.split(BAIT_SEPARATOR);
+            if (split.length < 2) {
+                continue;
+            }
             String baitId = split[0];
 
             int baitQuantity = "∞".equals(split[1]) ? UNLIMITED_BAIT : Integer.parseInt(split[1]);
@@ -207,15 +227,28 @@ public class BaitNBTManager {
             if (baitId.equals(bait.getId())) {
                 if (bait.getBaitData().infinite() || baitQuantity == UNLIMITED_BAIT) {
                     combined.append(baitId).append(":∞,");
-                } else {
+                    cursorModifier.set(quantity > 0 ? -quantity : 0);
+                } else if (quantity < 0) {
                     int newQuantity = baitQuantity + quantity;
+                    if (newQuantity > 0) {
+                        combined.append(baitId).append(BAIT_SEPARATOR).append(newQuantity).append(BAIT_ENTRY_DELIMITER);
+                    }
+                    cursorModifier.set(quantity);
+                } else {
                     int maxApplications = bait.getBaitData().maxApplications();
+                    if (maxApplications != UNLIMITED_BAIT) {
+                        int canApply = Math.max(0, maxApplications - baitQuantity);
+                        int toApply = Math.min(quantity, canApply);
+                        int newQuantity = baitQuantity + toApply;
 
-                    if (newQuantity > maxApplications && maxApplications != UNLIMITED_BAIT) {
-                        combined.append(baitId).append(BAIT_SEPARATOR).append(maxApplications).append(BAIT_ENTRY_DELIMITER);
-                        cursorModifier.set(-maxApplications + (newQuantity - quantity));
-                        maxBait.set(true);
-                    } else if (newQuantity != 0) {
+                        combined.append(baitId).append(BAIT_SEPARATOR).append(newQuantity).append(BAIT_ENTRY_DELIMITER);
+                        cursorModifier.set(-toApply);
+
+                        if (quantity > canApply) {
+                            maxBait.set(true);
+                        }
+                    } else {
+                        int newQuantity = baitQuantity + quantity;
                         combined.append(baitId).append(BAIT_SEPARATOR).append(newQuantity).append(BAIT_ENTRY_DELIMITER);
                         cursorModifier.set(-quantity);
                     }
@@ -236,27 +269,37 @@ public class BaitNBTManager {
             } else {
                 compound.setString(NbtKeys.EMF_APPLIED_BAIT, combined.toString());
             }
+            compound.setBoolean(NbtKeys.EMF_BAIT_REFORMATTED, true);
         });
     }
 
     private static void applyInitialBait(
             ItemStack item, BaitHandler bait, int quantity,
-            StringBuilder combined, AtomicInteger cursorModifier, AtomicBoolean maxBait) {
+            StringBuilder combined, AtomicInteger cursorModifier, AtomicBoolean maxBait) throws MaxBaitsReachedException {
+
+        if (quantity <= 0) {
+            return;
+        }
+
+        if (MainConfig.getInstance().getBaitsPerRod() <= 0) {
+            throw new MaxBaitsReachedException("Max baits reached.", new ApplicationResult(item, 0));
+        }
+
+        int maxApplications = bait.getBaitData().maxApplications();
+        int toApply = (maxApplications != UNLIMITED_BAIT) ? Math.min(quantity, maxApplications) : quantity;
+        if (toApply <= 0) { maxBait.set(true); return; }
+
+        if (quantity > maxApplications && maxApplications != UNLIMITED_BAIT) {
+            maxBait.set(true);
+        }
+
+        cursorModifier.set(-toApply);
+        combined.append(bait.getId()).append(BAIT_SEPARATOR).append(toApply);
 
         NBT.modify(item, nbt -> {
             ReadWriteNBT compound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
-            int maxApplications = bait.getBaitData().maxApplications();
-
-            if (quantity > maxApplications && maxApplications != UNLIMITED_BAIT) {
-                combined.append(bait.getId()).append(BAIT_SEPARATOR).append(maxApplications);
-                cursorModifier.set(-maxApplications);
-                maxBait.set(true);
-            } else {
-                combined.append(bait.getId()).append(BAIT_SEPARATOR).append(quantity);
-                cursorModifier.set(-quantity);
-            }
-
             compound.setString(NbtKeys.EMF_APPLIED_BAIT, combined.toString());
+            compound.setBoolean(NbtKeys.EMF_BAIT_REFORMATTED, true);
         });
     }
 
@@ -273,12 +316,17 @@ public class BaitNBTManager {
             return null;
         }
 
-        String[] baitNameList = NbtUtils.getBaitArray(fishingRod);
+        Map<String, Integer> applied;
+        try {
+            applied = BaitQuantities.parse(NbtUtils.getString(fishingRod, NbtKeys.EMF_APPLIED_BAIT));
+        } catch (IllegalArgumentException malformed) {
+            return null;
+        }
         List<BaitHandler> baitList = new ArrayList<>();
 
-        for (String baitName : baitNameList) {
+        for (String baitName : applied.keySet()) {
 
-            BaitHandler bait = BaitManager.getInstance().getBait(baitName.split(BAIT_SEPARATOR)[0]);
+            BaitHandler bait = BaitManager.getInstance().getBait(baitName);
             if (bait != null) {
                 baitList.add(bait);
             }
@@ -335,15 +383,11 @@ public class BaitNBTManager {
             return false;
         }
 
-        String[] baitList = NbtUtils.getBaitArray(itemStack);
-
-        for (String appliedBait : baitList) {
-            if (appliedBait.split(BAIT_SEPARATOR)[0].equals(bait)) {
-                return true;
-            }
+        try {
+            return BaitQuantities.parse(NbtUtils.getString(itemStack, NbtKeys.EMF_APPLIED_BAIT)).containsKey(bait);
+        } catch (IllegalArgumentException malformed) {
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -356,52 +400,33 @@ public class BaitNBTManager {
      * @return The number of baits that were deleted in total.
      */
     public static int deleteAllBaits(ItemStack itemStack) {
-        if (!NbtUtils.hasKey(itemStack, NbtKeys.EMF_APPLIED_BAIT)) {
+        if (!isBaitedRod(itemStack)) {
             return 0;
         }
 
-        String[] baitList = NbtUtils.getBaitArray(itemStack);
-        int totalDeleted = Arrays.stream(baitList)
-                .filter(Objects::nonNull)
-                .mapToInt(bait -> {
-                            String[] parts = bait.split(BAIT_SEPARATOR);
-                            return getDeletedFromQuantityString(parts[1]);
-                        }
-                )
-                .sum();
+        int totalDeleted;
+        try {
+            totalDeleted = BaitQuantities.total(BaitQuantities.parse(NbtUtils.getString(itemStack, NbtKeys.EMF_APPLIED_BAIT)));
+        } catch (IllegalArgumentException | ArithmeticException malformed) {
+            return 0;
+        }
 
         NBT.modify(itemStack, nbt -> {
             nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND).removeKey(NbtKeys.EMF_APPLIED_BAIT);
         });
 
+        itemStack.editMeta(meta -> meta.lore(deleteOldLore(itemStack)));
+
         return totalDeleted;
     }
 
-    private static int getDeletedFromQuantityString(final String quantityStr) {
-        if (!quantityStr.equals("∞")) {
-            return Integer.parseInt(quantityStr);
-        }
-
-        return  1; // Count infinite baits as 1
-    }
-
     public static List<Component> newApplyLore(ItemStack itemStack) {
-        // Mark this item as having reformatted lore
-        NBT.modify(itemStack, nbt -> {
-            ReadWriteNBT compound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
-            compound.setBoolean(NbtKeys.EMF_BAIT_REFORMATTED, true);
-        });
-
-        ItemMeta meta = itemStack.getItemMeta();
-        if (meta == null) {
-            return Collections.emptyList();
+        try {
+            BaitQuantities.parse(NbtUtils.getString(itemStack, NbtKeys.EMF_APPLIED_BAIT));
+        } catch (IllegalArgumentException malformed) {
+            return Optional.ofNullable(itemStack.getItemMeta()).map(ItemMeta::lore).orElse(Collections.emptyList());
         }
-
-        List<Component> lore = meta.lore();
-
-        if (lore == null) {
-            lore = new ArrayList<>();
-        }
+        List<Component> lore = new ArrayList<>(deleteOldLore(itemStack));
 
         EMFListMessage format = ConfigMessage.BAIT_ROD_LORE.getMessage().toListMessage();
 
@@ -452,18 +477,23 @@ public class BaitNBTManager {
     }
 
     /**
-     * This deletes all the old lore inserted by the plugin to the baited fishing rod. If the config value for the lore
-     * format had lines added/removed this will break the old rods.
+     * This deletes all the old bait lore inserted by the plugin to the baited fishing rod.
+     * All original lore belonging to the rod is preserved.
      *
-     * @param itemStack The lore of the itemstack having the bait section of its lore removed.
+     * @param itemStack The itemstack having the bait section of its lore removed.
+     * @return Lore with all bait lines removed.
      */
     public static List<Component> deleteOldLore(ItemStack itemStack) {
-        // Removes old lore from the rod
-        if (removeOldLoreFormat(itemStack)) {
-            return itemStack.lore();
+        if (itemStack == null || !itemStack.hasItemMeta()) {
+            return Collections.emptyList();
         }
 
-        List<Component> lore = itemStack.lore();
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta == null || !meta.hasLore()) {
+            return Collections.emptyList();
+        }
+
+        List<Component> lore = meta.lore();
         if (lore == null || lore.isEmpty()) {
             return Collections.emptyList();
         }
@@ -503,57 +533,6 @@ public class BaitNBTManager {
             return EMFSingleMessage.fromString("Invalid Bait");
         }
         return EMFSingleMessage.fromString(bait.getDisplayName());
-    }
-
-    // Conversion methods
-
-    /**
-     * Removes all lore from the fishing rod
-     */
-    private static boolean removeOldLoreFormat(@NotNull ItemStack item) {
-        if (NbtUtils.hasKey(item, NbtKeys.EMF_BAIT_REFORMATTED)) {
-            return false;
-        }
-
-        if (!item.hasItemMeta() || item.getItemMeta() == null || !item.getItemMeta().hasLore()) {
-            return true;
-        }
-
-        List<Component> lore = item.lore();
-        if (lore == null || lore.isEmpty()) {
-            return true;
-        }
-
-        if (MainConfig.getInstance().getBaitShowUnusedSlots()) {
-            // starting at 1, because at least one bait replacing {baits} is repeated.
-            int maxBaits = MainConfig.getInstance().getBaitsPerRod() + ConfigMessage.BAIT_ROD_LORE.getMessage().getPlainTextListMessage().size();
-            for (int i = 1; i < maxBaits; i++) {
-                try {
-                    lore.removeLast();
-                } catch (IndexOutOfBoundsException exception) {
-                    break;
-                }
-            }
-        } else {
-            // starting at 1, because at least one bait replacing {baits} is repeated.
-            int numBaitsApplied = getNumBaitsApplied(item) + ConfigMessage.BAIT_ROD_LORE.getMessage().getPlainTextListMessage().size();
-            //compliant version
-            for (int i = 1; i < numBaitsApplied; i++) {
-                try {
-                lore.removeLast();
-                } catch (IndexOutOfBoundsException exception) {
-                    break;
-                }
-            }
-        }
-
-        item.lore(lore);
-        NBT.modify(item, nbt -> {
-            ReadWriteNBT compound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
-            compound.setBoolean(NbtKeys.EMF_BAIT_REFORMATTED, true);
-        });
-
-        return true;
     }
 
 }

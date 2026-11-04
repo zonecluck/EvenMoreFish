@@ -1,0 +1,22 @@
+{
+  "backup": "/.emf-cinematic-polish-20261012-230354",
+  "files": {
+    "plugins/even-more-fish-2.3.6-SNAPSHOT-1.21.jar": {
+      "remote": "/plugins/even-more-fish-2.3.6-SNAPSHOT-1.21.jar",
+      "old_sha256": "1454767cf3934b34333e6d6165bda8fd442348b9d744df177524dae67d2bf058",
+      "sha256": "c9db5e1500fd4f80f3b87909c1697b4ab2266346f09d26c29b2f8fbd95eae64d",
+      "size": 2936694
+    },
+    "plugins/EvenMoreFish/simulator/cinematics.yml": {
+      "remote": "/plugins/EvenMoreFish/simulator/cinematics.yml",
+      "old_sha256": "8ecb7d07effe1063ba166b87070afb3d95075da47d5fb71f10f0adca950e69b2",
+      "sha256": "1255d52f3e883edaa90b8c9b8a76ca9376cffe6f6d2c8e6ba7b0c71ef551e556",
+      "size": 4494
+    }
+  },
+  "applied": [
+    "plugins/even-more-fish-2.3.6-SNAPSHOT-1.21.jar",
+    "plugins/EvenMoreFish/simulator/cinematics.yml"
+  ],
+  "status": "VERIFIED_RESTART_PENDING"
+}

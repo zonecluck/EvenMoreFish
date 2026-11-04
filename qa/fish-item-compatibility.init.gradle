@@ -1,0 +1,22 @@
+// Run the real fish-item finalizer against an installed Paper API without changing production dependencies.
+allprojects {
+    afterEvaluate {
+        if (project.name == 'even-more-fish-plugin') {
+            def compatibility = configurations.detachedConfiguration(dependencies.create(
+                "io.papermc.paper:paper-api:${providers.gradleProperty('fishCompatibilityPaperVersion').get()}"))
+            tasks.register('fishItemCompatibilityTest', Test) {
+                dependsOn(tasks.named('testClasses'))
+                testClassesDirs = sourceSets.test.output.classesDirs
+                def replacements = compatibility.resolvedConfiguration.resolvedArtifacts.collect {
+                    "${it.moduleVersion.id.group}:${it.name}"
+                }.toSet()
+                def retained = configurations.testRuntimeClasspath.resolvedConfiguration.resolvedArtifacts.findAll {
+                    !replacements.contains("${it.moduleVersion.id.group}:${it.name}")
+                }.collect { it.file }
+                classpath = sourceSets.main.output + sourceSets.test.output + files(retained) + compatibility
+                useJUnitPlatform()
+                filter { includeTestsMatching('com.oheers.fish.fishing.items.FishItemFlagsTest') }
+            }
+        }
+    }
+}

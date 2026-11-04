@@ -1,0 +1,140 @@
+# EvenMoreFish Simulator V2 — Phase 6 admin-only packet fish + Fish AI rehearsal.
+# IMPORTANT: Packet fish + rewards are ADMIN-ONLY diagnostic features until runtime gates pass.
+# Keep ambient-preview.enabled=false on production. Simulator defaults to LEGACY_EMF catches.
+# Keep the original config.yml "version" field; this file migrates separately.
+config-version: 1
+
+simulator:
+  # OFF by default. OFF = old EMF fishing stays unchanged.
+  enabled: false
+  mode: REGIONS_ONLY
+
+  dependency:
+    # Phase 4/5 packet fish visuals work only for authorized admin preview viewers.
+    # If a configured zone is unavailable, do not silently generate fake rewards.
+    # LEGACY_EMF keeps normal EvenMoreFish catches; DENY removes the cast at the water surface.
+    on-unavailable: LEGACY_EMF
+
+  policy:
+    # Existing EMF allowed-worlds/allowed-regions, toggle, rods, and competition rules
+    # remain mandatory. This permission can additionally restrict Simulator.
+    permission-required: false  # emf.simulator.use
+
+  ambient-preview:
+    # PREVIEW is admin-only until Gate G3/G5/G7 have been tested in Paper.
+    # enable with simulator.enabled: true AND an active configured zone.
+    enabled: false
+    scan-radius-chunks: 2
+    scan-columns-per-tick: 256
+    scan-nanos-per-tick: 600000     # 0.6ms soft scan budget per tick
+    max-cached-chunks: 96
+    max-queued-chunks: 96
+    max-cached-cells: 8192
+    minimum-water-depth: 2
+    max-agents: 160
+    max-per-zone: 48
+    max-private: 24
+    max-private-per-viewer: 2
+    max-visible-per-viewer: 20
+    max-preview-viewers: 8        # hard admin preview cap
+    packets-per-tick: 800        # total outgoing packet budget (movement/spawn/destroy)
+    spawn-interval-ticks: 20
+    movement-interval-ticks: 2
+    viewer-interval-ticks: 5
+    ttl-ticks: 3600
+    view-distance: 40.0
+    private-chance: 0.06
+
+  ai-preview:
+    # Phase 6 DEMONSTRATION ONLY. Must also enable ambient-preview + native-hook-probe.
+    # Requires admin permission emf.admin.simulator.preview AND .probe.
+    # Alone this remains preview-only; the separate reward-bridge gate is required for admin rewards.
+    enabled: false
+    max-active: 8
+    candidates-per-search: 12   # hard bound on candidate pathfinding per search
+    max-path-nodes: 96          # BFS visits only indexed adjacent water tiles
+    search-interval-ticks: 10  # don't re-path every tick if no fish is available
+    interest-ticks: 8
+    reaction-window-ticks: 26
+    grace-ticks: 3
+    max-retargets: 2
+    cast-cooldown-ticks: 10
+    max-wait-ticks: 500
+    attraction-radius: 12.0
+    swim-speed: 0.18
+    bite-radius: 0.7
+
+  reward-bridge:
+    # Phase 7: OPTIONAL ADMIN-ONLY reward integration test. DO NOT enable on production.
+    # Requires simulator + zone + native-hook-probe + ambient-preview + ai-preview.
+    # Only administrators with BOTH emf.admin.simulator.preview and .probe may receive fish.
+    enabled: false
+    # Must be set by the admin ONLY after verifying G3 (native bite/loot suppression),
+    # G5 (packet renderer) on a real Paper test server. Never auto-set during reload.
+    paper-gates-verified: false
+    experience-min: 1
+    experience-max: 6
+    # Compatibility: while fishing.only-fish=true, bait.catch-percentage>0,
+    # or native mcMMO/AuraSkills loot is enabled, the admin test remains LEGACY_EMF.
+    # Bait-loot and native treasure packet agents will be built in later phases.
+
+  native-hook-probe:
+    # EXPERIMENTAL: Admin-only test of Paper bite control. Requires BOTH this and
+    # simulator.enabled: true, zone enabled, plus emf.admin.simulator.probe.
+    # Probe sessions DO NOT grant items/EXP. Never run with normal players.
+    enabled: false
+    max-active: 8
+    settle-ticks: 60            # Wait at most 3 seconds for a flying hook to land in water
+    session-timeout-ticks: 600  # Auto-cleanup after 30 seconds
+    wait-time-ticks: 1000000   # Native bite postponement; do NOT use setBiteChance(0)
+    poll-interval-ticks: 2      # Inspect at 10Hz; not every player every tick
+    max-reel-distance: 35.0    # Cancel probe if player moves too far from hook
+
+# Center hologram displayed above active CUBOID zones and fishing pools.
+hologram:
+  enabled: true
+  y-offset: 1.6
+  lines:
+    - "<aqua><bold>[KHU VỰC HỒ CÂU]</bold></aqua>"
+    - " "
+    - "<gold>+{luck}% May mắn</gold>"
+    - "<green>+{speed}% Tốc độ câu</green>"
+
+# Zones only SELECT an engine; they must not override WorldGuard/RedProtect/EMF protection.
+# IDs may contain A-Z/a-z, digits, _ and -, up to 48 characters.
+# Overlap: deny-simulator always wins; otherwise higher priority, then ascending ID.
+# Missing region provider or unknown region ID never enables a Simulator zone.
+zones:
+  lake_world:
+    enabled: false
+    deny-simulator: false
+    type: WORLD
+    world: fishing_world
+    priority: 10
+
+  central_lake:
+    enabled: false
+    deny-simulator: false
+    type: CUBOID
+    world: world
+    min: {x: -120, y: 55, z: 220}
+    max: {x: 120, y: 115, z: 460}
+    priority: 30
+
+  harbor_fishing:
+    enabled: false
+    deny-simulator: false
+    type: WORLDGUARD_REGION
+    world: world
+    region-id: harbor_fishing
+    priority: 50
+
+  redprotect_pond:
+    enabled: false
+    deny-simulator: false
+    type: REDPROTECT_REGION
+    world: world
+    region-id: fishing_pond
+    priority: 20
+
+

@@ -10,6 +10,9 @@ import com.oheers.fish.events.JoinChecker;
 import com.oheers.fish.fishing.EMFFishListener;
 import com.oheers.fish.fishing.FishingProcessor;
 import com.oheers.fish.fishing.HuntingProcessor;
+import com.oheers.fish.autofish.AutoFishMenuManager;
+import com.oheers.fish.gui.guis.FishIndexMenuManager;
+import com.oheers.fish.gui.guis.StorageFishShopGui;
 import com.oheers.fish.recipe.RecipeListener;
 import com.oheers.fish.update.UpdateNotify;
 import com.oheers.fish.utils.ItemProtectionListener;
@@ -42,6 +45,12 @@ public class EventManager {
         pm.registerEvents(new ItemProtectionListener(), plugin);
         pm.registerEvents(new FishInteractEvent(), plugin);
         pm.registerEvents(new RecipeListener(), plugin);
+        pm.registerEvents(FishIndexMenuManager.getInstance(), plugin);
+        pm.registerEvents(AutoFishMenuManager.getInstance(), plugin);
+        pm.registerEvents(StorageFishShopGui.getInstance(), plugin);
+        if (plugin.getAutoFishing() != null) {
+            pm.registerEvents(plugin.getAutoFishing(), plugin);
+        }
     }
 
     public void registerOptionalListeners() {

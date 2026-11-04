@@ -122,6 +122,13 @@ public class ItemFactory {
     }
 
     public @NotNull ItemStack createItem(@Nullable Map<String, ?> replacements) {
+        if (this.usingItemAddon || this.configuration.contains("item.raw-material")
+            || this.configuration.getString("item.material", "").contains(":")) {
+            ItemStack latest = getBaseItem();
+            if (latest != null && !latest.isEmpty()) {
+                this.baseItem = latest;
+            }
+        }
         ItemStack item = baseItem.clone();
 
         if (!rawItem) {

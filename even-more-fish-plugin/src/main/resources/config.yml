@@ -248,6 +248,8 @@ command:
     applybaits: "applybaits"
     # The /emf journal command
     journal: "journal"
+    index: "index"
+    autofish: "autofish"
 
   # Should the base command show the help text instead of opening the GUI?
   # This is always true if the player doesn't have the /emf gui permission.
@@ -264,6 +266,67 @@ biome-sets:
     - LUKEWARM_OCEAN
     - OCEAN
     - WARM_OCEAN
+
+# Competition winner buffs: Buffs given to players who place in competitions.
+# Automatically reset when the next competition starts.
+competition-buffs:
+  enabled: true
+  notification-message: "<gold>★ <yellow>Bạn nhận được <green>Buff Quán Quân Cuộc Thi (Top {rank})<yellow>: <aqua>+{lure}% Tốc độ cắn câu</aqua>, <gold>+{luck}% May mắn</gold>, <light_purple>+{double}% Nhân đôi cá</light_purple>! <gray>(Reset ở cuộc thi tiếp theo)</gray>"
+  ranks:
+    '1':
+      luck: 0.50
+      lure: 0.40
+      double-catch: 0.35
+      exp-multiplier: 2.0
+    '2':
+      luck: 0.35
+      lure: 0.25
+      double-catch: 0.20
+      exp-multiplier: 1.5
+    '3':
+      luck: 0.20
+      lure: 0.15
+      double-catch: 0.10
+      exp-multiplier: 1.25
+    participation:
+      luck: 0.05
+      lure: 0.05
+      double-catch: 0.0
+      exp-multiplier: 1.0
+
+# Animations, titles, particles, and sound effects
+animations:
+  competition-start:
+    enabled: true
+    title: "<gradient:#00C0FF:#42E8E0><bold>⚡ CUỘC THI CÂU CÁ ⚡</gradient>"
+    subtitle: "<yellow>Cuộc thi đã bắt đầu! Hãy quăng cần và tranh tài!</yellow>"
+  competition-end:
+    enabled: true
+    title: "<gradient:#FFD700:#FFA500><bold>🏆 CUỘC THI KẾT THÚC 🏆</gradient>"
+    subtitle: "<yellow>Chúc mừng <gold><bold>{winner}</bold></gold> đã đạt <yellow>Top 1!</yellow>"
+  rare-catch:
+    enabled: true
+    all-rarities: false
+    # Frequent catches do not cover the player's view with a large title.
+    title-enabled: false
+    # Ordinary EMF fishing only; independent of the staging Simulator flags.
+    cinematic:
+      enabled: true
+      all-rarities: false
+      rarities: [Rare, Epic, Legendary, Mythical]
+      # Case-insensitive IDs. Common is always excluded, even with a high sort-index.
+      excluded-rarities: []
+      anchor-y-offset: 0.75
+      material-wheel: false
+      candidate-preview: false
+      hud-titles: false
+      cooldown-ticks: 60
+      max-concurrent: 8
+  double-catch:
+    enabled: true
+    message: "<gradient:#FFE600:#FF5500>⚡ <bold>MAY MẮN NHÂN ĐÔI!</bold> Bạn nhận được x2 {fish}! ⚡</gradient>"
+  hook-bite:
+    enabled: true
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!

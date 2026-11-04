@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.pool.FishingPoolSettingsTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:46:14.645Z" hostname="LEDAT" time="0.251">
+  <properties/>
+  <testcase name="yamlRoundTripRetainsGeometryAndBonusesAndRemoval()" classname="com.oheers.fish.fishing.pool.FishingPoolSettingsTest" time="0.208"/>
+  <testcase name="explicitCommonNeverBoostsAndFiniteBonusesClamp()" classname="com.oheers.fish.fishing.pool.FishingPoolSettingsTest" time="0.004"/>
+  <testcase name="shippedDefaultsEnableOnlyConfiguredRarityIdsWithEmptyPools()" classname="com.oheers.fish.fishing.pool.FishingPoolSettingsTest" time="0.026"/>
+  <testcase name="malformedTypesNonfiniteValuesAndDuplicateIdsRejectEntireCandidate()" classname="com.oheers.fish.fishing.pool.FishingPoolSettingsTest" time="0.009"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

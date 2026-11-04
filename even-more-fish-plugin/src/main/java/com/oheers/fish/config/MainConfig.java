@@ -35,6 +35,8 @@ public class MainConfig extends ConfigBase {
     private final String sellAllSubCommandName;
     private final String applyBaitsSubCommandName;
     private final String journalSubCommandName;
+    private final String indexSubCommandName;
+    private final String autofishSubCommandName;
 
     private Map<String, List<Biome>> biomeSets;
     private Map<String, Map<String, Double>> regionBoosts;
@@ -58,6 +60,8 @@ public class MainConfig extends ConfigBase {
         this.sellAllSubCommandName = getConfig().getString("command.subcommands.sellall", "sellall");
         this.applyBaitsSubCommandName = getConfig().getString("command.subcommands.applybaits", "applybaits");
         this.journalSubCommandName = getConfig().getString("command.subcommands.journal", "journal");
+        this.indexSubCommandName = getConfig().getString("command.subcommands.index", "index");
+        this.autofishSubCommandName = getConfig().getString("command.subcommands.autofish", "autofish");
 
         this.biomeSets = loadBiomeSets();
         this.regionBoosts = loadRegionBoosts();
@@ -317,6 +321,14 @@ public class MainConfig extends ConfigBase {
 
     public String getJournalSubCommandName() {
         return journalSubCommandName;
+    }
+
+    public String getIndexSubCommandName() {
+        return indexSubCommandName;
+    }
+
+    public String getAutofishSubCommandName() {
+        return autofishSubCommandName;
     }
 
     public boolean useOldBaseCommandBehavior() {

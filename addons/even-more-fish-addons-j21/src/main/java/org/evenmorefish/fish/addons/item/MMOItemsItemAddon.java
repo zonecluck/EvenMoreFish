@@ -5,13 +5,14 @@ import net.Indyuce.mmoitems.MMOItems;
 import net.Indyuce.mmoitems.api.Type;
 import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
 import org.bukkit.inventory.ItemStack;
+import java.util.Locale;
 
 public class MMOItemsItemAddon extends ItemAddon {
 
     @Override
     public ItemStack getItemStack(String id) {
-        String[] splitMaterialValue = id.split(":");
-        if (splitMaterialValue.length != 2) {
+        String[] splitMaterialValue = id == null ? new String[0] : id.split(":", -1);
+        if (splitMaterialValue.length != 2 || splitMaterialValue[0].isBlank() || splitMaterialValue[1].isBlank()) {
             getLogger().severe(() -> String.format(
                 "Incorrect format for MMOItemsItemAddon, use %s:type:id. Got %s",
                 getIdentifier(),
@@ -21,18 +22,20 @@ public class MMOItemsItemAddon extends ItemAddon {
         }
 
         MMOItems plugin = MMOItems.plugin;
-        Type type = plugin.getTypes().get(splitMaterialValue[0]);
+        if (plugin == null || !plugin.isEnabled()) return null;
+        Type type = plugin.getTypes().get(splitMaterialValue[0].trim().toUpperCase(Locale.ROOT));
         if (type == null) {
             getLogger().info(() -> String.format("Could not obtain MMOItems item %s", id));
             return null;
         }
-        MMOItem item = plugin.getMMOItem(type, splitMaterialValue[1]);
+        MMOItem item = plugin.getMMOItem(type, splitMaterialValue[1].trim().toUpperCase(Locale.ROOT));
         if (item == null) {
             getLogger().info(() -> String.format("Could not obtain MMOItems item %s", id));
             return null;
         }
 
-        return item.newBuilder().build();
+        ItemStack built = item.newBuilder().build();
+        return built == null ? null : built.clone();
     }
 
     @Override

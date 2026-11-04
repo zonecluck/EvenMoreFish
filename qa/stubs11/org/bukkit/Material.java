@@ -1,0 +1,1 @@
+package org.bukkit; public enum Material { GRAY_STAINED_GLASS_PANE,BARRIER,PAPER,COMPASS,NETHER_STAR,FEATHER,AIR; public static Material matchMaterial(String s){try{return valueOf(s);}catch(Exception x){return null;}} public boolean isItem(){return this!=AIR;} }

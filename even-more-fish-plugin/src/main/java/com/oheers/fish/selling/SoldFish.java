@@ -13,7 +13,7 @@ public class SoldFish {
     private final String name;
     private final String rarity;
     private int amount;
-    
+
     private double totalValue;
     private final double length;
 
@@ -38,31 +38,40 @@ public class SoldFish {
         this.amount = item.getAmount();
         this.totalValue = worth.get() * this.amount;
     }
-    
+
+    public SoldFish(@NotNull Fish fish, int amount, double unitWorth) {
+        this.fish = fish;
+        this.name = fish.getName();
+        this.rarity = fish.getRarity().getId();
+        this.length = fish.getLength();
+        this.amount = amount;
+        this.totalValue = unitWorth * amount;
+    }
+
     public void setAmount(int amount) {
         this.amount = amount;
     }
-    
+
     public void setTotalValue(double totalValue) {
         this.totalValue = totalValue;
     }
-    
+
     public @NotNull String getName() {
         return name;
     }
-    
+
     public int getAmount() {
         return amount;
     }
-    
+
     public double getTotalValue() {
         return totalValue;
     }
-    
+
     public @NotNull String getRarity() {
         return rarity;
     }
-    
+
     public double getLength() {
         return length;
     }

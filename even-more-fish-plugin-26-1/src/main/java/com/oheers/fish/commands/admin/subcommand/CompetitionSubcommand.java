@@ -10,6 +10,7 @@ import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.messages.ConfigMessage;
+import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -30,6 +31,10 @@ public class CompetitionSubcommand {
         return Commands.literal(name)
             .then(start())
             .then(end())
+            .then(cancel())
+            .then(pause())
+            .then(resume())
+            .then(leaderboard())
             .then(test())
             .then(extend());
     }
@@ -79,6 +84,69 @@ public class CompetitionSubcommand {
                     return 1;
                 }
                 active.end(false);
+                return 1;
+            });
+    }
+
+    private ArgumentBuilder<CommandSourceStack, ?> cancel() {
+        return Commands.literal("cancel")
+            .executes(ctx -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(ctx.getSource().getSender());
+                    return 1;
+                }
+                active.cancel();
+                EMFSingleMessage.fromString("<green>Đã hủy bỏ cuộc thi hiện tại thành công.").send(ctx.getSource().getSender());
+                return 1;
+            });
+    }
+
+    private ArgumentBuilder<CommandSourceStack, ?> pause() {
+        return Commands.literal("pause")
+            .executes(ctx -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(ctx.getSource().getSender());
+                    return 1;
+                }
+                if (active.isPaused()) {
+                    EMFSingleMessage.fromString("<yellow>Cuộc thi đã đang ở trạng thái tạm dừng rồi.").send(ctx.getSource().getSender());
+                    return 1;
+                }
+                active.pause();
+                EMFSingleMessage.fromString("<gold>[!] <yellow>Cuộc thi câu cá đã tạm dừng đếm ngược.").broadcast();
+                return 1;
+            });
+    }
+
+    private ArgumentBuilder<CommandSourceStack, ?> resume() {
+        return Commands.literal("resume")
+            .executes(ctx -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(ctx.getSource().getSender());
+                    return 1;
+                }
+                if (!active.isPaused()) {
+                    EMFSingleMessage.fromString("<yellow>Cuộc thi đang chạy bình thường, không bị tạm dừng.").send(ctx.getSource().getSender());
+                    return 1;
+                }
+                active.resume();
+                EMFSingleMessage.fromString("<green>[!] <aqua>Cuộc thi câu cá đã được tiếp tục!").broadcast();
+                return 1;
+            });
+    }
+
+    private ArgumentBuilder<CommandSourceStack, ?> leaderboard() {
+        return Commands.literal("leaderboard")
+            .executes(ctx -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(ctx.getSource().getSender());
+                    return 1;
+                }
+                active.sendLeaderboard(ctx.getSource().getSender());
                 return 1;
             });
     }

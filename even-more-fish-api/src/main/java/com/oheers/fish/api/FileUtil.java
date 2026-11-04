@@ -203,18 +203,18 @@ public class FileUtil {
             return finalList;
         }
         try {
-            FilenameFilter filter = extension == null ? null : (dir, name) -> name.endsWith(extension);
-            File[] fileArray = directory.listFiles(filter);
+            File[] fileArray = directory.listFiles();
             if (fileArray == null) {
                 return finalList;
             }
+            java.util.Arrays.sort(fileArray, java.util.Comparator.comparing(File::getName));
             for (File file : fileArray) {
                 if (ignoreUnderscoreFiles && file.getName().startsWith("_")) {
                     continue;
                 }
                 if (file.isDirectory() && recursive) {
-                    finalList.addAll(getFilesInDirectory(file, ignoreUnderscoreFiles, true));
-                } else if (file.isFile()) {
+                    finalList.addAll(getFilesInDirectoryWithExtension(file, extension, ignoreUnderscoreFiles, true));
+                } else if (file.isFile() && (extension == null || file.getName().endsWith(extension))) {
                     finalList.add(file);
                 }
             }

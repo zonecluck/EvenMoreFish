@@ -83,7 +83,11 @@ public class HelpMessage {
     }
 
     public void send(@NotNull CommandSender sender) {
-        final EMFListMessage message = ConfigMessage.HELP_GENERAL_TITLE.getMessage().toListMessage();
+        String adminName = MainConfig.getInstance().getAdminSubCommandName();
+        EMFMessage title = (subcommand.equals(adminName) || subcommand.startsWith(adminName + " ")
+                ? ConfigMessage.HELP_ADMIN_TITLE : ConfigMessage.HELP_GENERAL_TITLE).getMessage();
+        if (title.isEmpty()) title = ConfigMessage.HELP_GENERAL_TITLE.getMessage();
+        final EMFListMessage message = title.toListMessage();
         entries.forEach(entry -> {
             if (!entry.requirement().test(sender)) {
                 return;

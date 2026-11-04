@@ -1,0 +1,35 @@
+id: dia_mach
+disabled: false
+allowed-rarities:
+  - Junk
+  - Common
+  - Rare
+  - Epic
+
+# Chỉ số sức mạnh của Cần Câu Custom
+stats:
+  luck-modifier: 0.08
+  lure-modifier: 0.06
+  double-catch-chance: 0.05
+  exp-multiplier: 1.15
+
+allow-baits: true
+unbreakable: true
+
+item:
+  material: FISHING_ROD
+  displayname: "<gradient:#D7A86E:#FFF0B3><bold>Cần Câu Địa Mạch</gradient>"
+  glowing: true
+  lore:
+    - ' '
+    - '<dark_gray> ○ <white>Độ hiếm: <gold>Sử Thi (Epic)</gold>'
+    - '<dark_gray> ○ <white>Đặc tính: <aqua>Không Thể Hỏng</aqua>'
+    - ' '
+    - '<dark_gray> ○ <white>Tăng sức mạnh:'
+    - '  <dark_gray> -<yellow> May Mắn:</yellow> <green>+8%</green>'
+    - '  <dark_gray> -<aqua> Tốc Độ Cắn Câu:</aqua> <green>+6%</green>'
+    - '  <dark_gray> -<light_purple> Nhân Đôi Cá:</light_purple> <green>5%</green>'
+    - '  <dark_gray> -<gold> Hệ Số EXP:</gold> <green>x1.15</green>'
+    - ' '
+    - '<#C797FF>Khai thác nguồn năng lượng địa tầng'
+    - '<white>để câu những loài thủy sinh sâu thẳm!'

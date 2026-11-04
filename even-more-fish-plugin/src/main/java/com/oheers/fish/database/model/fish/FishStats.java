@@ -3,6 +3,7 @@ package com.oheers.fish.database.model.fish;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.fishing.items.Fish;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,13 +37,13 @@ public class FishStats {
         this.fishRarity = fishRarity;
         this.firstCatchTime = firstCatchTime;
         this.discoverer = discoverer;
-        this.discovererName = FishUtils.getPlayerName(discoverer);
+        this.discovererName = resolveNameOnServerThread(discoverer);
         this.shortestLength = shortestLength;
         this.shortestFisher = shortestFisher;
-        this.shortestFisherName = FishUtils.getPlayerName(shortestFisher);
+        this.shortestFisherName = resolveNameOnServerThread(shortestFisher);
         this.longestLength = longestLength;
         this.longestFisher = longestFisher;
-        this.longestFisherName = FishUtils.getPlayerName(longestFisher);
+        this.longestFisherName = resolveNameOnServerThread(longestFisher);
         this.quantity = quantity;
     }
 
@@ -58,6 +59,21 @@ public class FishStats {
             longestFisher,
             quantity
         );
+    }
+
+    /** DB mapper threads must not resolve OfflinePlayer using Bukkit APIs. */
+    private static String resolveNameOnServerThread(UUID uuid) {
+        return Bukkit.isPrimaryThread() ? FishUtils.getPlayerName(uuid) : null;
+    }
+
+    public static FishStats firstCatch(String fishName, String rarityId, LocalDateTime time,
+                                       UUID playerId, String playerName, float length) {
+        FishStats stats = new FishStats(fishName, rarityId, time, playerId,
+            length, playerId, length, playerId, 0);
+        stats.discovererName = playerName;
+        stats.shortestFisherName = playerName;
+        stats.longestFisherName = playerName;
+        return stats;
     }
 
     public static FishStats empty(Fish fish, LocalDateTime firstCatchTime) {
@@ -121,8 +137,12 @@ public class FishStats {
     }
 
     public void setShortestFisher(@NotNull UUID shortestFisher) {
+        setShortestFisher(shortestFisher, resolveNameOnServerThread(shortestFisher));
+    }
+
+    public void setShortestFisher(@NotNull UUID shortestFisher, @Nullable String playerName) {
         this.shortestFisher = shortestFisher;
-        this.shortestFisherName = FishUtils.getPlayerName(shortestFisher);
+        this.shortestFisherName = playerName;
     }
 
     public void setLongestLength(float longestLength) {
@@ -130,8 +150,12 @@ public class FishStats {
     }
 
     public void setLongestFisher(@NotNull UUID longestFisher) {
+        setLongestFisher(longestFisher, resolveNameOnServerThread(longestFisher));
+    }
+
+    public void setLongestFisher(@NotNull UUID longestFisher, @Nullable String playerName) {
         this.longestFisher = longestFisher;
-        this.longestFisherName = FishUtils.getPlayerName(longestFisher);
+        this.longestFisherName = playerName;
     }
 
     public void incrementQuantity() {

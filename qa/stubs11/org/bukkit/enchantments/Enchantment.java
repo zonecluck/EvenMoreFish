@@ -1,0 +1,1 @@
+package org.bukkit.enchantments; public class Enchantment { public static final Enchantment UNBREAKING=new Enchantment(); public static Enchantment getByKey(org.bukkit.NamespacedKey key){return "minecraft:unbreaking".equals(key.id())?UNBREAKING:null;} }

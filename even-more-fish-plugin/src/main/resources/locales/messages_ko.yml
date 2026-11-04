@@ -10,23 +10,23 @@ prefix-admin: '<gradient:#FFECEC:#FF5555>[EvenMoreFish] '
 # The prefix shown when errors occur e.g. no permission to run a command.
 prefix-error: '<gradient:#FFECEC:#FF5555>[EvenMoreFish] '
 # Sent to players when they catch a fish with a length.
-fish-caught: <white><b>{player}</b>이(가) {length}cm의 <b>{rarity}</b> {fish}을(를) 낚았습니다!
+fish-caught: '<#57C7FF>{player}<#BFC7D5>이(가) <white>{length}<#BFC7D5>cm의 <white>{rarity} {fish}<#BFC7D5>을(를) 낚았습니다!'
 # Sent to players when they catch a fish without a length.
-lengthless-fish-caught: <white><b>{player}</b>이(가) <b>{rarity}</b> {fish}을(를) 낚았습니다!
+lengthless-fish-caught: '<#57C7FF>{player}<#BFC7D5>이(가) <white>{rarity} {fish}<#BFC7D5>을(를) 낚았습니다!'
 # Sent to players when they hunt a fish with a length.
-fish-hunted: <white><b>{player}</b>이(가) {length}cm의 <b>{rarity}</b> {fish}을(를) 사냥했습니다!
+fish-hunted: '<#57C7FF>{player}<#BFC7D5>이(가) <white>{length}<#BFC7D5>cm의 <white>{rarity} {fish}<#BFC7D5>을(를) 사냥했습니다!'
 # Sent to players when they hunt a fish without a length.
-lengthless-fish-hunted: <white><b>{player}</b>이(가) <b>{rarity}</b> {fish}을(를) 사냥했습니다!
+lengthless-fish-hunted: '<#57C7FF>{player}<#BFC7D5>이(가) <white>{rarity} {fish}<#BFC7D5>을(를) 사냥했습니다!'
 # Sent to a player when they don't have permission to execute a command.
-no-permission: <red>이 명령어를 사용할 권한이 없습니다.
+no-permission: '<#FF5A6E>이 명령어를 사용할 권한이 없습니다.'
 # Sent when a competition starts.
-contest-start: <reset> {type} 낚시 대회가 시작 되었습니다.
+contest-start: '<#BFC7D5><reset> <white>{type}<#BFC7D5> 낚시 대회가 시작 되었습니다.'
 # Sent when a competition ends.
-contest-end: <reset>낚시대회가 종료되었습니다.
+contest-end: '<#BFC7D5><reset>낚시대회가 종료되었습니다.'
 # Sent when a player joins while a competition is active.
-contest-join: <reset>{type} 낚시 대회가 진행 중입니다.
+contest-join: '<#BFC7D5><reset><white>{type}<#BFC7D5> 낚시 대회가 진행 중입니다.'
 # Sent when a new player takes the #1 spot in a competition.
-new-first: "<reset>{player} 이제 1위입니다."
+new-first: "<#BFC7D5><reset><#57C7FF>{player}<#BFC7D5> 이제 1위입니다."
 # Should this message appear in chat (false) or above the exp bar (true)
 action-bar-message: true
 # What competition types should the action bar be used for? (recommended: MOST_FISH)
@@ -35,19 +35,19 @@ action-bar-types:
 # What should replace the {type} variable for each competition type?
 competition-types:
   # MOST_FISH
-  most: 가장 많은 물고기 낚기
+  most: '<#BFC7D5>가장 많은 물고기 낚기'
   # LARGEST_FISH
-  largest: 가장 큰 물고기 낚기
+  largest: '<#BFC7D5>가장 큰 물고기 낚기'
   # LARGEST_TOTAL_FISH
-  largest-total: 종합 물고기 길이을 가장 길게 낚기
+  largest-total: '<#BFC7D5>종합 물고기 길이을 가장 길게 낚기'
   # SHORTEST_FISH
-  shortest: 가장 작은 물고기 낚기
+  shortest: '<#BFC7D5>가장 작은 물고기 낚기'
   # SHORTEST_TOTAL_FISH
-  shortest-total: 종합 물고기 길이을 가장 짧게 낚기
+  shortest-total: '<#BFC7D5>종합 물고기 길이을 가장 짧게 낚기'
   # SPECIFIC_FISH
-  specific: '{amount} <b>{rarity}</b> {fish}'
+  specific: '<white>{amount} {rarity} {fish}'
   # SPECIFIC_RARITY
-  specific-rarity: '<b>{rarity}</b> 물고기 {amount}개'
+  specific-rarity: '<white>{rarity}<#BFC7D5> 물고기 <white>{amount}<#BFC7D5>개'
 # Segments shown in the bossbar when competitions run
 bossbar:
   # {prefix} is defined inside the competition files.
@@ -67,221 +67,287 @@ duration:
 # replace the {fish_lore}, however if it's empty the line will be removed. DO NOT ADD ANYTHING OTHER THAN THIS VARIABLE
 # TO THAT LINE.
 fish-lore:
-  - '{fisherman_lore}'
-  - '{length_lore}'
+  - '<white>{fisherman_lore}'
+  - '<white>{length_lore}'
   - ''
-  - '{fish_lore}'
-  - '<b>{rarity}'
+  - '<white>{fish_lore}'
+  - '<white>{rarity}'
 # Sets what to replace with the {fisherman_lore} or {length_lore} with above ^
 fisherman-lore:
-  - <white>{player}이(가) 포획
+  - '<#57C7FF>{player}<#BFC7D5>이(가) 포획'
 length-lore:
-  - <white>길이 {length}cm.
+  - '<#BFC7D5>길이 <white>{length}<#BFC7D5>cm.'
 # The format of the leaderboard after a competition is over
 leaderboard:
-  largest-fish: '<white>#{position} | {player} (<b>{rarity}</b> {fish}, {length}cm)'
-  largest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
-  most-fish: '<white>#{position} | {player} <white>(<white>물고기 {amount}<white>개)'
-  shortest-fish: '<white>#{position} | {player} <white>(<b>{rarity}</b> {fish}<white>, {length}cm<white>)'
-  shortest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
+  largest-fish: '<white>#{position}<#BFC7D5> | <#57C7FF>{player}<#BFC7D5> (<white>{rarity} {fish}<#BFC7D5>, <white>{length}<#BFC7D5>cm)'
+  largest-total: '<white>#{position}<#BFC7D5> | <#57C7FF>{player} <white>({amount}<#BFC7D5>cm<white>)'
+  most-fish: '<white>#{position}<#BFC7D5> | <#57C7FF>{player} <white>(물고기 {amount}<#BFC7D5>개)'
+  shortest-fish: '<white>#{position}<#BFC7D5> | <#57C7FF>{player} <white>({rarity} {fish}<#BFC7D5>, <white>{length}<#BFC7D5>cm<white>)'
+  shortest-total: '<white>#{position}<#BFC7D5> | <#57C7FF>{player} <white>({amount}<#BFC7D5>cm<white>)'
   # Sent when a competition only has a single winner, in place of the leaderboard.
-  single-winner: <white>{player}이(가) {type} 유형의 낚시 대회에서 우승했습니다. 축하드립니다!
+  single-winner: '<#57C7FF>{player}<#BFC7D5>이(가) <white>{type}<#BFC7D5> 유형의 낚시 대회에서 우승했습니다. 축하드립니다!'
   # This shows the number of players currently in the competition, set to "" to disable.
-  total-players: <white>현재 플레이어 {amount}명이 순위표에 있습니다.
+  total-players: '<#BFC7D5>현재 플레이어 <white>{amount}<#BFC7D5>명이 순위표에 있습니다.'
   # The number of positions shown in the leaderboard - can't be less than 1.
   leaderboard-count: 5
   # Sent to players when nobody got a record during a competition
-  no-winners: <white>낚시 기록이 없습니다.
+  no-winners: '<#BFC7D5>낚시 기록이 없습니다.'
   # When an individual player didn't get a record
-  no-record: <reset>아무것도 낚지 않았습니다.
+  no-record: '<#BFC7D5><reset>아무것도 낚지 않았습니다.'
 # Sent when an admin tries to start a competition where the type doesn't exist.
-invalid-type: "<white>유효한 낚시 대회 유형이 아닙니다. <click:open_url:'https://evenmorefish.github.io/EvenMoreFish/docs/features/competitions/types'>여기</click>를 클릭해 가능한 유형을 확인하세요."
+invalid-type: "<#FF5A6E>Loại cuộc thi không hợp lệ."
 # Sent to all online players when not enough players are on to start a competition
-not-enough-players: <white>예정된 낚시 대회를 시작할 만큼 사람이 충분하지 않습니다.
+not-enough-players: '<#BFC7D5>예정된 낚시 대회를 시작할 만큼 사람이 충분하지 않습니다.'
 # Sent to all players at specific times to show the remaining time left
 # {time_formatted} shows the time (e.g. 5m left, 10m 30s left)
 # {time_raw} is the amount of seconds remaining
-time-alert: <white>{type} 유형의 대회가 {time_formatted}만큼 남았습니다
+time-alert: '<white>{type}<#BFC7D5> 유형의 대회가 <#5899ee>{time_formatted}<#BFC7D5>만큼 남았습니다'
 # The message sent to players when they've sold their fish in the /emf shop
-fish-sale: <white>물고기 <green>{amount}개<white>를 <green>{sell-price}<white>에 판매했습니다.
+fish-sale: '<#BFC7D5>물고기 <white>{amount}<#BFC7D5>개<white>를 {sell-price}<#BFC7D5>에 판매했습니다.'
 # The message sent to players when they attempt to sell and there are no sellable fish
-no-sellable-fish: <white>팔 것이 없습니다!
+no-sellable-fish: '<#BFC7D5>팔 것이 없습니다!'
 # Help messages
 # General help (/emf help) - Commands locked behind permissions will not show for players.
-help-format: "[noPrefix]<aqua>{command} <yellow>- <white>{description}"
+help-format: "<white>{command}<#BFC7D5> - <white>{description}"
 help-general:
-  title: "[noPrefix]<gradient:#f1ffed:#73ff6b><st>         </st> <b><gradient:#E6F9FF:#8FD9FB>EvenMoreFish </b><st><gradient:#73ff6b:#f1ffed>         "
-  top: "[noPrefix]진행 중인 대회의 순위표를 표시합니다."
-  help: "[noPrefix]이 페이지를 표시합니다."
-  shop: "[noPrefix]물고기를 판매할 상점을 엽니다."
-  toggle: "[noPrefix]플러그인의 각종 기능을 전환합니다."
+  title: "<#BFC7D5>EvenMoreFish <st>"
+  top: "<#BFC7D5>진행 중인 대회의 순위표를 표시합니다."
+  help: "<#BFC7D5>이 페이지를 표시합니다."
+  shop: "<#BFC7D5>물고기를 판매할 상점을 엽니다."
+  toggle: "<#BFC7D5>플러그인의 각종 기능을 전환합니다."
   gui: "[noPrefix]메인 메뉴 GUI를 엽니다."
-  admin: "[noPrefix]관리자 명령어 도움말 페이지."
-  sellall: "[noPrefix]보관함에 있는 물고기를 전부 판매합니다."
+  admin: "<#BFC7D5>관리자 명령어 도움말 페이지."
+  sellall: "<#BFC7D5>보관함에 있는 물고기를 전부 판매합니다."
   next: "[noPrefix]다음 대회가 시작하는 시간을 표시합니다."
-  applybaits: "[noPrefix]자신의 낚싯대에 미끼를 적용합니다."
-  journal: "[noPrefix]잡은 물고기의 일지와 통계를 봅니다."
+  applybaits: "<#BFC7D5>자신의 낚싯대에 미끼를 적용합니다."
+  journal: "<#BFC7D5>잡은 물고기의 일지와 통계를 봅니다."
 help-list:
-  fish: "[noPrefix]특정 등급의 모든 물고기를 표시합니다."
+  fish: "<#BFC7D5>특정 등급의 모든 물고기를 표시합니다."
   rarities: "[noPrefix]모든 등급을 표시합니다."
 # Competition help (/emf admin competition help)
 help-competition:
-  start: "[noPrefix]설정한 대회를 시작합니다."
-  end: "[noPrefix]진행 중인 대회를 종료합니다."
-  test: "[noPrefix]고른 유형의 대회 시범을 허용합니다."
-  extend: "[noPrefix]가능한 대회의 시간을 확장합니다."
+  start: "<#BFC7D5>설정한 대회를 시작합니다."
+  end: "<#BFC7D5>진행 중인 대회를 종료합니다."
+  test: "<#BFC7D5>고른 유형의 대회 시범을 허용합니다."
+  extend: "<#BFC7D5>가능한 대회의 시간을 확장합니다."
 # Admin help (/emf admin help)
 help-admin:
-  bait: "[noPrefix]플레이어에게 미끼를 줍니다."
-  competition: "[noPrefix]대회를 시작하거나 멈춥니다"
-  clearbaits: "[noPrefix]낚싯대에 적용된 모든 미끼를 제거합니다."
-  fish: "[noPrefix]플레이어에게 물고기를 줍니다."
-  nbt-rod: "[noPrefix]플레이어에게 EMF 물고기를 잡을 때 필요한 사용자 지정 NBT 낚싯대를 줍니다."
-  custom-rod: "[noPrefix]플레이어에게 사용자 지정 낚싯대를 줍니다."
-  reload: "[noPrefix]플러그인의 설정 파일을 다시 불러옵니다."
-  migrate: "[noPrefix]예전 데이터페이스(V2)를 V3으로 마이그레이션합니다"
-  addons: "[noPrefix]모든 애드온을 표시합니다."
-  version: "[noPrefix]플러그인 정보를 표시합니다."
-  rawitem: "[noPrefix]주로 사용하는 손에 있는 아이템의 생 NBT를 표시합니다."
+  bait: "<#BFC7D5>플레이어에게 미끼를 줍니다."
+  competition: "<#BFC7D5>대회를 시작하거나 멈춥니다"
+  clearbaits: "<#BFC7D5>낚싯대에 적용된 모든 미끼를 제거합니다."
+  fish: "<#BFC7D5>플레이어에게 물고기를 줍니다."
+  nbt-rod: "<#BFC7D5>Trao cần câu NBT tùy chỉnh."
+  custom-rod: "<#BFC7D5>플레이어에게 사용자 지정 낚싯대를 줍니다."
+  reload: "<#BFC7D5>플러그인의 설정 파일을 다시 불러옵니다."
+  migrate: "<#BFC7D5>예전 데이터페이스(V2)를 V3으로 마이그레이션합니다"
+  addons: "<#BFC7D5>모든 애드온을 표시합니다."
+  version: "<#BFC7D5>플러그인 정보를 표시합니다."
+  rawitem: "<#BFC7D5>주로 사용하는 손에 있는 아이템의 생 NBT를 표시합니다."
   database: "[noPrefix]플러그인의 데이터베이스를 관리합니다."
 # Shown when the %emf_competition_place_player_*% placeholder requests a position in the leaderboard that doesn't exist
-no-player-in-place: <white>이 자리를 차지하기 위해 낚시를 시작하세요
+no-player-in-place: '<#BFC7D5>이 자리를 차지하기 위해 낚시를 시작하세요'
 # Shown when the %emf_competition_place_fish_*% placeholder requests a position in the leaderboard that doesn't exist
-no-fish-in-place: <white>이 자리를 차지하기 위해 낚시를 시작하세요
+no-fish-in-place: '<#BFC7D5>이 자리를 차지하기 위해 낚시를 시작하세요'
 # Shown when the %emf_competition_place_size_*% placeholder requests a position in the leaderboard that doesn't exist
-no-size-in-place: <white>이 자리를 차지하기 위해 낚시를 시작하세요
+no-size-in-place: '<#BFC7D5>이 자리를 차지하기 위해 낚시를 시작하세요'
 # Shown when the %emf_competition_place_player_*% placeholder is used when there's no competition running
-no-competition-running: <white>개최된 대회가 없습니다.
+no-competition-running: '<#BFC7D5>개최된 대회가 없습니다.'
 # Shown when the %emf_competition_place_fish_*% placeholder is used when there's no competition running
-no-competition-running-fish: <white>개최된 대회가 없습니다.
+no-competition-running-fish: '<#BFC7D5>개최된 대회가 없습니다.'
 # Shown when the %emf_competition_place_size_*% placeholder is used when there's no competition running
-no-competition-running-size: <white>개최된 대회가 없습니다.
+no-competition-running-size: '<#BFC7D5>개최된 대회가 없습니다.'
 # Shown in %emf_competition_time_left% when there are no scheduled competitions.
-no-competitions-scheduled: <white>예정된 낚시 대회가 없습니다.
+no-competitions-scheduled: '<#BFC7D5>예정된 낚시 대회가 없습니다.'
 # Broadcasted to all players when a competition is extended.
-competition-time-extended: <white>진행 중인 대회가 {duration}만큼 연장되었습니다!
+competition-time-extended: '<#BFC7D5>진행 중인 대회가 <#5899ee>{duration}<#BFC7D5>만큼 연장되었습니다!'
 # How should %emf_custom_fishing_status% be formatted?
-custom-fishing-enabled: <green>켜짐
-custom-fishing-disabled: <red>꺼짐
+custom-fishing-enabled: '<#55D68A>켜짐'
+custom-fishing-disabled: '<#FF5A6E>꺼짐'
 # How should the %emf_competition_place_fish_*% placeholder be formatted when the fish has length?
-emf-competition-fish-format: "<white>{length}cm의 <b>{rarity}</b> {fish}"
+emf-competition-fish-format: "<white>{length}<#BFC7D5>cm의 <white>{rarity} {fish}"
 # How should the %emf_competition_place_fish_*% placeholder be formatted when the fish has no length?
-emf-lengthless-fish-format: "<white><b>{rarity}</b> {fish}"
+emf-lengthless-fish-format: "<white>{rarity} {fish}"
 # How should %emf_competition_place_fish_*% be formatted during MOST/SPECIFIC_FISH competitions?
-emf-most-fish-format: "<white>물고기 {amount}개"
+emf-most-fish-format: "<#BFC7D5>물고기 <white>{amount}<#BFC7D5>개"
 # What should be displayed for %emf_competition_place_size_*% during the MOST_FISH competition?
-emf-size-during-most-fish: N/A
+emf-size-during-most-fish: '<#BFC7D5>N/A'
 # How the %emf_competition_time_left% placeholder should be formatted.
 emf-time-remaining:
   # When there is not an active competition.
-  inactive: "<white>다음 대회 개최에 남은 시간: {days}일, {hours}시간, {minutes}분."
+  inactive: "<#BFC7D5>다음 대회 개최에 남은 시간: <#5899ee>{days}<#BFC7D5>일, <#5899ee>{hours}<#BFC7D5>시간, <#5899ee>{minutes}<#BFC7D5>분."
   # When there is an active competition.
-  active: "<white>남은 대회 시간: {time-left}"
+  active: "<#BFC7D5>남은 대회 시간: <#5899ee>{time-left}"
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
-max-baits-reached: <white>이 낚싯대에 적용할 수 있는 특수 미끼의 최대 개수에 도달했습니다.
+max-baits-reached: '<#BFC7D5>이 낚싯대에 적용할 수 있는 특수 미끼의 최대 개수에 도달했습니다.'
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: <white>이 낚싯대에 적용할 수 있는 {bait}<white>의 최대 개수에 도달했습니다.
+max-bait-reached: '<#BFC7D5>이 낚싯대에 적용할 수 있는 <white>{bait}<#BFC7D5>의 최대 개수에 도달했습니다.'
 # Sent when a player catches a bait from fishing
-bait-catch: <white><b>{player}</b>이(가) <b>{bait}</b> 미끼를 낚았습니다!
+bait-catch: '<#57C7FF>{player}<#BFC7D5>이(가) <white>{bait}<#BFC7D5> 미끼를 낚았습니다!'
 # Sent when a bait is applied and a fish is caught.
-bait-use: <white>낚싯대의 <b>{bait}</b> 미끼를 하나 사용했습니다.
+bait-use: '<#BFC7D5>낚싯대의 <white>{bait}<#BFC7D5> 미끼를 하나 사용했습니다.'
 # Sent when someone tries to use a bait in creative
-bait-survival-limited: <white>낚싯대에 미끼를 적용하려면 <u>서바이벌이나 모험 모드</u>여야 합니다.
+bait-survival-limited: '<#BFC7D5>낚싯대에 미끼를 적용하려면 <u>서바이벌이나 모험 모드여야 합니다.'
 # Sent when someone tries to merge a baited rod into an unbaited rod
-bait-rod-protection: <white>미끼를 적용한 낚싯대를 보호했습니다. 수리하려 한다면, 첫 번째 슬롯에 놔주세요.
+bait-rod-protection: '<#BFC7D5>미끼를 적용한 낚싯대를 보호했습니다. 수리하려 한다면, 첫 번째 슬롯에 놔주세요.'
 # Sent when someone tries to apply a bait to a fishing rod they cannot use to fish
-bait-invalid-rod: <white>당신은 낚싯대에 미끼를 적용할 수 없습니다!
+bait-invalid-rod: '<#BFC7D5>당신은 낚싯대에 미끼를 적용할 수 없습니다!'
 # Sent when a bait is purchased from the menu.
-bait-purchased: <white>{bait} {amount}개를 {price}에 구매했습니다.
+bait-purchased: '<white>{bait} {amount}<#BFC7D5>개를 <#55D68A>{price}<#BFC7D5>에 구매했습니다.'
 # Sent when a player attempts to purchase a bait, asking them to confirm.
-bait-confirm-purchase: <white>5초 내로 다시 클릭해 미끼 구매를 확정하세요.
+bait-confirm-purchase: '<#BFC7D5>5초 내로 다시 클릭해 미끼 구매를 확정하세요.'
 # Sent when a player attempts to purchase a bait they cannot afford.
-bait-cannot-afford: <white>미끼를 구매할 수 없습니다. {price}만큼 필요합니다.
+bait-cannot-afford: '<#BFC7D5>미끼를 구매할 수 없습니다. <#55D68A>{price}<#BFC7D5>만큼 필요합니다.'
 # Sent when a player attempts to purchase a bait that is not for sale.
-bait-not-for-sale: <white>그 미끼는 판매되고 있지 않습니다.
+bait-not-for-sale: '<#BFC7D5>그 미끼는 판매되고 있지 않습니다.'
 toggle:
   fishing:
-    off: <white>더 이상 사용자 지정 물고기를 낚지 못합니다.
-    on: <white>이제 사용자 지정 물고기를 낚을 수 있습니다.
+    off: '<#BFC7D5>더 이상 사용자 지정 물고기를 낚지 못합니다.'
+    on: '<#BFC7D5>이제 사용자 지정 물고기를 낚을 수 있습니다.'
   bossbar:
     off: <white>더 이상 대회 보스바를 볼 수 없습니다.
     on: <white>이제 대회 보스바를 볼 수 있습니다.
 admin:
   # Opens an /emf shop for another player
-  open-fish-shop: <white>{player}에게 상점 보관함을 열었습니다.
+  open-fish-shop: '<#57C7FF>{player}<#BFC7D5>에게 상점 보관함을 열었습니다.'
   # When a fish is given to a player
-  given-player-fish: <white>{player}에게 {fish}을(를) 주었습니다.
+  given-player-fish: '<#57C7FF>{player}<#BFC7D5>에게 <white>{fish}<#BFC7D5>을(를) 주었습니다.'
   # When a bait is given to a player
-  given-player-bait: <white>{player}에게 {bait}을(를) 주었습니다.
+  given-player-bait: '<#57C7FF>{player}<#BFC7D5>에게 <white>{bait}<#BFC7D5>을(를) 주었습니다.'
   # When an admin runs /emf admin bait without a bait name.
-  no-bait-specified: <white>미끼 이름을 지정해야 합니다.
+  no-bait-specified: '<#BFC7D5>미끼 이름을 지정해야 합니다.'
   # When the admin tries the command /emf admin clearbaits whe not holding a fishing rod.
-  must-be-holding-rod: <white>명령어를 실행하려면 낚싯대를 들고 있어야 합니다.
+  must-be-holding-rod: '<#BFC7D5>명령어를 실행하려면 낚싯대를 들고 있어야 합니다.'
   # When /emf admin clearbaits command is run.
-  all-baits-cleared: <white>{amount}개의 미끼를 자신의 낚싯대로부터 전부 제거했습니다.
+  all-baits-cleared: '<white>{amount}<#BFC7D5>개의 미끼를 자신의 낚싯대로부터 전부 제거했습니다.'
   # /emf admin clearbaits is run, but there are no baits on the rod.
-  no-baits-on-rod: <white>낚싯대에 적용된 미끼가 없습니다.
+  no-baits-on-rod: '<#BFC7D5>낚싯대에 적용된 미끼가 없습니다.'
   # When economy is disabled for the plugin
-  economy-disabled: <white>EvenMoreFish의 경제 기능이 꺼져 있습니다.
+  economy-disabled: '<#BFC7D5>EvenMoreFish의 경제 기능이 꺼져 있습니다.'
   # When the specified player can't be found .
-  player-not-found: <white>{player}을(를) 찾을 수 없습니다.
+  player-not-found: '<#57C7FF>{player}<#BFC7D5>을(를) 찾을 수 없습니다.'
   # When the specified number is not a number.
-  number-format-error: <white>{amount}은(는) 유효한 숫자가 아닙니다.
+  number-format-error: '<white>{amount}<#BFC7D5>은(는) 유효한 숫자가 아닙니다.'
   # When the specified number in item quantity is too large.
-  number-range-error: <white>{amount}은(는) 1-64 사이의 수가 아닙니다.
+  number-range-error: '<white>{amount}<#BFC7D5>은(는) 1-64 사이의 수가 아닙니다.'
   # When a command cannot be run from the console.
-  cannot-run-on-console: <white>명령어는 콘솔에서 작동하지 않습니다.
+  cannot-run-on-console: '<#BFC7D5>명령어는 콘솔에서 작동하지 않습니다.'
   # Sent when a competition is already running when using /emf admin competition start
-  competition-already-running: <white>이미 개최 중인 대회가 있습니다.
+  competition-already-running: '<#BFC7D5>이미 개최 중인 대회가 있습니다.'
   # When an invalid competition type is provided
-  competition-type-invalid: "<white>유효한 낚시 대회 유형이 아닙니다. <click:open_url:'https://evenmorefish.github.io/EvenMoreFish/docs/features/competitions/types'>여기</click>를 클릭해 가능한 유형을 확인하세요."
+  competition-type-invalid: "<#FF5A6E>Loại cuộc thi không hợp lệ."
   # When an invalid competition id is provided
-  competition-id-invalid: <white>유효한 대회 id가 아닙니다.
+  competition-id-invalid: '<#BFC7D5>유효한 대회 id가 아닙니다.'
   # When the command /emf admin custom-rod is run.
-  custom-rod-given: <white>{player}에게 사용자 지정 낚싯대를 주었습니다.
+  custom-rod-given: '<#57C7FF>{player}<#BFC7D5>에게 사용자 지정 낚싯대를 주었습니다.'
   # When there's a modrinth update available, don't translate the URL otherwise it won't direct to the correct page.
-  update-available: "<white>업데이트가 가능합니다: https://modrinth.com/plugin/evenmorefish/versions?l=paper"
+  update-available: "<#BFC7D5>EvenMoreFish có bản cập nhật mới trên Modrinth."
   # When the plugin is reloaded
-  reload: <white>성공적으로 플러그인을 다시 불러왔습니다.
+  reload: '<#BFC7D5>성공적으로 플러그인을 다시 불러왔습니다.'
   # When checking a list of registered addons. The actual list is added to the end of this message.
-  list-addons: "<white>등록된 {addon-type}: "
+  list-addons: "<#BFC7D5>등록된 <white>{addon-type}<#BFC7D5>:"
 # When an invalid rarity is provided for a command.
-rarity-invalid: <white>유효한 등급이 아닙니다!
+rarity-invalid: '<#BFC7D5>유효한 등급이 아닙니다!'
 # When the player can't access the Fishing Journal
-journal-disabled: <white>낚시 일지에 접근할 수 없습니다. 플러그인 데이터베이스에서 켜주세요.
+journal-disabled: '<#BFC7D5>낚시 일지에 접근할 수 없습니다. 플러그인 데이터베이스에서 켜주세요.'
 # Reward messages
 reward:
-  catch-up: <white>오프라인일 때 보상을 받았습니다. 지금 가져옵니다.
+  catch-up: '<#BFC7D5>오프라인일 때 보상을 받았습니다. 지금 가져옵니다.'
 # Bait messages
 bait:
   # How the lore should look ({baits} is a multi-line variable)
   rod-lore:
-    - <white>
-    - "<gray>미끼 슬롯: <yellow>({current_baits}/{max_baits})"
-    - <white>
-    - "{baits}"
-    - <white>
+    - ''
+    - "<#BFC7D5>미끼 슬롯: <white>({current_baits}<#BFC7D5>/<white>{max_baits}<#BFC7D5>)"
+    - ''
+    - "<white>{baits}"
+    - ''
   # The default lore of the bait, changing this will not modify existing baits, but any new baits will have this format.
   bait-lore:
-    - <white>
-    - "낚시 확률 증가 목록:"
-    - "{boosts}"
-    - "{lore}"
-    - <white>
-    - '<#dadada>낚싯대에 포개 적용하며,'
-    - '<#dadada><u>SHIFT</u>를 홀드하면 전부 적용합니다.'
-    - <white>
+    - ''
+    - "<#BFC7D5>낚시 확률 증가 목록:"
+    - "<white>{boosts}"
+    - "<white>{lore}"
+    - ''
+    - '<#BFC7D5>낚싯대에 포개 적용하며,'
+    - '<#BFC7D5><u>SHIFT를 홀드하면 전부 적용합니다.'
+    - ''
   # How the baits should look in each line of the {baits} variable above ^. {baits} respects the display name setting,
   # the <gold> is there for baits without a display name set.
-  baits: <gold>► {bait} {amount}개
+  baits: '<#FFA94D>► <white>{bait} {amount}<#FFA94D>개'
   # These are listed in the {boosts} variable above in bait-lore
   # boost-rarity/rarities: shown when the bait only impacts 1 rarity or when it impacts multiple rarities.
   # boost-fish: shown when the bait impacts some fish individually.
-  boosts-rarity: '► <white>등급 1개'
-  boosts-rarities: '► <white>등급 {amount}개'
-  boosts-fish: '► <white>물고기 {amount}개'
+  boosts-rarity: '<#BFC7D5>► <white>등급 1개'
+  boosts-rarities: '<#BFC7D5>► <white>등급 {amount}<#BFC7D5>개'
+  boosts-fish: '<#BFC7D5>► <white>물고기 {amount}<#BFC7D5>개'
   # This is added to the lore in place of a bait if show-unused-slots is enabled in the general section.
-  unused-slot: <gray>► ? <i>가능한 슬롯
+  unused-slot: '<#BFC7D5>► ? <i>가능한 슬롯'
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
 version: 13
+
+# English fallback messages for Simulator preview (Phase 2-8).
+simulator:
+  generic-error: '<#FF5A6E>Simulator message is missing; see console.'
+  help: '<#BFC7D5>Simulator commands: status, zone list, zone info [id], here, reload, off, on'
+  status: '<#BFC7D5>Simulator: enabled=<white>{enabled}<#BFC7D5>, emergencyOff=<white>{emergency}<#BFC7D5>, mode=<white>{mode}<#BFC7D5>, revision=<white>{revision}<#BFC7D5>, packetEvents=<white>{packets}<#BFC7D5>, hookBridge=<white>{hook}<#BFC7D5>, nativeProbe=<white>{probe}'
+  ambient-status: '<#BFC7D5>Admin fish preview: active=<white>{active}<#BFC7D5>, agents=<white>{agents}<#BFC7D5> (private=<white>{private}<#BFC7D5>), viewers=<white>{viewers}<#BFC7D5>, shown=<white>{visible}<#BFC7D5>, water cells=<white>{water}<#BFC7D5>, scan queue=<white>{queue}<#BFC7D5>, packets=<white>{sent}<#BFC7D5>, deferred=<white>{deferred}'
+  schooling-status: '<#BFC7D5>Fish schooling (preview): enabled=<white>{enabled}<#BFC7D5> | schools=<white>{schools}<#BFC7D5>, members=<white>{members}<#BFC7D5> | decisions=<white>{decisions}<#BFC7D5>, cell checks=<white>{checks}<#BFC7D5>, budget hits=<white>{budget}<#BFC7D5>, scatters=<white>{scatters}'
+  ecosystem-status: '<#BFC7D5>Fish ecosystem (preview): enabled=<white>{enabled}<#BFC7D5> | cache=<white>{cache}<#BFC7D5>, samples=<white>{samples}<#BFC7D5>, budget drops=<white>{sample-drops}<#BFC7D5>, errors=<white>{sample-failures}<#BFC7D5> | shy flee=<white>{shy}<#BFC7D5>, particles=<white>{particles}<#BFC7D5>, FX drops=<white>{fx-drops}'
+  model-status: '<#BFC7D5>Packet fish models: enabled=<white>{enabled}<#BFC7D5>, resource-pack-ready=<white>{loaded}<#BFC7D5>, visual replacements=<white>{swaps}<#BFC7D5>, pack accepted=<white>{accepted}<#BFC7D5>, declined/failed=<white>{rejected}'
+  encounter-status: '<#BFC7D5>Rare encounters (preview): enabled=<white>{enabled}<#BFC7D5>, active=<white>{active}<#BFC7D5>, created=<white>{spawned}<#BFC7D5>, viewed=<white>{observed}<#BFC7D5>, expired=<white>{expired}<#BFC7D5>, committed=<white>{completed}<#BFC7D5>, particles=<white>{particles}<#BFC7D5>, dropped=<white>{dropped}<#BFC7D5>, failures=<white>{failures}'
+  encounter-invalid: '<#FF5A6E>Invalid encounter kind: rare_presence, golden, shadow, ghost, rare_school.'
+  encounter-preview-ok: '<#55D68A>Applied <white>{type}<#55D68A> to an existing visible EMF fish (no reward).'
+  encounter-preview-unavailable: '<#FFA94D>No eligible visible rare fish, or encounter preview is disabled.'
+  trace-header: '<#FFA94D>Latest native-hook probe events (<white>{count} s<#FFA94D>tored, showing up to 15):'
+  trace-row: '<white>{row}'
+  metrics: '{prefix}<gray>Zones={zones} | Pending casts={pending} | Probe sessions={sessions} | Native catches blocked={catches} | Native bites escaped={bites} | Probe reels={reels}</gray>'
+  zone-list: '<#FFA94D>Configured Simulator zones (<white>{count}<#FFA94D>), page <white>{page}<#FFA94D>/<white>{pages}<#FFA94D>:'
+  zone-item: '<#BFC7D5>- <white>{id}<#BFC7D5>: type=<white>{type}<#BFC7D5>, world=<#5899ee>{world}<#BFC7D5>, priority=<white>{priority}<#BFC7D5>, enabled=<white>{enabled}<#BFC7D5>, deny=<white>{deny}'
+  zone-info: '<#FFA94D>Zone <white>{id}<#FFA94D>: type=<white>{type}<#FFA94D>, world=<#5899ee>{world}<#FFA94D>, region=<white>{region}<#FFA94D>, priority=<white>{priority}<#FFA94D>, enabled=<white>{enabled}<#FFA94D>, deny=<white>{deny}'
+  zone-not-found: '<#FF5A6E>Unknown Simulator zone: <white>{id}'
+  here: '<#FFA94D>Current position: world=<#5899ee>{world}<#FFA94D>, block=(<#5899ee>{x}<#FFA94D>,<#5899ee>{y}<#FFA94D>,<#5899ee>{z}<#FFA94D>), zone=<#5899ee>{zone}<#FFA94D>, denied=<white>{denied}'
+  here-player-only: '<#FF5A6E>Only players can inspect a location.'
+  reload-ok: '<#55D68A>Simulator config reloaded. Existing probe sessions were cleaned.'
+  reload-failed: '<#FF5A6E>Simulator config invalid. Previous valid snapshot remains active; see console.'
+  emergency-off: '<#FFA94D>Simulator router suspended; active probes cleaned up.'
+  emergency-on: '<#55D68A>Simulator router resumed. Production Simulator is still gated.'
+  no-permission: '<#FF5A6E>You lack permission for this Simulator action.'
+  unavailable-deny: '<#FF5A6E>Simulator is unavailable in this area. Cast denied by admin policy.'
+  ai-interested: '<#BFC7D5>🐟 A fish has noticed your bait...'
+  ai-bite: '<#55D68A>⚡ Bite! Reel in now! <#BFC7D5>(<#5899ee>{time}<#55D68A> ticks)'
+  ai-success-preview: '<#55D68A>✅ Perfect reel! <white>AI PREVIEW — no fish or EXP awarded.'
+  ai-success-committed: '<#55D68A>✅ EMF fish delivered successfully (admin test mode).'
+  ai-commit-rejected: '<#FF5A6E>⛔ Catch rejected by requirements or EMF event; bait was not spent.'
+  ai-commit-failed: '<#BFC7D5>️ Delivery failed. Check console; catch cannot be replayed.'
+  reward-status: '<#BFC7D5>Reward bridge (admin test): enabled=<white>{enabled}<#BFC7D5>, paper-ack=<white>{verified}<#BFC7D5>, legacy loot required=<white>{legacy}<#BFC7D5>, delivered=<white>{delivered}<#BFC7D5>, rejected=<white>{rejected}<#BFC7D5>, delivery errors=<white>{failed}'
+  ai-early: '<#FF5A6E>❌ Too early! The fish escaped.'
+  ai-missed: '<#FF5A6E>❌ Too late! The fish swam away.'
+  ai-no-target: '<#BFC7D5>No eligible fish reached this hook. Preview closed.'
+  ai-lost: '<#BFC7D5>Fish was lost or the preview session was cancelled.'
+  ai-status: '<#BFC7D5>AI preview: enabled=<white>{enabled}<#BFC7D5>, active=<white>{active}<#BFC7D5>, success (preview/test)=<white>{success}<#BFC7D5>, fail=<white>{failure}<#BFC7D5>, timeout=<white>{missed}'
+
+# Phase 8 Simulator visual preview messages
+  effects-on: '<#55D68A>Simulator preview effects enabled for your session.'
+  effects-off: '<#FFA94D>Simulator preview effects disabled for your session.'
+  effects-status: '<#BFC7D5>Visual preview: enabled=<white>{enabled}<#BFC7D5> | cinematic=<white>{cinematics}<#BFC7D5> | HUD=<white>{hud}<#BFC7D5> | packets=<white>{sent}<#BFC7D5> | failures=<white>{failed}<#BFC7D5> | rejected=<white>{rejected}<#BFC7D5> | cues=<white>{cues}<#BFC7D5> | pending destroy=<white>{pending}'
+  presentation-status: '<#BFC7D5>Presentation: sent=<white>{sent}<#BFC7D5> | stale=<white>{stale}<#BFC7D5> | lower-priority drops=<white>{priority}<#BFC7D5> | preference I/O errors=<white>{io-failures}'
+  presentation-bite: '<#BFC7D5>🎣 FISH BITES! <white>{bar} <#5899ee>{time} <#BFC7D5>• Right-click to reel'
+  presentation-current: '<#BFC7D5>Simulator HUD: <white>{profile} <#BFC7D5>• /emf hud off|minimal|balanced|cinematic|reduced-motion'
+  presentation-changed: '<#55D68A>Simulator HUD preset set to <white>{profile}<#55D68A>. Saving asynchronously.'
+  ai-bite-hud: '<#55D68A>🎣 REEL NOW! <white>{bar} <#5899ee>{time}<#55D68A> ticks'
+
+# Phase 9 diagnostic messages. The English baseline is used for untranslated locales.
+  performance-status: '<#BFC7D5>Preview profile: avg=<white>{avg-ms}ms<#BFC7D5> max=<white>{max-ms}ms<#BFC7D5> over2ms=<white>{slow}<#BFC7D5> | packet peak=<white>{peak}<#BFC7D5> pending destroys=<white>{pending}<#BFC7D5> | errors=<white>{failures}<#BFC7D5> destroy errors=<white>{destroy-failures}<#BFC7D5> | dropped water jobs=<white>{jobs}<#BFC7D5> | ticker failures=<white>{crashes}<#BFC7D5> last=<white>{reason}'
+  doctor-gates: '<#BFC7D5>Simulator Doctor: PacketEvents backend=<white>{packet}<#BFC7D5>, native hook bridge=<white>{hook}<#BFC7D5>, simulator config=<white>{enabled}<#BFC7D5>, ambient=<white>{preview}<#BFC7D5>, probe=<white>{probe}<#BFC7D5>, admin reward=<white>{reward}<#BFC7D5>, manual Paper acknowledgment=<white>{declared}<#BFC7D5>, emergency=<white>{emergency}'
+  doctor-warning: '<#FFA94D>G3/G5/G7 cannot be certified by this command. Full Gradle build + Paper/client tests remain mandatory. Do not enable player rewards before sign-off.'
+
+# Phase 11 — Premium cinematic localized visuals (V2)
+  cinematic-reveal-title: '<#FFA94D>✦ <white>{rarity}<#FFA94D> ✦'
+  cinematic-reveal-subtitle: '<#BFC7D5>🐟 <white>{fish}'
+  cinematic-preview-invalid: '<#FF5A6E>Invalid preset: common, rare, epic, legendary.'
+  cinematic-preview-water: '<#FFA94D>Look at a water block within 12 blocks to preview the cinematic.'
+  cinematic-preview-started: '<#55D68A>Playing <white>{preset}<#55D68A> cinematic (visual-only, no reward).'
+  cinematic-preview-unavailable: '<#FF5A6E>Preview unavailable: check simulator/effects/cinematics, PacketEvents, permissions and limits.'
+  cinematic-preview-stopped: '<#FFA94D>Your cinematic has been stopped.'
+  premium-status: '<#BFC7D5>Premium V2: enabled=<white>{enabled}<#BFC7D5> | scenes=<white>{scenes}<#BFC7D5> | cues=<white>{cues}<#BFC7D5> | trails=<white>{trails}<#BFC7D5> | failures=<white>{failed}'

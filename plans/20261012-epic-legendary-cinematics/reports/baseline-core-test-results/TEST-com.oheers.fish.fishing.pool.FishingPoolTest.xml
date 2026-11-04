@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.pool.FishingPoolTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:46:15.090Z" hostname="LEDAT" time="0.057">
+  <properties/>
+  <testcase name="radiusIncludesEdgeButRejectsWrongWorldAndVerticalFloor()" classname="com.oheers.fish.fishing.pool.FishingPoolTest" time="0.002"/>
+  <testcase name="nearestOverlapWinsAndIdsResolveTiesWithoutStacking()" classname="com.oheers.fish.fishing.pool.FishingPoolTest" time="0.002"/>
+  <testcase name="zeroWeightsStayZeroAndRareMultiplierChangesActualSelection()" classname="com.oheers.fish.fishing.pool.FishingPoolTest" time="0.046"/>
+  <testcase name="finiteOutOfRangeBonusesClampAndNonfiniteGeometryFails()" classname="com.oheers.fish.fishing.pool.FishingPoolTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

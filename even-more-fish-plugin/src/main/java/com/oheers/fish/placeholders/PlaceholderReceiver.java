@@ -81,6 +81,7 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
         return Stream.of(
             // Competition
             new CompetitionActivePlaceholder(),
+            new com.oheers.fish.placeholders.impl.competition.CompetitionBuffPlaceholder(),
             new CompetitionPlaceFishPlaceholder(),
             new CompetitionPlacePlayerPlaceholder(),
             new CompetitionPlaceSizePlaceholder(),

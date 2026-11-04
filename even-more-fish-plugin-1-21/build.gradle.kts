@@ -15,6 +15,9 @@ extra["variant"] = "1.21"
 dependencies {
     api(project(":even-more-fish-plugin"))
 
+    // External PacketEvents is OPTIONAL at runtime, and must NOT be shaded into EMF.
+    compileOnly("com.github.retrooper:packetevents-spigot:2.14.0")
+
     compileOnly(libs.paper.api) {
         version {
             strictly("1.21.1-R0.1-SNAPSHOT")
@@ -40,6 +43,7 @@ afterEvaluate {
     bukkit {
         main = "com.oheers.fish.EMFModule"
         apiVersion = "1.21"
+        softDepend = (softDepend.orEmpty() + listOf("packetevents", "LeDatPlatform")).distinct()
     }
 }
 

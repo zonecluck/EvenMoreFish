@@ -23,9 +23,11 @@ public abstract class AdminCommandProvider<C, A> {
         .addEntry("version", ConfigMessage.HELP_ADMIN_VERSION::getMessage)
         .addEntry("migrate", ConfigMessage.HELP_ADMIN_MIGRATE::getMessage, AdminPerms.MIGRATE)
         .addEntry("rawItem", ConfigMessage.HELP_ADMIN_RAWITEM::getMessage)
-        .addEntry("debug", () -> EMFSingleMessage.fromString("Shows debug information for some features."))
+        .addEntry("debug", () -> EMFSingleMessage.fromString("Xem thông tin chẩn đoán tính năng câu cá."))
         .addEntry("help", ConfigMessage.HELP_GENERAL_HELP::getMessage)
         .addEntry("competition", ConfigMessage.HELP_ADMIN_COMPETITION::getMessage)
+        .addEntry("buff", () -> EMFSingleMessage.fromString("Quản lý buff người thắng cuộc thi (view, give, clear)."))
+        .addEntry("testeffect", () -> EMFSingleMessage.fromString("Thử nghiệm hiệu ứng animation, title và âm thanh."))
         .addEntry("database", ConfigMessage.HELP_ADMIN_DATABASE::getMessage, AdminPerms.DATABASE);
 
     public abstract @NotNull C get();
@@ -40,6 +42,8 @@ public abstract class AdminCommandProvider<C, A> {
 
     protected abstract @NotNull A competition();
 
+    protected abstract @NotNull A buff();
+
     protected abstract @NotNull A customRod();
 
     protected abstract @NotNull A debug();
@@ -53,6 +57,8 @@ public abstract class AdminCommandProvider<C, A> {
     protected abstract @NotNull A version();
 
     protected abstract @NotNull A rawItem();
+
+    protected abstract @NotNull A testEffect();
 
     protected abstract @NotNull A migrate();
 

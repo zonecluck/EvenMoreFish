@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.FishingHookHologramsTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-12T16:26:15.934Z" hostname="LEDAT" time="2.637">
+  <properties/>
+  <testcase name="absentNativeBiteWindowResumesActualWaitingCountdownWithoutTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="2.565"/>
+  <testcase name="clearDoesNotClearUnrelatedTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.006"/>
+  <testcase name="offlineOwnerRemovesDisplayAndStopsUpdaterWithoutTouchingTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.005"/>
+  <testcase name="waitingCountdownTracksNativeSecondsAndCachesUnchangedText()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.008"/>
+  <testcase name="missedTransitionDoesNotSendOrClearTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.005"/>
+  <testcase name="biteAnimationUpdatesHookDisplayWithoutSendingTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.007"/>
+  <testcase name="explicitRemovalDoesNotClearUnrelatedTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.005"/>
+  <testcase name="invalidHookRemovesDisplayAndStopsIdleUpdater()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.004"/>
+  <testcase name="ownerWorldChangeRemovesDisplayAndStopsUpdaterWithoutTouchingTitles()" classname="com.oheers.fish.fishing.FishingHookHologramsTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\hp\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.17.7\fbf3d6d649ed37fc9e9c59480a05be0a26e3c2da\byte-buddy-agent-1.17.7.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

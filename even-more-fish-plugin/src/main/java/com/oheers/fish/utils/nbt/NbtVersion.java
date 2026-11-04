@@ -35,9 +35,15 @@ public enum NbtVersion {
                 return NbtVersion.COMPAT; //def an emf item
             }
             if (nbt.hasTag(NbtKeys.PUBLIC_BUKKIT_VALUES)) {
-                return NbtVersion.LEGACY;
+                de.tr7zw.changeme.nbtapi.iface.ReadableNBT publicBukkitValues = nbt.getCompound(NbtKeys.PUBLIC_BUKKIT_VALUES);
+                if (publicBukkitValues != null && hasAnyEmfKey(publicBukkitValues)) {
+                    return NbtVersion.LEGACY;
+                }
             }
-            return NbtVersion.NBTAPI;
+            if (nbt.hasTag(NbtKeys.EMF_COMPOUND + ":" + NbtKeys.EMF_APPLIED_BAIT)) {
+                return NbtVersion.NBTAPI;
+            }
+            return NbtVersion.COMPAT;
         });
     }
 
@@ -53,9 +59,25 @@ public enum NbtVersion {
                 return NbtVersion.COMPAT; //def an emf item
             }
             if (nbt.hasTag(NbtKeys.PUBLIC_BUKKIT_VALUES)) {
-                return NbtVersion.LEGACY;
+                de.tr7zw.changeme.nbtapi.iface.ReadableNBT publicBukkitValues = nbt.getCompound(NbtKeys.PUBLIC_BUKKIT_VALUES);
+                if (publicBukkitValues != null && hasAnyEmfKey(publicBukkitValues)) {
+                    return NbtVersion.LEGACY;
+                }
             }
-            return NbtVersion.NBTAPI;
+            if (nbt.hasTag(NbtKeys.EMF_COMPOUND + ":" + NbtKeys.EMF_APPLIED_BAIT)) {
+                return NbtVersion.NBTAPI;
+            }
+            return NbtVersion.COMPAT;
         });
+    }
+
+    private static boolean hasAnyEmfKey(final de.tr7zw.changeme.nbtapi.iface.ReadableNBT compound) {
+        final String prefix = NbtKeys.EMF_COMPOUND + ":";
+        for (String key : compound.getKeys()) {
+            if (key.startsWith(prefix) || key.startsWith("evenmorefish:")) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -1,0 +1,18 @@
+# Phase 10: one owner for Simulator action-bar messages.
+# Staging feature is OFF by default; enable only for an authorized Paper preview.
+# This file does not enable the Simulator engine or its reward bridge.
+config-version: 1
+enabled: false
+
+actionbar:
+  # Max 5 updates per second when set to 4 ticks; state transitions can preempt immediately.
+  minimum-interval-ticks: 5
+  bite-ttl-ticks: 8
+  result-ttl-ticks: 35
+  # Normally use world-space bubbles for INTERESTED; do not clutter the middle of the screen.
+  show-interested-hint: false
+
+profiles:
+  # Player can choose OFF/MINIMAL/BALANCED/CINEMATIC/REDUCED_MOTION using /emf hud.
+  # Preferences are stored as individual UUID files in simulator/player-prefs/.
+  default: BALANCED

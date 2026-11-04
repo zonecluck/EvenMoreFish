@@ -1,0 +1,53 @@
+# EvenMoreFish Simulator V2 — Phase 9.1 validation record (2026-10-11)
+
+Actual environment: Java 21.0.12, no globally installed Gradle distribution, restricted DNS.
+
+1) `bash qa/run-parse-only.sh`
+   PASS — Java 21 syntax parsed: 455 sources; 0 errors.
+   Scope: syntax parsing, NOT whole-project typechecked compilation.
+
+2) `bash qa/run-offline-smoke.sh`
+   PASS — dirty revision, retry, fractional boost, RNG, DB executor ordering.
+
+3) `bash qa/run-simulator-phase23-smoke.sh`
+   PASS — 10 config/zone tests, probe state, offhand, immutable snapshot and idempotent cleanup.
+
+4) `bash qa/run-simulator-phase45-smoke.sh`
+   PASS — shared/private ownership, caps, reservation, packet budget, destroy retry, TTL and mock 100-viewer/1000-fish stress.
+   Note: first attempt failed to compile isolated test because script missed new PacketCleanupQueue.java;
+   script was corrected and rerun PASS.
+
+5) `bash qa/run-simulator-phase6-smoke.sh`
+   PASS — water BFS, bite window, competing players, early/missed reel, cooldown, cleanup and FishKey identity.
+
+6) `bash qa/run-simulator-phase7-smoke.sh`
+   PASS — duplicate reel, event cancellation, late validation, reentrant reload and delivery-failure no replay.
+
+7) `bash qa/run-simulator-phase7-stats-smoke.sh`
+   PASS — deferred internal stats and nested event isolation.
+
+8) `bash qa/run-simulator-phase8-smoke.sh`
+   PASS — cinematic budget, HUD, opt-out, world change, injected partial-spawn and destroy-retry recovery.
+   Executed independently after a previous long combined regression was interrupted.
+
+9) `bash qa/run-simulator-phase9-smoke.sh`
+   PASS — priority delete, private fish, reconnect, injected partial/throwing spawn, thrown teleport,
+   error recovery, and mock 1/10/30/50/100 viewer load with no packet budget overshoot.
+   Executed independently after a previous long combined regression was interrupted.
+
+10) `bash qa/run-simulator-phase91-smoke.sh`
+    PASS — one-slot delivery plan without mutating source, no split, capacity/duplicate/retry cleanup ledger.
+    Executed independently after a previous long combined regression was interrupted.
+
+11) PyYAML structural validation
+    PASS — 49 YAML resources and 18 locale effects-status messages with {pending}.
+
+12) `./gradlew --version`
+    FAILED BEFORE GRADLE STARTS — java.net.UnknownHostException: services.gradle.org
+    Gradle 9.5.1 distribution missing. See `qa/PHASE091_GRADLE_BOOTSTRAP.log`.
+
+NOT EXECUTED: Gradle compile, full JUnit, Paper 1.21.4+/PacketEvents Minecraft client runtime,
+G3 native hook suppression, G5 client packet rendering, G7 reward/inventory/database integration,
+real MSPT/TPS soak, Folia compatibility.
+
+No production JAR produced. Simulator/reward bridge must stay disabled for player use.

@@ -1,0 +1,16 @@
+# Persistent pools for ordinary EMF fishing. Empty until an administrator creates one.
+# /emf admin pool create <id> <radius> [speed-percent] [rare-multiplier]
+# Aim at water (up to 32 blocks), or stand at the intended water surface.
+# Radius: 1..64; wait reduction: 0..85%; eligible rarity weight: x1..x10.
+fishing-pools:
+  enabled: true
+  vertical-tolerance: 2.0
+  default-speed-percent: 25.0
+  default-rare-multiplier: 1.5
+  # Exact case-insensitive rarity IDs. Common is always excluded.
+  rare-rarity-ids: [Uncommon, Rare, Epic, Legendary, Mythical]
+  particles:
+    enabled: true
+    ring-points: 32
+    viewer-distance: 48
+  pools: {}

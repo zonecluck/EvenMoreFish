@@ -1,0 +1,27 @@
+Phase07 Validation 2026-10-11_04:13:55_UTC
+
+===== run-parse-only.sh =====
+Java 21 syntax parsed: 446 sources; 0 syntax errors
+
+===== run-offline-smoke.sh =====
+PASS: dirty revision, failed flush retry, fractional boost, RNG, DB executor ordering
+
+===== run-simulator-phase23-smoke.sh =====
+PASS: 10 simulator config/zone ownership tests
+PASS: probe state, offhand, immutable snapshot, idempotent cleanup
+
+===== run-simulator-phase45-smoke.sh =====
+PASS: shared/private agent ownership, caps, reservation, visual privacy, double-claim, packet budget, destroy retry, TTL, motion, 100-viewer/1000-agent stress simulation
+
+===== run-simulator-phase6-smoke.sh =====
+PASS: indexed-water BFS, server-only bite window, shared competition, private owner, early reel, missed reel, idempotent success, cooldown, cleanup and fish identity
+
+===== run-simulator-phase7-smoke.sh =====
+PASS: Phase 7 duplicate reel, identity, event cancellation, late validation, reservation, reentrant reload, delivery failure & no replay
+
+===== run-simulator-phase7-stats-smoke.sh =====
+PASS: Phase 7 stats deferral uses fish identity + UUID, nested event isolation and finally cleanup
+
+===== YAML validation =====
+PASS 19 YAML files
+PASS: reward gate disabled by default

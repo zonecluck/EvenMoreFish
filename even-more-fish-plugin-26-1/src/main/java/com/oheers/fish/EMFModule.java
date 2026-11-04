@@ -3,6 +3,8 @@ package com.oheers.fish;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.MainCommand;
+import com.oheers.fish.commands.main.subcommand.AutoFishSubcommand;
+import com.oheers.fish.commands.main.subcommand.JournalSubcommand;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.items.ItemConfigResolver;
 import com.oheers.fish.items.configs.FireResistantItemConfig;
@@ -43,6 +45,8 @@ public class EMFModule extends EvenMoreFish {
     public void loadCommands() {
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(event -> {
             event.registrar().register(new MainCommand().get(), MainConfig.getInstance().getMainCommandAliases());
+            event.registrar().register(new JournalSubcommand(MainConfig.getInstance().getIndexSubCommandName()).get().build());
+            event.registrar().register(new AutoFishSubcommand(MainConfig.getInstance().getAutofishSubCommandName()).get().build());
             if (MainConfig.getInstance().isAdminShortcutCommandEnabled()) {
                 String shortcut = MainConfig.getInstance().getAdminShortcutCommandName();
                 event.registrar().register(new AdminCommand(shortcut).get());

@@ -1,0 +1,16 @@
+# Visual mappings are cosmetic only. Actual catch types and rewards remain EMF-defined.
+# Phase 5 packet renderer supports four vanilla fish entity types without resource packs.
+# ITEM_DISPLAY/custom-model-data mapping is RESERVED and falls back to the vanilla model
+# until Paper protocol metadata is verified on a real server. It is NOT currently functional.
+config-version: 1
+visuals:
+  fallback-model: COD
+  rarity-overrides:
+    Rare: {model: SALMON}
+    Epic: {model: TROPICAL_FISH}
+    Legendary: {model: PUFFERFISH}
+  fish-overrides:
+    # 'Legendary:Golden Koi':
+    #   renderer: ITEM_DISPLAY
+    #   item-model: 'example:golden_koi'
+    #   model: SALMON # fallback model

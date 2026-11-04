@@ -5,10 +5,12 @@ import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.arguments.EMFPlayerArgument;
 import com.oheers.fish.gui.guis.SellGui;
+import com.oheers.fish.gui.guis.StorageFishShopGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.permissions.UserPerms;
+import com.oheers.fish.selling.TurtleStorageFishBridge;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
@@ -51,7 +53,11 @@ public class ShopSubcommand {
             ConfigMessage.ECONOMY_DISABLED.getMessage().send(sender);
             return;
         }
-        new SellGui(target, SellGui.SellState.NORMAL, null).open();
+        if (TurtleStorageFishBridge.isAvailable()) {
+            StorageFishShopGui.open(target);
+        } else {
+            new SellGui(target, SellGui.SellState.NORMAL, null).open();
+        }
 
         if (!target.equals(sender)) {
             EMFMessage message = ConfigMessage.ADMIN_OPEN_FISH_SHOP.getMessage();

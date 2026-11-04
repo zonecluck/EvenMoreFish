@@ -84,14 +84,18 @@ public class WorthNBT {
 
     public static @NotNull Optional<Double> getValue(@NotNull Fish fish) {
         double setWorth = fish.getSetWorth();
-        float length = fish.getLength();
-        if (setWorth > 0) {
+        if (setWorth > 0.0D) {
             return Optional.of(setWorth);
-        } else if (length > 0.0D) {
-            return getMultipliedValue(length, fish);
-        } else {
-            return Optional.empty();
         }
+        float length = fish.getLength();
+        if (length > 0.0D) {
+            Optional<Double> multiplied = getMultipliedValue(length, fish);
+            if (multiplied.isPresent()) {
+                return multiplied;
+            }
+        }
+        double fallbackWorth = defaultWorthForRarity(fish);
+        return fallbackWorth > 0.0D ? Optional.of(fallbackWorth) : Optional.empty();
     }
 
     private static Optional<Double> getMultipliedValue(float length, @NotNull Fish fish) {
@@ -100,6 +104,33 @@ public class WorthNBT {
             return Optional.empty();
         }
         return Optional.of(multiplier * length);
+    }
+
+    private static double defaultWorthForRarity(@NotNull Fish fish) {
+        String id = fish.getRarity() != null ? fish.getRarity().getId() : "";
+        if (id == null) {
+            return 25.0D;
+        }
+        String lower = id.trim().toLowerCase(java.util.Locale.ROOT);
+        if (lower.contains("anomaly") || lower.contains("divine") || lower.contains("god") || lower.contains("di_biet")) {
+            return 5000.0D;
+        }
+        if (lower.contains("mythic") || lower.contains("than_thoai")) {
+            return 2500.0D;
+        }
+        if (lower.contains("legend") || lower.contains("huyen_thoai")) {
+            return 1000.0D;
+        }
+        if (lower.contains("epic") || lower.contains("su_thi")) {
+            return 400.0D;
+        }
+        if (lower.contains("rare") || lower.contains("hiem")) {
+            return 150.0D;
+        }
+        if (lower.contains("uncommon") || lower.contains("it_gap")) {
+            return 60.0D;
+        }
+        return 25.0D;
     }
 
 }

@@ -1,0 +1,1 @@
+package org.bukkit.inventory; public class InventoryView { private Inventory top; public InventoryView(Inventory i){top=i;} public Inventory getTopInventory(){return top;} }

@@ -284,6 +284,8 @@ public abstract class EMFMessage {
      */
     public void setRarity(@NotNull final Object rarity) {
         setVariable("{rarity}", rarity);
+        setVariable("{rarity_name}", rarity);
+        setVariable("{rarityname}", rarity);
         setVariable("{rarity_colour}", "");
     }
 

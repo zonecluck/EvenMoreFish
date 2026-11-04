@@ -11,11 +11,13 @@ import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.commands.AdminCommandProvider;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.admin.subcommand.BaitSubcommand;
+import com.oheers.fish.commands.admin.subcommand.BuffSubcommand;
 import com.oheers.fish.commands.admin.subcommand.ClearBaitsSubcommand;
 import com.oheers.fish.commands.admin.subcommand.CompetitionSubcommand;
 import com.oheers.fish.commands.admin.subcommand.CustomRodSubcommand;
 import com.oheers.fish.commands.admin.subcommand.DatabaseSubcommand;
 import com.oheers.fish.commands.admin.subcommand.DebugSubcommand;
+import com.oheers.fish.commands.admin.subcommand.EffectSubcommand;
 import com.oheers.fish.commands.admin.subcommand.FishSubcommand;
 import com.oheers.fish.commands.admin.subcommand.ListSubcommand;
 import com.oheers.fish.database.Database;
@@ -63,10 +65,13 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
             .then(fish())
             .then(list())
             .then(competition())
+            .then(buff())
             .then(customRod())
+            .then(new com.oheers.fish.commands.admin.subcommand.PoolSubcommand().get())
             .then(debug())
             .then(bait())
             .then(clearBaits())
+            .then(testEffect())
             .then(reload())
             .then(version())
             .then(rawItem())
@@ -95,6 +100,11 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> buff() {
+        return new BuffSubcommand("buff").get();
+    }
+
+    @Override
     protected @NonNull ArgumentBuilder<CommandSourceStack, ?> customRod() {
         return new CustomRodSubcommand("custom-rod").get();
     }
@@ -112,6 +122,11 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     @Override
     protected @NonNull ArgumentBuilder<CommandSourceStack, ?> clearBaits() {
         return new ClearBaitsSubcommand("clearbaits").get();
+    }
+
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> testEffect() {
+        return new EffectSubcommand("testeffect").get();
     }
 
     @Override

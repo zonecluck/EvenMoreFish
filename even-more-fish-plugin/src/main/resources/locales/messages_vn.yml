@@ -2,16 +2,16 @@
 #Sent to players when they fish an EvenMoreFish fish
 fish-caught: <gradient:#E6F9FF:#8FD9FB>[EvenMoreFish]</gradient> <white><b>{player}</b></white> <gray>đã câu được</gray> {rarity} {fish} <gray>dài</gray> <#A8D8EA>{length}cm</#A8D8EA>!
 #By setting a fish's minimum-length to less than 0, you can create a lengthless fish. This is used when a player fishes a lengthless fish.
-lengthless-fish-caught: <gradient:#E6F9FF:#8FD9FB>[EvenMoreFish]</gradient> <white><b>{player}</b></white> <gray>đã câu được</gray> {rarity} {fish}!
+lengthless-fish-caught: '<#57C7FF>{player} <#BFC7D5>đã câu được <white>{rarity} {fish}!'
 #Sent to a player when they don't have permission to execute a command.
-no-permission: <red>bạn không có quyền để chạy lệnh này.
+no-permission: '<#FF5A6E>bạn không có quyền để chạy lệnh này.'
 #The message to be sent when a competition starts and ends
-contest-start: <reset>Cuộc thi câu cá xếp hạng {type} đã bắt đầu.
-contest-end: <reset>Cuộc thi câu cá đã kết thúc.
+contest-start: '<#BFC7D5><reset>Cuộc thi câu cá xếp hạng <white>{type}<#BFC7D5> đã bắt đầu.'
+contest-end: '<#BFC7D5><reset>Cuộc thi câu cá đã kết thúc.'
 #The message to be sent when a player joins whilst a competition is going on
-contest-join: <reset>Cuộc thi câu cá hạng {type} đang diễn ra.
+contest-join: '<#BFC7D5><reset>Cuộc thi câu cá hạng <white>{type}<#BFC7D5> đang diễn ra.'
 #Shown to players when a new player takes #1 spot, remove this value or set it to "" to disable this message
-new-first: '<reset>{player} đang TOP #1'
+new-first: '<#BFC7D5><reset><#57C7FF>{player}<#BFC7D5> đang TOP #1'
 #Should this message appear in chat (false) or above the exp bar (true)
 action-bar-message: true
 #What competition types should the action bar be used for? (recommended: MOST_FISH)
@@ -20,15 +20,15 @@ action-bar-types:
 #What should replace the {type} variable for each competition type?
 competition-types:
   #MOST_FISH
-  most: nhiều cá nhất
+  most: '<#BFC7D5>nhiều cá nhất'
   #LARGEST_FISH
-  largest: cá to nhất
+  largest: '<#BFC7D5>cá to nhất'
   #LARGEST_TOTAL_FISH
-  largest-total: tổng chiều dài cá lớn nhất
+  largest-total: '<#BFC7D5>tổng chiều dài cá lớn nhất'
   #SPECIFIC_FISH
-  specific: '{amount} {rarity} {fish}<reset>'
+  specific: '<white>{amount} {rarity} {fish}<#BFC7D5><reset>'
   #SPECIFIC_RARITY
-  specific-rarity: '{amount} {rarity_colour}<bold>{rarity}<reset> cá'
+  specific-rarity: '<white>{amount} {rarity_colour}{rarity}<#BFC7D5><reset> cá'
 #Segments shown in the bossbar when competitions run
 bossbar:
   layout: '{prefix}<reset>{time-formatted}<reset>{remaining}'
@@ -51,125 +51,215 @@ prefix-error: '<red>[EvenMoreFish] '
 #replace the {fish_lore}, however if it's empty the line will be removed. DO NOT ADD ANYTHING OTHER THAN THIS VARIABLE
 #TO THAT LINE.
 fish-lore:
-  - <white>Bắt bởi {player}
-  - <white>Dài {length} cm
+  - '<#BFC7D5>Bắt bởi <#57C7FF>{player}'
+  - '<#BFC7D5>Dài <white>{length}<#BFC7D5> cm'
   - ''
-  - '{fish_lore}'
-  - '{rarity_colour}<bold>{rarity}'
+  - '<white>{fish_lore}'
+  - '<white>{rarity_colour}{rarity}'
 #The format of commands in /emf help (this message doesn't support papi placeholders)
-help: /{command} - {description}
+help: '<#BFC7D5>/<white>{command}<#BFC7D5> - <white>{description}'
 #The format of the leaderboard after a competition is over (this message doesn't support papi placeholders)
-leaderboard-largest-fish: <reset>#{position} | {player} <reset>({rarity} {fish}<reset>, {length}cm<reset>)
-leaderboard-largest-total: <reset>#{position} | {player} <reset>({amount} cm<reset>)
-leaderboard-most-fish: <reset>#{position} | {player} <reset>({amount} <reset>fish)
+leaderboard-largest-fish: '<#BFC7D5><reset><white>#{position}<#BFC7D5> | <#57C7FF>{player}<#BFC7D5> <reset>(<white>{rarity} {fish}<#BFC7D5><reset>, <white>{length}<#BFC7D5>cm<reset>)'
+leaderboard-largest-total: '<#BFC7D5><reset><white>#{position}<#BFC7D5> | <#57C7FF>{player}<#BFC7D5> <reset>(<white>{amount}<#BFC7D5> cm<reset>)'
+leaderboard-most-fish: '<#BFC7D5><reset><white>#{position}<#BFC7D5> | <#57C7FF>{player}<#BFC7D5> <reset>(<white>{amount}<#BFC7D5> <reset>fish)'
 #If you're running a competition where there's no leaderboard, this message is sent when there's a winner
-single-winner: <reset>{player} đã thắng cuộc thi câu cá xếp hạng {type}. Chúc mừng!
+single-winner: '<#BFC7D5><reset><#57C7FF>{player}<#BFC7D5> đã thắng cuộc thi câu cá xếp hạng <white>{type}<#BFC7D5>. Chúc mừng!'
 #This shows the number of players currently in the competition, set to "" to disable.
-total-players: <reset>Có tổng cộng {amount} người chơi trên top
+total-players: '<#BFC7D5><reset>Có tổng cộng <white>{amount}<#BFC7D5> người chơi trên top'
 #The number of positions shown in the leaderboard - can't be less than 1.
 leaderboard-count: 5
 #If the player doesn't appear on /emf top, should their position be displayed at the bottom?
 always-show-pos: true
 #Sent to players when nobody got a record during a competition
-no-winners: <reset>Không ai có TOP trong cuộc thi câu cá.
+no-winners: '<#BFC7D5><reset>Không ai có TOP trong cuộc thi câu cá.'
 #When an individual player didn't get a record
-no-record: <reset>Bạn chưa câu con cá nào cả.
+no-record: '<#BFC7D5><reset>Bạn chưa câu con cá nào cả.'
 #Sent when an admin tries to start a competition where the type doesn't exist e.g. /emf admin competition start 600 ABCDEFGH
-invalid-type: '<reset>Đó không phải xếp hạng cuộc thi đúng, các xếp hạng có sẵn: MOST_FISH, LARGEST_FISH, SPECIFIC_FISH'
+invalid-type: '<#FF5A6E><reset>Đó không phải xếp hạng cuộc thi đúng, các xếp hạng có sẵn: MOST_FISH, LARGEST_FISH, SPECIFIC_FISH'
 #Sent to all online players when not enough players are on to start a competition
-not-enough-players: <reset>Không có đủ người chơi online để bắt đầu cuộc thi câu cá.
+not-enough-players: '<#BFC7D5><reset>Không có đủ người chơi online để bắt đầu cuộc thi câu cá.'
 #Sent to all players at specific times to show the remaining time left
 #{time_formatted} shows the time (e.g. 5m left, 10m 30s left)
 #{time_raw} is what you input in competitions.yml
-time-alert: <reset>Còn {time_formatted} cho cuộc thi câu cá xếp hạng {type}
+time-alert: '<#BFC7D5><reset>Còn <#5899ee>{time_formatted}<#BFC7D5> cho cuộc thi câu cá xếp hạng <white>{type}'
 #The message sent to players when they've sold their fish in the /emf shop
-fish-sale: <white>Bạn đã bán </white><green>{amount} </green><white>cá với giá </white><green>{sell-price}</green><white>.
+fish-sale: '<#55D68A>Bạn đã bán <white>{amount} cá với giá {sell-price}.'
 #Help messages
 #General help (/emf help) - permission node dependant commands will only show if they are formatted with the forward-slash.
 help-general:
-  - <strikethrough><white> </white></strikethrough><strikethrough><#f1ffed> </#f1ffed></strikethrough><strikethrough><#e2ffdb> </#e2ffdb></strikethrough><strikethrough><#d3ffc9> </#d3ffc9></strikethrough><strikethrough><#c3ffb7> </#c3ffb7></strikethrough><strikethrough><#b2ffa5> </#b2ffa5></strikethrough><strikethrough><#9fff92> </#9fff92></strikethrough><strikethrough><#8bff7f> </#8bff7f></strikethrough><strikethrough><#73ff6b> </#73ff6b></strikethrough><strikethrough><green> </green></strikethrough><white> </white><bold><green>EvenMoreFish </green></bold><strikethrough><green> </green></strikethrough><strikethrough><#73ff6b> </#73ff6b></strikethrough><strikethrough><#8bff7f> </#8bff7f></strikethrough><strikethrough><#9fff92> </#9fff92></strikethrough><strikethrough><#b2ffa5> </#b2ffa5></strikethrough><strikethrough><#c3ffb7> </#c3ffb7></strikethrough><strikethrough><#d3ffc9> </#d3ffc9></strikethrough><strikethrough><#f1ffed> </#f1ffed></strikethrough><strikethrough><white> </white></strikethrough><white>
-  - /emf top - Xem bảng xếp hạng cuộc thi câu cá hiện tại.
-  - /emf help - Mở cái bảng này nè.
-  - /emf shop - Mở cửa hàng bán cá.
-  - /emf admin - Khu vực trợ giúp dành cho admin.
-  - <white>/emf admin - Xem lệnh của admin.
-#Competition help (/emf admin competition help)
+  title: "<#BFC7D5>Hướng dẫn câu cá"
+  top: "<#BFC7D5>Xem cuộc thi đang diễn ra và hạng của bạn."
+  help: "<#BFC7D5>Xem các lệnh câu cá dành cho bạn."
+  shop: "<#BFC7D5>Mở cửa hàng bán cá."
+  toggle: "<#BFC7D5>Bật hoặc tắt cá tùy chỉnh và bossbar."
+  gui: "[noPrefix]Mở giao diện câu cá."
+  admin: "<#BFC7D5>Xem lệnh quản trị (cần quyền admin)."
+  sellall: "<#BFC7D5>Bán toàn bộ cá hợp lệ trong túi đồ."
+  next: "[noPrefix]Xem thời gian cuộc thi tiếp theo."
+  applybaits: "<#BFC7D5>Gắn mồi vào cần câu."
+  journal: "<#BFC7D5>Xem nhật ký cá đã bắt."
 help-competition:
-  - <strikethrough><white> </white></strikethrough><strikethrough><#f1ffed> </#f1ffed></strikethrough><strikethrough><#e2ffdb> </#e2ffdb></strikethrough><strikethrough><#d3ffc9> </#d3ffc9></strikethrough><strikethrough><#c3ffb7> </#c3ffb7></strikethrough><strikethrough><#b2ffa5> </#b2ffa5></strikethrough><strikethrough><#9fff92> </#9fff92></strikethrough><strikethrough><#8bff7f> </#8bff7f></strikethrough><strikethrough><#73ff6b> </#73ff6b></strikethrough><strikethrough><green> </green></strikethrough><white> </white><bold><green>EvenMoreFish </green></bold><strikethrough><green> </green></strikethrough><strikethrough><#73ff6b> </#73ff6b></strikethrough><strikethrough><#8bff7f> </#8bff7f></strikethrough><strikethrough><#9fff92> </#9fff92></strikethrough><strikethrough><#b2ffa5> </#b2ffa5></strikethrough><strikethrough><#c3ffb7> </#c3ffb7></strikethrough><strikethrough><#d3ffc9> </#d3ffc9></strikethrough><strikethrough><#f1ffed> </#f1ffed></strikethrough><strikethrough><white> </white></strikethrough><white>
-  - /emf admin competition start \<duration> \<type> - Bắt đầu cuộc thi câu cá với 1 khoảng thời gian định sẵn
-  - /emf admin competition end - Kết thúc cuộc thi câu cá hiện tại (nếu đang diễn ra)
-#Admin help (/emf admin help)
+  start: "<#BFC7D5>Bắt đầu cuộc thi đã cấu hình."
+  end: "<#BFC7D5>Kết thúc cuộc thi hiện tại."
+  test: "<#BFC7D5>Thử cuộc thi với loại đã chọn."
+  extend: "<#BFC7D5>Gia hạn cuộc thi đang diễn ra."
+# Admin help (/emf admin help)
 help-admin:
-  - <strikethrough><white> </white></strikethrough><strikethrough><#f1ffed> </#f1ffed></strikethrough><strikethrough><#e2ffdb> </#e2ffdb></strikethrough><strikethrough><#d3ffc9> </#d3ffc9></strikethrough><strikethrough><#c3ffb7> </#c3ffb7></strikethrough><strikethrough><#b2ffa5> </#b2ffa5></strikethrough><strikethrough><#9fff92> </#9fff92></strikethrough><strikethrough><#8bff7f> </#8bff7f></strikethrough><strikethrough><#73ff6b> </#73ff6b></strikethrough><strikethrough><green> </green></strikethrough><white> </white><bold><green>EvenMoreFish </green></bold><strikethrough><green> </green></strikethrough><strikethrough><#73ff6b> </#73ff6b></strikethrough><strikethrough><#8bff7f> </#8bff7f></strikethrough><strikethrough><#9fff92> </#9fff92></strikethrough><strikethrough><#b2ffa5> </#b2ffa5></strikethrough><strikethrough><#c3ffb7> </#c3ffb7></strikethrough><strikethrough><#d3ffc9> </#d3ffc9></strikethrough><strikethrough><#f1ffed> </#f1ffed></strikethrough><strikethrough><white> </white></strikethrough><white>
-  - /emf admin competition \<start/end> \<duration> \<type> - Bắt đầu hoặc kết thúc cuộc thi câu cá
-  - /emf admin reload - Nạp lại config của plugin
-  - /emf admin version - Xem thông tin plugin.
-  - <white>/emf admin version - Xem thông tin plugin.
-#Shown when the emf competition placeholders request a position in the leaderboard that doesn't exist
-no-player-in-place: Hãy câu cá và chiếm lấy vị trí này đi!
+  title: "<#BFC7D5>Quản trị câu cá"
+  bait: "<#BFC7D5>Trao mồi câu cho người chơi."
+  competition: "<#BFC7D5>Quản lý cuộc thi câu cá."
+  clearbaits: "<#BFC7D5>Gỡ toàn bộ mồi hợp lệ khỏi cần câu."
+  fish: "<#BFC7D5>Trao cá cho người chơi."
+  nbt-rod: "<#BFC7D5>Trao cần NBT dùng để câu cá EMF."
+  custom-rod: "<#BFC7D5>Trao cần câu tùy chỉnh."
+  reload: "<#BFC7D5>Tải lại cấu hình plugin."
+  migrate: "<#BFC7D5>Chuyển cơ sở dữ liệu Legacy V2 sang V3."
+  addons: "<#BFC7D5>Liệt kê addon đã đăng ký."
+  version: "<#BFC7D5>Xem thông tin phiên bản plugin."
+  rawitem: "<#BFC7D5>Xem NBT của vật phẩm đang cầm."
+  database: "[noPrefix]Quản lý cơ sở dữ liệu plugin."
+# Shown when the %emf_competition_place_player_*% placeholder requests a position in the leaderboard that doesn't exist
+no-player-in-place: '<#BFC7D5>Hãy câu cá và chiếm lấy vị trí này đi!'
 #Shown when the emf competition placeholders are used when there's no competition running
-no-competition-running: Không có cuộc thi câu cá nào đang diễn ra.
+no-competition-running: '<#BFC7D5>Không có cuộc thi câu cá nào đang diễn ra.'
 #How should the %emf_competition_place_fish_*% be formatted?
-emf-competition-fish-format: '{length}cm <bold>{rarity}</bold> {fish}'
+emf-competition-fish-format: '<white>{length}<#BFC7D5>cm <white>{rarity} {fish}'
 #How should the %emf_competition_place_fish_*% be formatted when there's no length on the fish?
-emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity}{fish}'
+emf-lengthless-fish-format: '<white>{rarity_colour}{rarity}{fish}'
 #How should %emf_competition_place_fish_*% be formatted during MOST/SPECIFIC_FISH competitions?
-emf-most-fish-format: '{amount} con cá'
+emf-most-fish-format: '<white>{amount}<#BFC7D5> con cá'
 #What should be displayed for %emf_competition_place_size_*% during the MOST_FISH competition?
-emf-size-during-most-fish: Không tồn tại
+emf-size-during-most-fish: '<#FF5A6E>Không tồn tại'
 #How the %emf_competition_time_left% variable should be formatted.
-emf-time-remaining: 'Thời gian cho đến cuộc thi tiếp theo: {days} ngày {hours} giờ {minutes} phút.'
+emf-time-remaining: '<#BFC7D5>Thời gian cho đến cuộc thi tiếp theo: <#5899ee>{days}<#BFC7D5> ngày <#5899ee>{hours}<#BFC7D5> giờ <#5899ee>{minutes}<#BFC7D5> phút.'
 #Replaces the %emf_competition_time_left% variable when there's a competition already running.
-emf-time-remaining-during-comp: Đang có cuộc thi câu cá diễn ra.
+emf-time-remaining-during-comp: '<#BFC7D5>Đang có cuộc thi câu cá diễn ra.'
 #Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
-max-baits-reached: <reset>Bạn đã đạt đến mức độ tối đa của mồi câu cho cần câu này.
+max-baits-reached: '<#BFC7D5><reset>Bạn đã đạt đến mức độ tối đa của mồi câu cho cần câu này.'
 #Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: <reset>Bạn đã đạt đến mức tối đa của mồi cầu {bait}<reset> để có thể áp dụng vào cần câu.
+max-bait-reached: '<#BFC7D5><reset>Bạn đã đạt đến mức tối đa của mồi cầu <white>{bait}<#BFC7D5><reset> để có thể áp dụng vào cần câu.'
 #Sent when a player catches a bait from fishing (this can be disabled by setting catch-percentage to 0 in baits.yml
-bait-catch: <reset><bold>{player}<reset> đã bắt được mồi câu <bold>{bait}<reset>!
+bait-catch: '<#BFC7D5><reset><#57C7FF>{player}<#BFC7D5><reset> đã bắt được mồi câu <white>{bait}<#BFC7D5><reset>!'
 #Sent when a bait is applied and a fish is caught.
-bait-use: <reset>Bạn đã dùng mồi <bold>{bait}.
+bait-use: '<#BFC7D5><reset>Bạn đã dùng mồi <white>{bait}.'
 #Sent when someone tries to use a bait in creative
-bait-survival-limited: <reset>Bạn phải ở <underlined>Sinh tồn<reset> để có thể áp dụng mồi câu.
+bait-survival-limited: '<#BFC7D5><reset>Bạn phải ở <underlined>Sinh tồn<reset> để có thể áp dụng mồi câu.'
 #Shown when /emf toggle is run, to turn off and on respectively.
-toggle-off: <reset>Bạn sẽ không bắt được cá nữa (Cá được custom).
-toggle-on: <reset>Bạn sẽ bắt được cá (Cá được custom).
+toggle-off: '<#BFC7D5><reset>Bạn sẽ không bắt được cá nữa (Cá được custom).'
+toggle-on: '<#BFC7D5><reset>Bạn sẽ bắt được cá (Cá được custom).'
 #When trying to place a skull-fish when this is blocked in config.yml
-place-fish-blocked: <reset>Bạn không thể đặt loại cá này.
+place-fish-blocked: '<#FF5A6E><reset>Bạn không thể đặt loại cá này.'
 admin:
   #Opens an /emf shop for another player
-  open-fish-shop: <reset>Mở shop cho {player}.
+  open-fish-shop: '<#BFC7D5><reset>Mở shop cho <#57C7FF>{player}.'
   #When a fish is given to a player
-  given-player-fish: <reset>Bạn đã đưa người chơi {player} con cá {fish}.
+  given-player-fish: '<#BFC7D5><reset>Bạn đã đưa người chơi <#57C7FF>{player}<#BFC7D5> con cá <white>{fish}.'
   #When a bait is given to a player
-  given-player-bait: <reset>Bạn đã đưa người chơi {player} bait {bait}.
+  given-player-bait: '<#BFC7D5><reset>Bạn đã đưa người chơi <#57C7FF>{player}<#BFC7D5> bait <white>{bait}.'
   #When an admin runs /emf admin bait without a bait name.
-  no-bait-specified: <reset>Tên loại mồi không tồi tại.
+  no-bait-specified: '<#BFC7D5><reset>Tên loại mồi không tồi tại.'
   #When the admin tries the command /emf admin clearbaits whe not holding a fishing rod.
-  must-be-holding-rod: <reset>Bạn cần phải cầm cần câu trên tay.
+  must-be-holding-rod: '<#BFC7D5><reset>Bạn cần phải cầm cần câu trên tay.'
   #When /emf admin clearbaits command is run.
-  all-baits-cleared: <reset>Bạn đã loại bỏ {amount} mồi khỏi cần câu.
+  all-baits-cleared: '<#BFC7D5><reset>Bạn đã loại bỏ <white>{amount}<#BFC7D5> mồi khỏi cần câu.'
   #/emf admin clearbaits is run, but there are no baits on the rod.
-  no-baits-on-rod: <reset>Cần câu này không có mồi.
+  no-baits-on-rod: '<#BFC7D5><reset>Cần câu này không có mồi.'
   #When economy is disabled for the plugin
-  economy-disabled: <reset>Tính năng tiền bạc của EvenMoreFish đã bị tắt.
+  economy-disabled: '<#FF5A6E><reset>Tính năng tiền bạc của EvenMoreFish đã bị tắt.'
   #When the specified player can't be found when using -p: parameter.
-  player-not-found: <reset>{player} không tồn tại.
+  player-not-found: '<#FF5A6E><reset><#57C7FF>{player}<#FF5A6E> không tồn tại.'
   #When the specified number in -q: is not a number.
-  number-format-error: <reset>{amount} không phải là con số.
+  number-format-error: '<#FF5A6E><reset><white>{amount}<#FF5A6E> không phải là con số.'
   #When the specified number in -q: is not within the minecraft stack range (1-64)
-  number-range-error: <reset>{amount} phải là số từ 1-64.
+  number-range-error: '<#BFC7D5><reset><white>{amount}<#BFC7D5> phải là số từ 1-64.'
   #When a command cannot be run from the console
-  cannot-run-on-console: <reset>Lệnh này không thể gửi từ console.
+  cannot-run-on-console: '<#FF5A6E><reset>Lệnh này không thể gửi từ console.'
   #Sent when a competition is already running when using /emf admin competition start
-  competition-already-running: <reset>Đang có cuộc thi khác đang khởi động.
+  competition-already-running: '<#BFC7D5><reset>Đang có cuộc thi khác đang khởi động.'
   #When an invalid competition type is tried to be started
-  competition-type-invalid: '<reset>Đó không phải xếp hạng cuộc thi đúng, các xếp hạng có sẵn: MOST_FISH, LARGEST_FISH, SPECIFIC_FISH'
+  competition-type-invalid: '<#FF5A6E><reset>Đó không phải xếp hạng cuộc thi đúng, các xếp hạng có sẵn: MOST_FISH, LARGEST_FISH, SPECIFIC_FISH'
   #When there's a modrinth update available, don't translate the URL otherwise it won't direct to the correct page.
-  update-available: <reset>Đã có cập nhật mới tại https://modrinth.com/plugin/evenmorefish/versions?l=paper
+  update-available: '<#55D68A><reset>Đã có cập nhật mới tại https://modrinth.com/plugin/evenmorefish/versions?l=paper'
   #When the plugin is reloaded
-  reload: <reset>Đã tải lại plugin hoàn tất.
+  reload: '<#55D68A><reset>Đã tải lại plugin hoàn tất.'
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
 version: 1
+# Fishing Simulator V2 — giai đoạn kiểm chứng, chưa chạy production.
+simulator:
+  generic-error: '<#FF5A6E>Thiếu nội dung thông báo Simulator, hãy xem console.'
+  help: '<#BFC7D5>Lệnh Simulator: status, trace, zone list/info, here, effects on/off, reload, off/on'
+  status: '<#BFC7D5>Simulator: enabled=<white>{enabled}<#BFC7D5>, emergencyOff=<white>{emergency}<#BFC7D5>, mode=<white>{mode}<#BFC7D5>, revision=<white>{revision}<#BFC7D5>, packetEvents=<white>{packets}<#BFC7D5>, hookBridge=<white>{hook}<#BFC7D5>, nativeProbe=<white>{probe}'
+  ambient-status: '<#BFC7D5>Preview cá (admin): active=<white>{active}<#BFC7D5>, cá=<white>{agents}<#BFC7D5> (riêng=<white>{private}<#BFC7D5>), viewers=<white>{viewers}<#BFC7D5>, hiển thị=<white>{visible}<#BFC7D5>, nước=<white>{water}<#BFC7D5>, hàng quét=<white>{queue}<#BFC7D5>, packet=<white>{sent}<#BFC7D5>, hoãn=<white>{deferred}'
+  schooling-status: '<#BFC7D5>Đàn cá (preview): bật=<white>{enabled}<#BFC7D5> | đàn=<white>{schools}<#BFC7D5>, thành viên=<white>{members}<#BFC7D5> | quyết định=<white>{decisions}<#BFC7D5>, ô kiểm tra=<white>{checks}<#BFC7D5>, giới hạn=<white>{budget}<#BFC7D5>, tản đàn=<white>{scatters}'
+  ecosystem-status: '<#BFC7D5>Hệ sinh thái cá (preview): bật=<white>{enabled}<#BFC7D5> | cache=<white>{cache}<#BFC7D5>, mẫu=<white>{samples}<#BFC7D5>, quá ngân sách=<white>{sample-drops}<#BFC7D5>, lỗi=<white>{sample-failures}<#BFC7D5> | cá nhát bỏ chạy=<white>{shy}<#BFC7D5>, particle=<white>{particles}<#BFC7D5>, FX bị bỏ=<white>{fx-drops}'
+  model-status: '<#BFC7D5>Packet fish models: enabled=<white>{enabled}<#BFC7D5>, resource-pack-ready=<white>{loaded}<#BFC7D5>, visual replacements=<white>{swaps}<#BFC7D5>, pack accepted=<white>{accepted}<#BFC7D5>, declined/failed=<white>{rejected}'
+  encounter-status: '<#FF5A6E>Rare encounter (preview): bật=<white>{enabled}<#FF5A6E>, đang hoạt động=<white>{active}<#FF5A6E>, tạo=<white>{spawned}<#FF5A6E>, đã thấy=<white>{observed}<#FF5A6E>, hết hạn=<white>{expired}<#FF5A6E>, bắt thành công=<white>{completed}<#FF5A6E>, particle=<white>{particles}<#FF5A6E>, bỏ=<white>{dropped}<#FF5A6E>, lỗi=<white>{failures}'
+  encounter-invalid: '<#FF5A6E>Loại encounter không hợp lệ. <#BFC7D5>Dùng rare_presence, golden, shadow, ghost, rare_school.'
+  encounter-preview-ok: '<#55D68A>Đã gắn hiệu ứng <white>{type}<#55D68A> vào cá EMF thật đang hiển thị (không thưởng).'
+  encounter-preview-unavailable: '<#FF5A6E>Không có cá hiếm đủ điều kiện/đang hiển thị, hoặc encounter preview đang tắt.'
+  trace-header: '<#FFA94D>Nhật ký probe gần nhất (<white>{count}<#FFA94D> bản ghi, hiện tối đa 15):'
+  trace-row: '<white>{row}'
+  metrics: '{prefix}<gray>Vùng={zones} | Phao chờ={pending} | Phiên probe={sessions} | Chặn loot vanilla={catches} | Bite ngoài ý muốn={bites} | Reel thử nghiệm={reels}</gray>'
+  zone-list: '<#FFA94D>Danh sách vùng Simulator (<white>{count}<#FFA94D>), trang <white>{page}<#FFA94D>/<white>{pages}<#FFA94D>:'
+  zone-item: '<#BFC7D5>- <white>{id}<#BFC7D5>: loại=<white>{type}<#BFC7D5>, world=<#5899ee>{world}<#BFC7D5>, priority=<white>{priority}<#BFC7D5>, bật=<white>{enabled}<#BFC7D5>, chặn=<white>{deny}'
+  zone-info: '<#FFA94D>Vùng <white>{id}<#FFA94D>: loại=<white>{type}<#FFA94D>, world=<#5899ee>{world}<#FFA94D>, region=<white>{region}<#FFA94D>, priority=<white>{priority}<#FFA94D>, bật=<white>{enabled}<#FFA94D>, chặn=<white>{deny}'
+  zone-not-found: '<#FF5A6E>Không tìm thấy vùng Simulator: <white>{id}'
+  here: '<#FFA94D>Vị trí: world=<#5899ee>{world}<#FFA94D>, tọa độ=(<#5899ee>{x}<#FFA94D>,<#5899ee>{y}<#FFA94D>,<#5899ee>{z}<#FFA94D>), vùng=<#5899ee>{zone}<#FFA94D>, chặn=<white>{denied}'
+  here-player-only: '<#FF5A6E>Chỉ người chơi mới kiểm tra được vị trí.'
+  reload-ok: '<#55D68A>Đã tải lại cấu hình. Simulator và dọn phiên probe.'
+  reload-failed: '<#FF5A6E>Simulator config không hợp lệ; tiếp tục dùng cấu hình cũ.'
+  emergency-off: '<#55D68A>Đã tắt khẩn cấp Simulator và dọn các phiên probe.'
+  emergency-on: '<#55D68A>Đã mở lại router, Simulator production vẫn chưa được bật.'
+  no-permission: '<#FF5A6E>Bạn không có quyền sử dụng hành động Simulator này.'
+  unavailable-deny: '<#FF5A6E>Simulator chưa khả dụng tại vùng này; lần thả bị từ chối.'
+  ai-interested: '<#BFC7D5>🐟 Một con cá đang chú ý tới mồi...'
+  ai-bite: '<#55D68A>⚡ Cá cắn! Kéo cần ngay! <#BFC7D5>(<#5899ee>{time}<#55D68A> tick)'
+  ai-success-preview: '<#55D68A>✅ Kéo chuẩn! <white>Chỉ là AI preview — không nhận cá hoặc EXP.'
+  ai-success-committed: '<#55D68A>✅ Đã bắt cá thành công! Đã nhận vật phẩm EMF (chế độ admin test).'
+  ai-commit-rejected: '<#FF5A6E>⛔ Lượt câu bị từ chối bởi điều kiện hoặc event của EMF. Không mất mồi.'
+  ai-commit-failed: '<#BFC7D5>️ Lỗi trao thưởng. Báo admin kiểm tra console; không tự phát thưởng lại.'
+  reward-status: '<#FF5A6E>Reward bridge (admin test): enabled=<white>{enabled}<#FF5A6E>, paper-ack=<white>{verified}<#FF5A6E>, cần dùng legacy loot=<white>{legacy}<#FF5A6E>, thành công=<white>{delivered}<#FF5A6E>, bị từ chối=<white>{rejected}<#FF5A6E>, lỗi delivery=<white>{failed}'
+  ai-early: '<#FF5A6E>❌ Kéo quá sớm, cá đã chạy mất!'
+  ai-missed: '<#FF5A6E>❌ Quá muộn! Cá đã bơi mất.'
+  ai-no-target: '<#BFC7D5>Không có cá hợp lệ tiếp cận phao. Đã đóng preview.'
+  ai-lost: '<#BFC7D5>Cá biến mất hoặc phiên thử nghiệm đã bị hủy.'
+  ai-status: '<#FF5A6E>AI preview: bật=<white>{enabled}<#FF5A6E>, phiên=<white>{active}<#FF5A6E>, thành công (preview/test)=<white>{success}<#FF5A6E>, thất bại=<white>{failure}<#FF5A6E>, quá hạn=<white>{missed}'
+
+# Phase 8 Simulator visual preview messages
+  effects-on: '<#55D68A>Đã bật hiệu ứng Simulator Preview cho phiên này.'
+  effects-off: '<#55D68A>Đã tắt hiệu ứng Simulator Preview cho phiên này.'
+  effects-status: '<#BFC7D5>Hiệu ứng: bật=<white>{enabled}<#BFC7D5> | cinematic=<white>{cinematics}<#BFC7D5> | HUD=<white>{hud}<#BFC7D5> | packet=<white>{sent}<#BFC7D5> | lỗi=<white>{failed}<#BFC7D5> | từ chối=<white>{rejected}<#BFC7D5> | cue=<white>{cues}<#BFC7D5> | pending destroy=<white>{pending}'
+  presentation-status: '<#BFC7D5>HUD: đã gửi=<white>{sent}<#BFC7D5> | loại session cũ=<white>{stale}<#BFC7D5> | chặn ưu tiên thấp=<white>{priority}<#BFC7D5> | lỗi lưu cấu hình=<white>{io-failures}'
+  presentation-bite: '<#BFC7D5>🎣 CÁ CẮN! <white>{bar} <#5899ee>{time} <#BFC7D5>• Chuột phải để kéo'
+  presentation-current: '<#BFC7D5>HUD Simulator: <white>{profile} <#BFC7D5>• /emf hud off|minimal|balanced|cinematic|reduced-motion'
+  presentation-changed: '<#55D68A>Đã đặt HUD Simulator thành <white>{profile}<#BFC7D5>. Đang lưu thiết lập bất đồng bộ.'
+  ai-bite-hud: '<#55D68A>🎣 KÉO NGAY! <white>{bar} <#5899ee>{time}<#55D68A> tick'
+
+# Phase 9 diagnostic messages. The English baseline is used for untranslated locales.
+  performance-status: '<#BFC7D5>Hiệu năng Preview: TB=<white>{avg-ms}ms<#BFC7D5> đỉnh=<white>{max-ms}ms<#BFC7D5> trên 2ms=<white>{slow}<#BFC7D5> | đỉnh packet=<white>{peak}<#BFC7D5> chờ xóa=<white>{pending}<#BFC7D5> | lỗi=<white>{failures}<#BFC7D5> lỗi xóa=<white>{destroy-failures}<#BFC7D5> | bỏ quét nước=<white>{jobs}<#BFC7D5> | lỗi ticker=<white>{crashes}<#BFC7D5> cuối=<white>{reason}'
+  doctor-gates: '<#BFC7D5>Chẩn đoán Simulator: PacketEvents=<white>{packet}<#BFC7D5>, native hook=<white>{hook}<#BFC7D5>, bật=<white>{enabled}<#BFC7D5>, hiển thị cá=<white>{preview}<#BFC7D5>, probe=<white>{probe}<#BFC7D5>, reward admin=<white>{reward}<#BFC7D5>, admin khai báo Paper gate=<white>{declared}<#BFC7D5>, dừng khẩn cấp=<white>{emergency}'
+  doctor-warning: '<#FF5A6E>Lệnh này không thể chứng minh G3/G5/G7 đã đạt. Bắt buộc build Gradle và test Paper/client thật; chưa bật reward cho player.'
+
+# Phase 11 — Premium cinematic localized visuals (V2)
+  cinematic-reveal-title: '<#FFA94D>✦ <white>{rarity}<#FFA94D> ✦'
+  cinematic-reveal-subtitle: '<#BFC7D5>🐟 <white>{fish}'
+  cinematic-preview-invalid: '<#FF5A6E>Preset không hợp lệ: common, rare, epic, legendary.'
+  cinematic-preview-water: '<#FFA94D>Hãy nhìn vào một khối nước cách tối đa 12 block để xem cinematic.'
+  cinematic-preview-started: '<#55D68A>Đang phát cinematic <white>{preset}<#55D68A> (chỉ hình ảnh, không thưởng).'
+  cinematic-preview-unavailable: '<#FF5A6E>Không thể phát preview: kiểm tra simulator, effects, cinematic, PacketEvents, quyền và giới hạn.'
+  cinematic-preview-stopped: '<#55D68A>Đã dừng cinematic của bạn.'
+  premium-status: '<#BFC7D5>Cinematic V2: bật=<white>{enabled}<#BFC7D5> | đã phát=<white>{scenes}<#BFC7D5> | stage cue=<white>{cues}<#BFC7D5> | trail=<white>{trails}<#BFC7D5> | cue lỗi=<white>{failed}'
+
+help-format: "<white>{command} - {description}"
+
+help-list:
+  fish: "<#BFC7D5>Liệt kê cá thuộc một độ hiếm."
+  rarities: "[noPrefix]Liệt kê các độ hiếm."
+# Competition help (/emf admin competition help)
+
+leaderboard:
+  active-header: "<white>{competition} · {type}<#BFC7D5> · Còn <#5899ee>{time-left}s"
+  personal-rank: "<#BFC7D5>Hạng của bạn: <white>#{position}"
+  personal-unranked: "<#FF5A6E>Bạn chưa có hạng. Hãy câu cá để tham gia!"

@@ -1,11 +1,31 @@
 id: default
 disabled: false
 allowed-rarities: ALL
+
+# Custom rod attributes & stats
+stats:
+  luck-modifier: 0.30
+  lure-modifier: 0.25
+  double-catch-chance: 0.15
+  exp-multiplier: 1.5
+
+allow-baits: true
+unbreakable: true
+
 item:
   material: FISHING_ROD
-  displayname: <gradient:#E6F9FF:#8FD9FB>EvenMoreFish <yellow>Fishing Rod
+  displayname: "<gradient:#00E5FF:#1288FF><bold>Cần Câu Thần Thoại</gradient>"
   glowing: true
   lore:
-    - ''
-    - <gray>Catch </gray><yellow>custom </yellow><gray>fish using
-    - <gray>this fishing rod.
+    - ' '
+    - '<dark_gray> ○ <white>Độ hiếm: <gold>Huyền Thoại</gold>'
+    - '<dark_gray> ○ <white>Đặc tính: <aqua>Không Thể Hỏng</aqua>'
+    - ' '
+    - '<dark_gray> ○ <white>Chỉ số sức mạnh:'
+    - '  <dark_gray> -<yellow> May Mắn:</yellow> <green>+30%</green>'
+    - '  <dark_gray> -<aqua> Tốc Độ Cắn Câu:</aqua> <green>+25%</green>'
+    - '  <dark_gray> -<light_purple> Nhân Đôi Cá:</light_purple> <green>15%</green>'
+    - '  <dark_gray> -<gold> Kinh Nghiệm (EXP):</gold> <green>x1.5</green>'
+    - ' '
+    - '<#C797FF>Sử dụng cần câu này'
+    - '<white>để câu những loài thủy quái quý hiếm!'

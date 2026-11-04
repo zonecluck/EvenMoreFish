@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.placeholders.UserReportPlaceholderTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:53:30.026Z" hostname="LEDAT" time="0.016">
+  <properties/>
+  <testcase name="totalMoneyEarnedFormatsLargeValuesToTwoDecimals()" classname="com.oheers.fish.placeholders.UserReportPlaceholderTest" time="0.003"/>
+  <testcase name="placeholdersReturnZeroValuesFromExistingEmptyReport()" classname="com.oheers.fish.placeholders.UserReportPlaceholderTest" time="0.004"/>
+  <testcase name="placeholdersReturnDefaultsWhenUserReportIsMissing()" classname="com.oheers.fish.placeholders.UserReportPlaceholderTest" time="0.002"/>
+  <testcase name="totalFishSoldSupportsExplicitUuidIdentifiers()" classname="com.oheers.fish.placeholders.UserReportPlaceholderTest" time="0.001"/>
+  <testcase name="totalFishSoldHandlesVeryLargeAmounts()" classname="com.oheers.fish.placeholders.UserReportPlaceholderTest" time="0.001"/>
+  <testcase name="totalFishSoldUsesOfflinePlayerUuidForPlayerIdentifiers()" classname="com.oheers.fish.placeholders.UserReportPlaceholderTest" time="0.001"/>
+  <testcase name="totalFishSoldReturnsNullForInvalidIdentifierSuffix()" classname="com.oheers.fish.placeholders.UserReportPlaceholderTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

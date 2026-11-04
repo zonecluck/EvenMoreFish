@@ -20,10 +20,13 @@ import com.oheers.fish.baits.model.FishChance;
 import com.oheers.fish.baits.model.RarityChance;
 import com.oheers.fish.baits.model.WeightModifier;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.competition.buff.CompetitionBuffManager;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.exceptions.MaxBaitReachedException;
 import com.oheers.fish.exceptions.MaxBaitsReachedException;
 import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.fishing.Processor;
+import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.items.ItemFactory;
@@ -337,12 +340,22 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return chooseFish(player, location, context);
     }
 
-    public @NotNull Fish chooseFish(@NotNull Player player, @NotNull Location location, @NotNull RequirementContext requirementContext) {
-        Rarity selectedRarity = selectRarityWithModifiers(player, requirementContext);
-        Fish selectedFish = selectFishFromRarity(selectedRarity, player, location);
+    public @Nullable Fish chooseFish(@NotNull Player player, @NotNull Location location, @NotNull RequirementContext requirementContext) {
+        return chooseFish(player, location, requirementContext, null, null);
+    }
 
+    /**
+     * Resolve bait modifiers together with custom rod restrictions. Selection is
+     * side-effect-free; bait is only consumed after the catch is accepted.
+     */
+    public @Nullable Fish chooseFish(@NotNull Player player,
+                                     @NotNull Location location,
+                                     @NotNull RequirementContext requirementContext,
+                                     @Nullable CustomRod customRod,
+                                     @Nullable Processor<?> processor) {
+        Rarity selectedRarity = selectRarityWithModifiers(player, requirementContext, customRod);
+        Fish selectedFish = selectFishFromRarity(selectedRarity, player, location, customRod, processor);
         processBaitUsage(player, selectedRarity, selectedFish);
-
         return selectedFish;
     }
 
@@ -354,17 +367,41 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return baitData.fishModifiers();
     }
 
-    private @Nullable Rarity selectRarityWithModifiers(@NotNull Player player, @NotNull RequirementContext requirementContext) {
+    private @Nullable Rarity selectRarityWithModifiers(@NotNull Player player,
+                                                       @NotNull RequirementContext context,
+                                                       @Nullable CustomRod customRod) {
+        com.oheers.fish.fishing.rods.MMOItemsRodStats mmoStats = com.oheers.fish.fishing.rods.MMOItemsRodStats.resolve(player);
+        double buffLuck = CompetitionBuffManager.getInstance().getLuckBonus(player.getUniqueId());
+        double rodLuck = (customRod == null ? 0 : customRod.getLuckModifier()) + mmoStats.luckModifier();
+        double totalLuck = buffLuck + rodLuck;
+        double rareFishBonus = mmoStats.rareFishModifier();
         return fishManager.getWeightedRarity(
             player,
             Set.copyOf(fishManager.getRarityMap().values()),
-            this::getEffectiveRarityWeight,
-            null,
-            requirementContext
+            rarity -> {
+                double weight = getEffectiveRarityWeight(rarity);
+                if (customRod != null) {
+                    weight *= customRod.getRarityMultipliers().getOrDefault(rarity.getId(), 1.0);
+                }
+                boolean isCommon = "common".equalsIgnoreCase(rarity.getId());
+                if (!isCommon && totalLuck > 0 && rarity.getIndex() > 0) {
+                    weight *= 1.0 + totalLuck * (rarity.getIndex() * 0.4);
+                }
+                if (!isCommon && rareFishBonus > 0 && (rarity.getIndex() >= 3 || (rarity.getWeight() > 0 && rarity.getWeight() <= 5.0))) {
+                    weight *= 1.0 + rareFishBonus * (Math.max(1, rarity.getIndex() - 1) * 0.45);
+                }
+                return weight;
+            },
+            customRod,
+            context
         );
     }
 
-    private @Nullable Fish selectFishFromRarity(@Nullable Rarity rarity, @NotNull Player player, @NotNull Location location) {
+    private @Nullable Fish selectFishFromRarity(@Nullable Rarity rarity,
+                                                @NotNull Player player,
+                                                @NotNull Location location,
+                                                @Nullable CustomRod customRod,
+                                                @Nullable Processor<?> processor) {
         if (rarity == null) {
             return null;
         }
@@ -374,8 +411,8 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
             player,
             this::getEffectiveFishWeight,
             true,
-            null,
-            null
+            processor,
+            customRod
         );
     }
 
@@ -395,9 +432,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         fish.setWasBaited(true);
         fish.setFisherman(player);
 
-        if (shouldAlertUsage(rarity, fish)) {
-            alertUsage(player);
-        }
+        // Alert/charge only in handleFish() after EMFFishCaughtEvent is accepted.
     }
 
     private boolean shouldAlertUsage(@Nullable Rarity rarity, @NotNull Fish fish) {
@@ -429,11 +464,15 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
 
             fishingRod.setItemMeta(result.fishingRod().getItemMeta());
             EvenMoreFish.getInstance().getMetricsManager().incrementBaitsUsed(1);
+
+            if (shouldAlertUsage(fish.getRarity(), fish)) {
+                alertUsage(player);
+            }
         } catch (MaxBaitReachedException | MaxBaitsReachedException e) {
             logger.log(Level.WARNING, e.getMessage());
             player.sendMessage(e.getConfigMessage().getMessage().getComponentMessage(player));
-        } catch (NullPointerException exception) {
-            logger.log(Level.SEVERE, exception.getMessage(), exception);
+        } catch (Exception exception) {
+            logger.log(Level.SEVERE, "An error occurred while consuming bait: " + getId(), exception);
         }
     }
 
@@ -493,7 +532,9 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     }
 
     public @NotNull EMFSingleMessage format(@NotNull String name) {
-        EMFSingleMessage message = getFormat();
+        String rawFormat = getConfig().getString("format", "<yellow>{name}");
+        String resolved = rawFormat.replace("{name}", name).replace("<name>", name);
+        EMFSingleMessage message = EMFSingleMessage.fromString(resolved);
         message.setVariable("{name}", name);
         return message;
     }
@@ -733,7 +774,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      */
     @Override
     public boolean attemptPurchase(@NotNull Player player) {
-        if (economy == null || economy.isEmpty()) {
+        if (economy == null || economy.isEmpty() || !economy.isEnabled()) {
             ConfigMessage.BAIT_NOT_FOR_SALE.getMessage().send(player);
             return false;
         }

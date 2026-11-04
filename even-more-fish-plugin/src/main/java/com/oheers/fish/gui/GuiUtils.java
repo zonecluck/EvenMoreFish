@@ -8,9 +8,11 @@ import com.oheers.fish.gui.guis.BaitsGui;
 import com.oheers.fish.gui.guis.FishJournalGui;
 import com.oheers.fish.gui.guis.MainMenuGui;
 import com.oheers.fish.gui.guis.SellGui;
+import com.oheers.fish.gui.guis.StorageFishShopGui;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.selling.SellHelper;
+import com.oheers.fish.selling.TurtleStorageFishBridge;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiPageElement;
 import de.themoep.inventorygui.InventoryGui;
@@ -111,8 +113,12 @@ public class GuiUtils {
             if (!(humanEntity instanceof Player player)) {
                 return;
             }
-            new SellGui(player, SellGui.SellState.NORMAL, null).open();
             clearHistory(click.getWhoClicked());
+            if (TurtleStorageFishBridge.isAvailable()) {
+                StorageFishShopGui.open(player);
+            } else {
+                new SellGui(player, SellGui.SellState.NORMAL, null).open();
+            }
         });
         newActionMap.put("show-command-help", (gui, click) -> {
             click.getWhoClicked().closeInventory();
@@ -132,6 +138,7 @@ public class GuiUtils {
                 return;
             }
             if (gui instanceof SellGui sellGui) {
+                sellGui.setTransitioning(true);
                 new SellGui(player, SellGui.SellState.CONFIRM, sellGui.getFishInventory()).open();
                 return;
             }
@@ -141,6 +148,7 @@ public class GuiUtils {
         newActionMap.put("sell-shop", (gui, click) -> {
             HumanEntity humanEntity = click.getWhoClicked();
             if (gui instanceof SellGui sellGui && humanEntity instanceof Player player) {
+                sellGui.setTransitioning(true);
                 new SellGui(player, SellGui.SellState.CONFIRM, sellGui.getFishInventory()).open();
                 return;
             }
@@ -152,6 +160,9 @@ public class GuiUtils {
             if (!(humanEntity instanceof Player player)) {
                 return;
             }
+            if (gui instanceof SellGui sellGui) {
+                sellGui.setTransitioning(true);
+            }
             new SellHelper(click.getWhoClicked().getInventory(), player).sell();
             if (gui != null) {
                 gui.doRescue();
@@ -159,6 +170,9 @@ public class GuiUtils {
             closeGui(click.getWhoClicked());
         });
         newActionMap.put("sell-shop-confirm", (gui, click) -> {
+            if (gui instanceof SellGui sellGui) {
+                sellGui.setTransitioning(true);
+            }
             SellHelper.sellInventoryGui(click.getGui(), click.getWhoClicked());
             if (gui != null) {
                 gui.doRescue();
@@ -181,6 +195,15 @@ public class GuiUtils {
                 gui.doRescue();
             }
             new FishJournalGui(click.getWhoClicked(), null).open();
+            clearHistory(click.getWhoClicked());
+        });
+        newActionMap.put("open-autofish-menu", (gui, click) -> {
+            if (gui != null) {
+                gui.doRescue();
+            }
+            if (click.getWhoClicked() instanceof Player player) {
+                com.oheers.fish.autofish.AutoFishMenuManager.getInstance().open(player);
+            }
             clearHistory(click.getWhoClicked());
         });
         // Add page actions so third party plugins cannot register their own.

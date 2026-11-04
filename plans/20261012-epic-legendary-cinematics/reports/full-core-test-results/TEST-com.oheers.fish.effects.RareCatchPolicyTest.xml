@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.effects.RareCatchPolicyTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-12T15:53:26.656Z" hostname="LEDAT" time="0.007">
+  <properties/>
+  <testcase name="configuredRareIdsAndCustomRareHeuristicWork()" classname="com.oheers.fish.effects.RareCatchPolicyTest" time="0.002"/>
+  <testcase name="customCommonExclusionWinsOverHeuristicAndInclude()" classname="com.oheers.fish.effects.RareCatchPolicyTest" time="0.002"/>
+  <testcase name="commonCannotBecomeCinematicThroughWeightIndexOrExplicitInclude()" classname="com.oheers.fish.effects.RareCatchPolicyTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

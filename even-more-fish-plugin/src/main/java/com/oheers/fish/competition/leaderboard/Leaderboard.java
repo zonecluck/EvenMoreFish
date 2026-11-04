@@ -156,7 +156,13 @@ public class Leaderboard implements LeaderboardHandler {
             // If a tie, compare by the time of the most recent catch
             .thenComparing(Comparator.comparingLong(CompetitionEntry::getTime).reversed());
 
-        return type.shouldReverseLeaderboard() ? comparator : comparator.reversed();
+        Comparator<CompetitionEntry> ordered = type.shouldReverseLeaderboard() ? comparator : comparator.reversed();
+        return ordered.thenComparing(CompetitionEntry::getPlayer);
+    }
+    public static String rowColour(List<String> colours, int position) {
+        if (colours == null || colours.isEmpty()) return "<white>{name}</white>";
+        String colour = colours.get(Math.min(Math.max(0, position - 1), colours.size() - 1));
+        return colour == null || colour.isBlank() ? "<white>{name}</white>" : colour;
     }
 
 }

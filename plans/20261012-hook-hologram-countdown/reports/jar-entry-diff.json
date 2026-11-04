@@ -1,0 +1,18 @@
+{
+  "sha256": "0f21fb8eeb4140afd9467114c701e731db13ee1655ffd58f9a59965d40337271",
+  "changed": [
+    "com/oheers/fish/fishing/FishingHookHolograms$HologramState.class",
+    "com/oheers/fish/fishing/FishingHookHolograms$HookHologram.class",
+    "com/oheers/fish/fishing/FishingHookHolograms.class"
+  ],
+  "added": [
+    "com/oheers/fish/fishing/HookCountdownLine.class",
+    "com/oheers/fish/fishing/NativeHookTimers$1.class",
+    "com/oheers/fish/fishing/NativeHookTimers$Access.class",
+    "com/oheers/fish/fishing/NativeHookTimers$Phase.class",
+    "com/oheers/fish/fishing/NativeHookTimers$Reading.class",
+    "com/oheers/fish/fishing/NativeHookTimers.class"
+  ],
+  "removed": [],
+  "unexpected": []
+}

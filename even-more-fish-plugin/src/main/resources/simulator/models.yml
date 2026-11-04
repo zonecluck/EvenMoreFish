@@ -1,0 +1,24 @@
+# EvenMoreFish Simulator Phase 15: CLIENT-SIDE fish models (STAGING ONLY)
+# Requires PacketEvents, Paper 1.21.4+ and the exact configured pack UUID reported SUCCESSFULLY_LOADED.
+# Do not enable until item_display protocol is verified with the target Paper/PacketEvents/client.
+# When pack is missing/declined, all viewers receive the original vanilla fish visuals.
+# FishKey, rarity, weight, catch rewards and competition remain unchanged.
+config-version: 1
+enabled: false
+
+resource-pack:
+  # UUID used by your server's resource-pack publisher/API. NEVER use a random UUID here
+  # unless it is also the ID sent with the actual pack to Minecraft clients.
+  # Change the UUID when the pack contents change, to invalidate old acknowledgements.
+  id: '00000000-0000-0000-0000-000000000000'
+
+# Exact key: '<EMF rarity ID>:<EMF fish name>'. Case-insensitive, spaces supported.
+fish-overrides: {}
+# 'Legendary:Golden Koi':
+#   material: PAPER
+#   item-model: 'ledat:fish/golden_koi'  # assets/ledat/items/fish/golden_koi.json
+#   scale: 0.75                        # 0.05..3
+#   interpolation-ticks: 2            # 0..8
+
+# Fallback when there is no exact key match. This never changes actual rarity.
+rarity-overrides: {}

@@ -1,0 +1,70 @@
+# EvenMoreFish Simulator V2 — Phase 8 visual cues and catch cinematic.
+# This is an ADMIN PREVIEW feature, not a production reward switch.
+# Simulator, ambient-preview, native-hook-probe and ai-preview must be enabled first.
+# All cues are sent to the angler only, avoiding private fish leaks and particle spam.
+# No cue or animation grants items, money, XP, bait, or competition progress.
+config-version: 1
+
+effects:
+  # Visual-only simulator cues and the premium catch cinematic.
+  enabled: true
+
+hud:
+  # Actionbar only. No new TextDisplay entities or per-player repeating tasks.
+  enabled: true
+  interval-ticks: 5       # 4..20; bite countdown at most 5 updates/second
+  segments: 12           # 4..24; visual progress over the response window
+  filled-glyph: '▰'
+  empty-glyph: '▱'
+
+cinematic:
+  # Short player-only packet fish rising from the float to the angler.
+  # PacketEvents is required, no camera lock or Bukkit entity spawn.
+  enabled: true
+  max-concurrent: 4          # 1..8 animations per server
+  packet-budget-per-tick: 12 # 2..32 outgoing FX packets/tick; separate from ambient budget
+  max-distance: 32           # 4..48 blocks; cancel if viewer moves away
+
+# Preset keys are fixed; rename neither common/rare/epic/legendary.
+# sound: NONE or a Bukkit Sound enum (e.g. ENTITY_EXPERIENCE_ORB_PICKUP).
+# particle: NONE / SPLASH / BUBBLE_POP / FISHING / HAPPY_VILLAGER / CLOUD / CRIT / ENCHANT.
+# volume: 0..2, pitch: 0.5..2, count: 0..24, duration-ticks: 4..40, arc-height: 0..3.
+presets:
+  common:
+    interest: {sound: NONE, particle: BUBBLE_POP, count: 3, volume: 0.5, pitch: 1.0}
+    bite: {sound: ENTITY_FISHING_BOBBER_SPLASH, particle: SPLASH, count: 7, volume: 0.7, pitch: 1.1}
+    success: {sound: ENTITY_EXPERIENCE_ORB_PICKUP, particle: HAPPY_VILLAGER, count: 7, volume: 0.7, pitch: 1.1}
+    failure: {sound: BLOCK_NOTE_BLOCK_BASS, particle: BUBBLE_POP, count: 5, volume: 0.4, pitch: 0.7}
+    cinematic: {duration-ticks: 14, arc-height: 0.5}
+  rare:
+    interest: {sound: NONE, particle: BUBBLE_POP, count: 5, volume: 0.5, pitch: 1.0}
+    bite: {sound: ENTITY_FISHING_BOBBER_SPLASH, particle: SPLASH, count: 10, volume: 0.8, pitch: 1.2}
+    success: {sound: ENTITY_PLAYER_LEVELUP, particle: HAPPY_VILLAGER, count: 10, volume: 0.7, pitch: 1.2}
+    failure: {sound: BLOCK_NOTE_BLOCK_BASS, particle: BUBBLE_POP, count: 6, volume: 0.5, pitch: 0.7}
+    cinematic: {duration-ticks: 20, arc-height: 0.8}
+  epic:
+    interest: {sound: NONE, particle: BUBBLE_POP, count: 7, volume: 0.6, pitch: 1.0}
+    bite: {sound: ENTITY_FISHING_BOBBER_SPLASH, particle: SPLASH, count: 12, volume: 0.9, pitch: 1.3}
+    success: {sound: ENTITY_PLAYER_LEVELUP, particle: ENCHANT, count: 15, volume: 0.9, pitch: 1.4}
+    failure: {sound: BLOCK_NOTE_BLOCK_BASS, particle: CLOUD, count: 6, volume: 0.5, pitch: 0.8}
+    cinematic: {duration-ticks: 28, arc-height: 1.1}
+  legendary:
+    interest: {sound: NONE, particle: BUBBLE_POP, count: 8, volume: 0.6, pitch: 1.0}
+    bite: {sound: ENTITY_FISHING_BOBBER_SPLASH, particle: SPLASH, count: 15, volume: 1.0, pitch: 1.45}
+    success: {sound: UI_TOAST_CHALLENGE_COMPLETE, particle: ENCHANT, count: 22, volume: 1.0, pitch: 1.1}
+    failure: {sound: BLOCK_NOTE_BLOCK_BASS, particle: CLOUD, count: 8, volume: 0.6, pitch: 0.8}
+    cinematic: {duration-ticks: 36, arc-height: 1.5}
+
+# EMF rarity IDs do not have to match presets; configure them here.
+rarity-presets:
+  Common: common
+  Uncommon: rare
+  Rare: rare
+  Epic: epic
+  Legendary: legendary
+  Mythical: legendary
+
+# Optional override by "rarityId:fishId", exactly as in the EMF fish catalog.
+# fish-overrides:
+#   'Legendary:Golden Carp': legendary
+fish-overrides: {}

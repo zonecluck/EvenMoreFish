@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oheers.fish.fishing.pool.FishingLakeServiceTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-12T11:10:18.035Z" hostname="LEDAT" time="2.38">
+  <properties/>
+  <testcase name="dynamicSpeedReducesNativeRemainingWaitOnceAndLeavingRestoresElapsedCountdown()" classname="com.oheers.fish.fishing.pool.FishingLakeServiceTest" time="2.021"/>
+  <testcase name="dryUnloadedAndWrongWorldHooksCannotResolveProvider()" classname="com.oheers.fish.fishing.pool.FishingLakeServiceTest" time="0.042"/>
+  <testcase name="recastReplacesOldHookAndUntrackOldDoesNotRemoveNewCast()" classname="com.oheers.fish.fishing.pool.FishingLakeServiceTest" time="0.083"/>
+  <testcase name="noPoolsAndNoHooksNeedNoTickerAndTerminalStopsTheCastTicker()" classname="com.oheers.fish.fishing.pool.FishingLakeServiceTest" time="0.051"/>
+  <testcase name="missingDisabledAndThrowingProvidersUseOneStaticPool()" classname="com.oheers.fish.fishing.pool.FishingLakeServiceTest" time="0.081"/>
+  <testcase name="dynamicLakeWinsWithoutStackingAndUsesActualCasterAndHook()" classname="com.oheers.fish.fishing.pool.FishingLakeServiceTest" time="0.034"/>
+  <testcase name="lakeBonusRejectsNonfiniteAndOutOfContractValues()" classname="com.oheers.fish.fishing.pool.FishingLakeServiceTest" time="0.049"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

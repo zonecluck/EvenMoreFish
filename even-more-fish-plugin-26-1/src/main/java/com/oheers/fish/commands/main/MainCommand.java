@@ -9,6 +9,7 @@ import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.MainCommandProvider;
 import com.oheers.fish.commands.admin.AdminCommand;
+import com.oheers.fish.commands.main.subcommand.AutoFishSubcommand;
 import com.oheers.fish.commands.main.subcommand.JournalSubcommand;
 import com.oheers.fish.commands.main.subcommand.ShopSubcommand;
 import com.oheers.fish.commands.main.subcommand.ToggleSubcommand;
@@ -49,6 +50,8 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
             .then(admin())
             .then(shop())
             .then(journal())
+            .then(new JournalSubcommand(indexName()).get())
+            .then(new AutoFishSubcommand(autofishName()).get())
             .then(toggle())
             .then(next())
             .then(help())

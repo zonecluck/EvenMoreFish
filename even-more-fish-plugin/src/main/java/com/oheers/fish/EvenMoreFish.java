@@ -16,8 +16,18 @@ import com.oheers.fish.competition.CompetitionQueue;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.events.McMMOTreasureEvent;
 import com.oheers.fish.fishing.items.FishManager;
+import com.oheers.fish.fishing.simulator.SimulatorModule;
+import com.oheers.fish.effects.VanillaCatchCinematicService;
+import com.oheers.fish.fishing.pool.FishingPoolService;
+import com.oheers.fish.fishing.pool.HookedFishPacketService;
+import com.oheers.fish.fishing.simulator.engine.NativeHookBridge;
+import com.oheers.fish.fishing.simulator.visual.PacketTransport;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.fishing.rods.RodManager;
+import com.oheers.fish.autofish.AutoFishMenuManager;
+import com.oheers.fish.autofish.AutoFishingService;
+import com.oheers.fish.gui.guis.FishIndexMenuManager;
+import com.oheers.fish.gui.guis.StorageFishShopGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.plugin.ConfigurationManager;
 import com.oheers.fish.plugin.DependencyManager;
@@ -25,6 +35,7 @@ import com.oheers.fish.plugin.EventManager;
 import com.oheers.fish.plugin.IntegrationManager;
 import com.oheers.fish.plugin.MetricsManager;
 import com.oheers.fish.plugin.PluginDataManager;
+import com.oheers.fish.selling.TurtleStorageFishBridge;
 import com.oheers.fish.update.UpdateChecker;
 import de.themoep.inventorygui.InventoryGui;
 import de.tr7zw.changeme.nbtapi.NBT;
@@ -66,6 +77,11 @@ public abstract class EvenMoreFish extends EMFPlugin {
     private IntegrationManager integrationManager;
     private EventManager eventManager;
     private MetricsManager metricsManager;
+    private SimulatorModule simulatorModule;
+    private VanillaCatchCinematicService catchCinematics;
+    private FishingPoolService fishingPools;
+    private HookedFishPacketService hookedFishPackets;
+    private AutoFishingService autoFishing;
 
     private static EvenMoreFish instance;
     private static TaskScheduler scheduler;
@@ -127,6 +143,16 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
         this.pluginDataManager = new PluginDataManager(this);
 
+        // Simulator is an optional engine router. No second fishing listener is registered.
+        PacketTransport fishingTransport = createPacketTransport();
+        this.simulatorModule = new SimulatorModule(this, createNativeHookBridge(), fishingTransport);
+        this.simulatorModule.start();
+        this.catchCinematics = new VanillaCatchCinematicService(this);
+        this.fishingPools = new FishingPoolService(this);
+        this.fishingPools.reload();
+        this.hookedFishPackets = new HookedFishPacketService(this, fishingTransport);
+        this.autoFishing = new AutoFishingService(this);
+
         this.eventManager = new EventManager(this);
         this.eventManager.registerCoreListeners();
         this.eventManager.registerOptionalListeners();
@@ -138,6 +164,8 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
         // Always load this after BaitManager
         RodManager.getInstance().load();
+        // Fish catalog is available now; preview never mutates templates or grants rewards.
+        this.simulatorModule.onCatalogReady();
 
         // Always load this after RodManager
         this.competitionQueue = new CompetitionQueue();
@@ -158,16 +186,77 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
         registerCommands();
 
+        // Preload GUI & selling classes into the classloader to prevent NoClassDefFoundError if the jar is replaced at runtime
+        preloadRuntimeClasses();
+
         // Attempt to resume a competition if the temporary file exists.
         Competition.resumeFromFile();
 
         getLogger().info(() -> "EvenMoreFish by Oheers : Enabled");
     }
 
+    private void preloadRuntimeClasses() {
+        String[] classesToPreload = new String[]{
+            "com.oheers.fish.utils.nbt.NbtUtils",
+            "com.oheers.fish.utils.nbt.NbtKeys",
+            "com.oheers.fish.utils.nbt.NbtVersion",
+            "com.oheers.fish.utils.WeightedRandom",
+            "com.oheers.fish.gui.guis.SellGui",
+            "com.oheers.fish.gui.guis.SellGui$SellState",
+            "com.oheers.fish.gui.guis.StorageFishShopGui",
+            "com.oheers.fish.gui.guis.MainMenuGui",
+            "com.oheers.fish.gui.guis.FishJournalGui",
+            "com.oheers.fish.gui.guis.BaitsGui",
+            "com.oheers.fish.gui.guis.ApplyBaitsGui",
+            "com.oheers.fish.gui.ConfigGui",
+            "com.oheers.fish.gui.GuiUtils",
+            "com.oheers.fish.selling.SellHelper",
+            "com.oheers.fish.selling.SoldFish",
+            "com.oheers.fish.selling.TurtleStorageFishBridge",
+            "com.oheers.fish.selling.WorthNBT",
+            "com.oheers.fish.commands.CommandUtils",
+            "com.oheers.fish.gui.guis.FishIndexMenuManager",
+            "com.oheers.fish.autofish.AutoFishMenuManager"
+        };
+        ClassLoader loader = getClass().getClassLoader();
+        for (String className : classesToPreload) {
+            try {
+                Class.forName(className, true, loader);
+            } catch (Throwable ignored) {
+            }
+        }
+        try {
+            java.io.File jarFile = getFile();
+            if (jarFile != null && jarFile.isFile()) {
+                try (java.util.jar.JarFile jar = new java.util.jar.JarFile(jarFile)) {
+                    java.util.Enumeration<java.util.jar.JarEntry> entries = jar.entries();
+                    while (entries.hasMoreElements()) {
+                        java.util.jar.JarEntry entry = entries.nextElement();
+                        String name = entry.getName();
+                        if (!entry.isDirectory() && name.endsWith(".class") && name.startsWith("com/oheers/fish/")) {
+                            String className = name.substring(0, name.length() - 6).replace('/', '.');
+                            try {
+                                Class.forName(className, false, loader);
+                            } catch (Throwable ignored) {
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
     public abstract void disableCommands();
 
     @Override
     public void onDisable() {
+        // Stop all owned Simulator probes before plugins, hooks and fish catalogs unload.
+        if (simulatorModule != null) simulatorModule.shutdown();
+        if (catchCinematics != null) catchCinematics.clear();
+        if (fishingPools != null) fishingPools.shutdown();
+        if (hookedFishPackets != null) hookedFishPackets.shutdown();
+        if (autoFishing != null) autoFishing.shutdown();
         // Do this first.
         autoRunner.stop();
 
@@ -179,7 +268,7 @@ public abstract class EvenMoreFish extends EMFPlugin {
         if (active != null) {
             active.end(false, true);
         }
-        
+
         // Don't use the scheduler here because it will throw errors on disable
         if (this.pluginDataManager != null) {
             this.pluginDataManager.shutdown();
@@ -202,10 +291,25 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
     // gets called on server shutdown to simulate all players closing their Guis
     private void terminateGuis() {
+        try {
+            FishIndexMenuManager.getInstance().closeAll();
+        } catch (Throwable ignored) {
+        }
+        try {
+            AutoFishMenuManager.getInstance().closeAll();
+        } catch (Throwable ignored) {
+        }
+        try {
+            StorageFishShopGui.getInstance().closeAll();
+        } catch (Throwable ignored) {
+        }
         getServer().getOnlinePlayers().forEach(player -> {
-            InventoryGui inventoryGui = InventoryGui.getOpen(player);
-            if (inventoryGui != null) {
-                inventoryGui.close();
+            try {
+                InventoryGui inventoryGui = InventoryGui.getOpen(player);
+                if (inventoryGui != null) {
+                    inventoryGui.close();
+                }
+            } catch (Throwable ignored) {
             }
         });
     }
@@ -215,10 +319,16 @@ public abstract class EvenMoreFish extends EMFPlugin {
         terminateGuis();
 
         this.configurationManager.reloadConfigurations();
+        if (catchCinematics != null) catchCinematics.clear();
+        if (hookedFishPackets != null) hookedFishPackets.clear();
+        if (fishingPools != null) fishingPools.reload();
+        if (simulatorModule != null) simulatorModule.reload();
 
         FishManager.getInstance().reload();
+        TurtleStorageFishBridge.clearCache();
         BaitManager.getInstance().reload();
         RodManager.getInstance().reload();
+        if (simulatorModule != null) simulatorModule.onCatalogReady();
 
         HandlerList.unregisterAll(McMMOTreasureEvent.getInstance());
 
@@ -228,7 +338,7 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
         // Refresh global economy instance with any new EconomyTypes that may have been registered.
         Economy.getInstance().setEconomyTypes(EMFRegistry.ECONOMY_TYPE.getRegistry().values());
-        
+
         if (sender != null) {
             ConfigMessage.RELOAD_SUCCESS.getMessage().send(sender);
         }
@@ -238,6 +348,24 @@ public abstract class EvenMoreFish extends EMFPlugin {
         // This event is not cancellable.
         new EMFPluginReloadEvent().callEvent();
     }
+
+    /** Unavailable by default for old server variants; Paper 1.21 overrides this adapter. */
+    protected NativeHookBridge createNativeHookBridge() {
+        return NativeHookBridge.unsupported();
+    }
+
+    protected PacketTransport createPacketTransport() {
+        return PacketTransport.unavailable(); // other variants remain fully standalone
+    }
+
+    public SimulatorModule getSimulatorModule() {
+        return simulatorModule;
+    }
+
+    public VanillaCatchCinematicService getCatchCinematics() { return catchCinematics; }
+    public FishingPoolService getFishingPools() { return fishingPools; }
+    public HookedFishPacketService getHookedFishPackets() { return hookedFishPackets; }
+    public AutoFishingService getAutoFishing() { return autoFishing; }
 
     public Random getRandom() {
         return random;

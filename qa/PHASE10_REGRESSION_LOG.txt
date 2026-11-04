@@ -1,0 +1,30 @@
+===== qa/run-parse-only.sh =====
+Java 21 syntax parsed: 463 sources; 0 syntax errors
+===== qa/run-offline-smoke.sh =====
+PASS: dirty revision, failed flush retry, fractional boost, RNG, DB executor ordering
+===== qa/run-simulator-phase23-smoke.sh =====
+PASS: 10 simulator config/zone ownership tests
+PASS: probe state, offhand, immutable snapshot, idempotent cleanup
+===== qa/run-simulator-phase45-smoke.sh =====
+PASS: shared/private agent ownership, caps, reservation, visual privacy, double-claim, packet budget, destroy retry, TTL, motion, 100-viewer/1000-agent stress simulation
+===== qa/run-simulator-phase6-smoke.sh =====
+PASS: indexed-water BFS, server-only bite window, shared competition, private owner, early reel, missed reel, idempotent success, cooldown, cleanup and fish identity
+===== qa/run-simulator-phase7-smoke.sh =====
+PASS: Phase 7 duplicate reel, identity, event cancellation, late validation, reservation, reentrant reload, delivery failure & no replay
+===== qa/run-simulator-phase7-stats-smoke.sh =====
+PASS: Phase 7 stats deferral uses fish identity + UUID, nested event isolation and finally cleanup
+===== qa/run-simulator-phase8-smoke.sh =====
+PASS Phase 8 cinematic arc, packet budget, bounded concurrency, cleanup, player opt-out, HUD lifecycle
+===== qa/run-simulator-phase9-smoke.sh =====
+synthetic anglers=  1 fish= 500 elapsed=9.5 ms packets=300 peak/tick=40 deferred=0 failures=0
+synthetic anglers= 10 fish= 500 elapsed=24.0 ms packets=1800 peak/tick=400 deferred=0 failures=0
+synthetic anglers= 30 fish= 500 elapsed=45.1 ms packets=5400 peak/tick=800 deferred=200 failures=0
+synthetic anglers= 50 fish= 500 elapsed=42.6 ms packets=9000 peak/tick=800 deferred=1201 failures=0
+synthetic anglers=100 fish= 500 elapsed=46.1 ms packets=15600 peak/tick=800 deferred=5642 failures=0
+PASS Phase 9: orphan/partial-spawn retry, throwing teleport, destroy-first, round-robin, shared/private, reconnect, 1/10/30/50/100 synthetic angler soak
+===== qa/run-simulator-phase91-smoke.sh =====
+PASS Phase 9.1: conservative single-slot plan + orphan retry ledger capacity, idempotency and recovery
+PASS: 50 YAML resources, 18 locale diagnostics
+
+HEADLESS SUITES PASSED. Gradle full compile and Paper G3/G5/G7 remain UNVERIFIED.
+PASS: 26+ premium HUD/session/persistence assertions
